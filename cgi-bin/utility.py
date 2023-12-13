@@ -1,21 +1,6 @@
 # Author: Ehsan Sherkat - 2016
 
-# def read_term_document_matrix(path):
-#     """
-#     read document-term matrix (comma separate)
-#     :param path: path to matrix
-#     :return: 2D matrix (list of list)
-#     """
-#     document_term_matrix_file = open(path, 'r')
-#     matrix = []
-#     for line in document_term_matrix_file:
-#         line = line = line.replace('\r','').replace('\n','')
-#         columns = line.split(',')
-#         row = []
-#         for column in columns:
-#             row.append(column)
-#         matrix.append(row)
-#     return matrix
+    
 
 def read_term_document_matrix(path, type="tf"):
     """

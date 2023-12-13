@@ -165,24 +165,24 @@ try:
         document_term_matrix += line + '\n'
 
     #write document term matrix to file
-    document_term_matrix_file = open(userDirectory + "out" + userID + ".Matrix", 'w')
-    document_term_matrix_file.write(document_term_matrix)
-    document_term_matrix_file.close()
+    # document_term_matrix_file = open(userDirectory + "out" + userID + ".Matrix", 'w')
+    # document_term_matrix_file.write(document_term_matrix)
+    # document_term_matrix_file.close()
 
     #create document-document distance file
-    document_term_matrix = np.asarray(utility.read_term_document_matrix(userDirectory + "out" + userID + ".Matrix"), dtype=float)
-    documents_distance = squareform(pdist(document_term_matrix, 'cosine'))
-    documents_distance_path = userDirectory+"documentDistance"
-    # documents_distance_file = open(documents_distance_path, "wb")
-    documents_distance_file = open(documents_distance_path, "w")#/////////////////////////////
-    for i in range(len(document_term_matrix)):
-        for j in range(len(document_term_matrix)):
-            if j == 0:
-                documents_distance_file.write(str(documents_distance[i][j]))
-            else:
-                documents_distance_file.write("," + str(documents_distance[i][j]))
-        documents_distance_file.write("\n")
-    documents_distance_file.close()
+    # document_term_matrix = np.asarray(utility.read_term_document_matrix(userDirectory + "out" + userID + ".Matrix"), dtype=float)
+    # documents_distance = squareform(pdist(document_term_matrix, 'cosine'))
+    # documents_distance_path = userDirectory+"documentDistance"
+    # # documents_distance_file = open(documents_distance_path, "wb")
+    # documents_distance_file = open(documents_distance_path, "w")#/////////////////////////////
+    # for i in range(len(document_term_matrix)):
+    #     for j in range(len(document_term_matrix)):
+    #         if j == 0:
+    #             documents_distance_file.write(str(documents_distance[i][j]))
+    #         else:
+    #             documents_distance_file.write("," + str(documents_distance[i][j]))
+    #     documents_distance_file.write("\n")
+    # documents_distance_file.close()
 
     #write all words
     allwords_file = open(userDirectory + "out" + userID + ".Terms", 'w')
@@ -193,16 +193,16 @@ try:
     allwords_file.close()
 
     #write file list
-    fileList_file = open(userDirectory + "fileList", 'w')
-    for fileName in fileList:
-        fileList_file.write(fileName + '\n')
-    fileList_file.close()
+    # fileList_file = open(userDirectory + "fileList", 'w')
+    # for fileName in fileList:
+    #     fileList_file.write(fileName + '\n')
+    # fileList_file.close()
 
-    #write spec file (reomve it later)
-    spec_file = open(userDirectory + "out" + userID + ".Spec", 'w')
-    spec_file.write(str(len(fileList))+'\n')
-    spec_file.write(str(len(allWordsSorted))+'\n')
-    spec_file.close()
+    # #write spec file (reomve it later)
+    # spec_file = open(userDirectory + "out" + userID + ".Spec", 'w')
+    # spec_file.write(str(len(fileList))+'\n')
+    # spec_file.write(str(len(allWordsSorted))+'\n')
+    # spec_file.close()
 
     # run tsne
     tsneFile = userDirectory + "tsne"

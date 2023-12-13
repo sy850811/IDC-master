@@ -244,7 +244,7 @@ function callServer() {
         //get the cluster info from the server
         //for cluster names and words (top 5)
         clusterWords = getClusterWords();
- 
+
         // create request object
         // var asyncRequest = new XMLHttpRequest();
 
@@ -489,13 +489,15 @@ function getClusterCloud() {
         tempClusterCloud +=
           temp[j] +
           "|" +
-          Math.floor(getValueOfTerm("cluster" + i, temp[j]) / 10);
+          // Math.floor(getValueOfTerm("cluster" + i, temp[j]) / 10);
+          getValueOfTerm("cluster" + i, temp[j]);
       } else {
         tempClusterCloud +=
           "|" +
           temp[j] +
           "|" +
-          Math.floor(getValueOfTerm("cluster" + i, temp[j]) / 10);
+          // Math.floor(getValueOfTerm("cluster" + i, temp[j]) / 10);
+          getValueOfTerm("cluster" + i, temp[j]);
       }
 
       if (j == 30) {
@@ -774,6 +776,23 @@ function paralelCordinator(allData, panelName, ID, divName, color) {
       }
     }
   });
+  // #if panel7 then apply softmax across values to the data except name key
+  if (panelName == "#panel7") {
+    for (var i = 0; i < data.length; i++) {
+      var sum = 0;
+      for (var j = 0; j < Object.keys(data[i]).length; j++) {
+        if (Object.keys(data[i])[j] != "name") {
+          sum += parseFloat(data[i][Object.keys(data[i])[j]]);
+        }
+      }
+      for (var j = 0; j < Object.keys(data[i]).length; j++) {
+        if (Object.keys(data[i])[j] != "name") {
+          data[i][Object.keys(data[i])[j]] =
+            (parseFloat(data[i][Object.keys(data[i])[j]]) / sum) * 100;
+        }
+      }
+    }
+  }
 
   var number_of_clusters = d3.keys(data[0]).length - 1;
 
@@ -3660,13 +3679,15 @@ function showMyCloud() {
         wordsTemp +=
           $(terms[j]).text() +
           "|" +
-          Math.floor(getValueOfTerm(selectedCluster, $(terms[j]).text()) / 10); //Math.floor(1*Math.log(getValueOfTerm(selectedCluster, $(terms[j]).text())));
+          // Math.floor(getValueOfTerm(selectedCluster, $(terms[j]).text()) / 10); //Math.floor(1*Math.log(getValueOfTerm(selectedCluster, $(terms[j]).text())));
+          getValueOfTerm(selectedCluster, $(terms[j]).text());
       } else {
         wordsTemp +=
           "|" +
           $(terms[j]).text() +
           "|" +
-          Math.floor(getValueOfTerm(selectedCluster, $(terms[j]).text()) / 10); //Math.floor(1*Math.log(getValueOfTerm(selectedCluster, $(terms[j]).text())));
+          // Math.floor(getValueOfTerm(selectedCluster, $(terms[j]).text()) / 10); //Math.floor(1*Math.log(getValueOfTerm(selectedCluster, $(terms[j]).text())));
+          getValueOfTerm(selectedCluster, $(terms[j]).text());
       }
     }
 

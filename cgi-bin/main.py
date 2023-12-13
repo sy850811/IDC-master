@@ -11,7 +11,12 @@ from sklearn.cluster import KMeans
 from sklearn import metrics
 import sys, os
 import math
+# env = importlib.import_module("env")
+from dotenv import load_dotenv
+import os
 
+# Load environment variables from .env file
+load_dotenv()
 try:
     form = cgi.FieldStorage()
     cgitb.enable()
@@ -137,12 +142,12 @@ try:
         else:
             documentClustersHash[label] += "," + documentNames[index]
 
-    documentClusters = ""
-    for value in documentClustersHash.values():
-        documentClusters += value + "\n"
-    documentClustersFile = open(userDirectory + "documentClusters",'w')
-    documentClustersFile.write(documentClusters)
-    documentClustersFile.close()
+    # documentClusters = ""
+    # for value in documentClustersHash.values():
+    #     documentClusters += value + "\n"
+    # documentClustersFile = open(userDirectory + "documentClusters",'w')
+    # documentClustersFile.write(documentClusters)
+    # documentClustersFile.close()
 
     documentClustersArray = []
     for value in documentClustersHash.values():
@@ -153,63 +158,78 @@ try:
         documentClustersArray.append(tempArray)
 
     #create documents relatedness to each clusters (comparing the document vector with clusters centroid)
-    documentMembers = "name"
-    for i in range(len(documentClustersHash)):
-        if len(clusterNames) > 0:
-            documentMembers += "," + clusterNames[i]
-        else:
-            documentMembers += ",cluster" + str(i)
-    for documentIndex, documentName in enumerate(documentNames):
-        documentVector = document_term_matrix[documentIndex,:]
-        documentMembers += "\n" + documentName
-        for clusterIndex, clusterCenter in enumerate(clusterer.cluster_centers_):
-            try:
-                documentMembers += "," + str((1 - cosine(clusterCenter,documentVector))*100)
-            except:
-                documentMembers += "," + str(0)
-    documentMembersFile = open(userDirectory + "documentMembers", 'w')
-    documentMembersFile.write(documentMembers)
-    documentMembersFile.close()
+    # documentMembers = "name"
+    # for i in range(len(documentClustersHash)):
+    #     if len(clusterNames) > 0:
+    #         documentMembers += "," + clusterNames[i]
+    #     else:
+    #         documentMembers += ",cluster" + str(i)
+    # for documentIndex, documentName in enumerate(documentNames):
+    #     documentVector = document_term_matrix[documentIndex,:]
+    #     documentMembers += "\n" + documentName
+    #     for clusterIndex, clusterCenter in enumerate(clusterer.cluster_centers_):
+    #         try:
+    #             documentMembers += "," + str((1 - cosine(clusterCenter,documentVector))*100)
+    #         except:
+    #             documentMembers += "," + str(0)
+    # documentMembersFile = open(userDirectory + "documentMembers", 'w')
+    # documentMembersFile.write(documentMembers)
+    # documentMembersFile.close()
 
-    #create list of terms of clusters (list of assigned terms to each cluster - sorted) - cosine
-    termClusters = ""
+    # create list of terms of clusters (list of assigned terms to each cluster - sorted) - cosine
+    # termClusters = ""
+    # termClustersArray = []
+    # tempTermCentroidCosine[:] = termCentroidCosine
+    # for index, center in enumerate(tempTermCentroidCosine):
+    #     average = np.average(center)
+    #     minDistance = center.min()
+    #     termClusters += termNames[center.argmin()]
+    #     counter = 0
+    #     tempArray = []
+    #     tempArray.append(termNames[center.argmin()])
+    #     while minDistance < average:
+    #         counter += 1
+    #         if counter >= numberOfTermsOfCluster:
+    #             break
+    #         center[center.argmin()] = 2
+    #         termClusters += "," + termNames[center.argmin()]
+    #         tempArray.append(termNames[center.argmin()])
+    #         minDistance = center.min()
+    #     termClusters += "\n"
+    #     termClustersArray.append(tempArray)
+    # termClustersFile = open(userDirectory + "termClusters", 'w')
+    # # termClustersFile.write(termClusters)
+    # termClustersFile.close()
+
     termClustersArray = []
-    tempTermCentroidCosine[:] = termCentroidCosine
-    for index, center in enumerate(tempTermCentroidCosine):
-        average = np.average(center)
-        minDistance = center.min()
-        termClusters += termNames[center.argmin()]
-        counter = 0
-        tempArray = []
-        tempArray.append(termNames[center.argmin()])
-        while minDistance < average:
-            counter += 1
-            if counter >= numberOfTermsOfCluster:
-                break
-            center[center.argmin()] = 2
-            termClusters += "," + termNames[center.argmin()]
-            tempArray.append(termNames[center.argmin()])
-            minDistance = center.min()
-        termClusters += "\n"
-        termClustersArray.append(tempArray)
-    termClustersFile = open(userDirectory + "termClusters", 'w')
-    termClustersFile.write(termClusters)
-    termClustersFile.close()
+    file_path = f"../users/{userID}/{os.getenv('MODE')}termClusters"
+    with open(file_path, "r") as file:
+        for line in file:
+            line = line.strip()
+            terms = line.split(",")
+            termClustersArray.append(terms)
+
+    # print("Content-type:text/html\r\n\r\n")
+    # print("termClustersArray",termClustersArray)
+
+
+
+
 
     #create terms relatedness to each clusters (comparing the centroid of terms)
-    termMembers = "name"
-    for i in range(len(documentClustersHash)):
-        if len(clusterNames) > 0:
-            termMembers += "," + clusterNames[i]
-        else:
-            termMembers += ",cluster" + str(i)
-    for termIndex, termName in enumerate(termNames):
-        termMembers += "\n" + termName
-        for index, center in enumerate(termCentroidCosine):
-            termMembers += "," + str((1 - center[termIndex])*100)
-    termMembersFile = open(userDirectory + "termMembers", 'w')
-    termMembersFile.write(termMembers)
-    termMembersFile.close()
+    # termMembers = "name"
+    # for i in range(len(documentClustersHash)):
+    #     if len(clusterNames) > 0:
+    #         termMembers += "," + clusterNames[i]
+    #     else:
+    #         termMembers += ",cluster" + str(i)
+    # for termIndex, termName in enumerate(termNames):
+    #     termMembers += "\n" + termName
+    #     for index, center in enumerate(termCentroidCosine):
+    #         termMembers += "," + str((1 - center[termIndex])*100)
+    # termMembersFile = open(userDirectory + "termMembers", 'w')
+    # termMembersFile.write(termMembers)
+    # termMembersFile.close()
 
     #send data to the Visualization modules
     print("Content-type:application/json\r\n\r\n")

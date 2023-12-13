@@ -6,7 +6,11 @@ import json
 import cgi, cgitb
 import zipfile
 import os
+from dotenv import load_dotenv
+import os
 
+# Load environment variables from .env file
+load_dotenv()
 cgitb.enable()
 
 form = cgi.FieldStorage()
@@ -15,7 +19,7 @@ userDirectory = eval(form.getvalue('userDirectory'))
 serverClusterName = eval(form.getvalue('serverClusterName'))
 
 try:
-	documentClusters = userDirectory + 'documentClusters'
+	documentClusters = userDirectory +os.getenv('MODE')+ 'documentClusters'
 	documentClustersCSV = open(documentClusters, 'r')
 
 	zipCollection = zipfile.ZipFile(userDirectory + 'collection.zip', mode='w') #zip all clusters
