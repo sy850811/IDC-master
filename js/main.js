@@ -2,7 +2,10 @@
  * Author: Ehsan Sherkat  *
  * Copyright: 2015        *
  **************************/
-
+const BASELINE_LOCAL = 0;
+const BASELINE_GLOBAL = 1;
+const BASELINE_BOTH = 2;
+const PROPOSED_BOTH = 3;
 var clusterWords = ""; //the name and the key terms of clusters
 var clusterKeyTerms = ""; //the key terms of clusters are here
 var clusterDocuments = ""; //the list of documents of cluster
@@ -44,7 +47,9 @@ var serverClusetrName = [];
 var termClusters = [];
 var docClusters = [];
 var clusterNumber = -1;
-
+var explanation_details = "";
+var userSubsetDetails = null;
+var currentSubset = null;
 /**
  * Load the system and clusters
  */
@@ -66,7 +71,8 @@ function pageLoad() {
   // //get the user id
   // else
   {
-    var input = prompt("Please enter your userId", "");
+    // var input = prompt("Please enter your userId", "");
+    var input = "baqia";
     var loadSessionConfirmed = false;
 
     if (input != null && input.trim() != "") {
@@ -89,7 +95,40 @@ function pageLoad() {
         },
         success: function (msg) {
           var status = msg["status"];
-          console.log(msg);
+          $.ajax({
+            type: "POST",
+            url: "./cgi-bin/getUserSubset.py",
+            data: { userID: JSON.stringify(userID) },
+            success: function (msg) {
+              userSubsetDetails = msg["userSubset"];
+              console.log(userSubsetDetails);
+              // loop through each key in the userSubsetDetails object
+              // if userid is found in the value array of any key, then set currentSubset to that key
+              // if userid is not found in any value array, then raise an alert
+              var found = false;
+              for (var key in userSubsetDetails) {
+                if (userSubsetDetails[key].indexOf(userID) != -1) {
+                  //select last character of key string
+                  currentSubset = +key.slice(-1);
+                  found = true;
+                  console.log(
+                    "For user : " + userID + ",subset is: " + currentSubset
+                  );
+                  break;
+                }
+              }
+
+              if (found) {
+                panelVisibility(currentSubset);
+                console.log("-----currentSubset is: " + currentSubset);
+              } else {
+                alert(
+                  "You are not a member of any subset. Please contact the administrator."
+                );
+              }
+            },
+          });
+          getExplanation();
           if (status == "yes") {
             alert(
               "You need to pre-process your collection! Click on 'Upload Document' on the top left hand side!"
@@ -121,10 +160,11 @@ function pageLoad() {
               }
             }
             if (!loadSessionConfirmed) {
-              input = prompt(
-                "Please enter your initial number of clusters",
-                ""
-              );
+              // input = prompt(
+              //   "Please enter your initial number of clusters",
+              //   ""
+              // );
+              input = "4";
 
               if (
                 input != null &&
@@ -150,6 +190,23 @@ function pageLoad() {
     } else if (input != null && input.trim() == "") {
       alert("Your userID is not valid!");
     }
+  }
+}
+function panelVisibility(currentSubset) {
+  /**
+  select panel div from the html file
+  if currentSubset is 0, keep 1,2,5,9
+  if currentSubset is 1, keep 1,2,3,4,5,7
+  if currentSubset is 2,3, keep 1,2,3,4,5,7,8,9
+  **/
+  if (currentSubset == BASELINE_LOCAL) {
+    $("#panel3").hide(); //Cluster Key Terms
+    $("#panel4").hide(); //Cluster Documents
+    $("#panel7").hide(); //Term-Cluster View
+    $("#panel8").hide(); //Term Cloud
+  }
+  if (currentSubset == BASELINE_GLOBAL) {
+    $("#panel9").hide(); //Local Explanation
   }
 }
 
@@ -210,13 +267,10 @@ function callServer() {
     },
 
     success: function (msg) {
-      console.log(msg);
       $("body").css("cursor", "auto");
 
       var date02 = new Date();
       var n02 = date02.getTime();
-      var time = (n02 - n01) / 1000;
-      console.log("Time to clustering: " + time);
 
       clusterKeytermsOriginal = eval(msg["termClusters"]);
       clusterDocs = eval(msg["documentClusters"]);
@@ -271,7 +325,6 @@ function callServer() {
 
         documentClusterData = d3.csv.parse(asyncRequest.responseText);
         documentClusterDataString = asyncRequest.responseText;
-        console.log(documentClusterData);
 
         //for list of documents of cluster
         clusterDocuments = getClusterDocuments();
@@ -417,8 +470,6 @@ function callServer() {
 
         var date4 = new Date();
         var n4 = date4.getTime();
-        time = (n4 - n3) / 1000;
-        console.log("Time to depict graph: " + time);
 
         //refresh tree view
         refreshTreeView();
@@ -438,14 +489,6 @@ function callServer() {
 
         //change the mouse icon
         document.body.style.cursor = "auto";
-
-        var date03 = new Date();
-        var n03 = date03.getTime();
-        var time1 = (n03 - n4) / 1000;
-        var time2 = (n2 - n02) / 1000 + time1;
-        console.log("Other running time: " + time2);
-        time = (n03 - n01) / 1000;
-        console.log("Total running time: " + time);
       }
     },
     error: function (msg) {
@@ -733,7 +776,6 @@ function clusterClicked(elementID) {
     $("#panel6title").css("background-color", clusterColor);
     $("#panel7title").css("background-color", clusterColor);
     $("#panel8title").css("background-color", clusterColor);
-    // $("#panel9title").css("background-color", clusterColor);
 
     //load list of documnets of each cluster
     docListLoad(elementID);
@@ -1252,6 +1294,7 @@ function loadDoc(index) {
           document.getElementById("doc_content").innerHTML = getDocumentContent(
             docJson[j].ID
           );
+
           //Or
           // d3.select("#doc_content")
           //   .append("text")
@@ -1489,7 +1532,6 @@ function changeClusterColor(clusterName, color) {
     $("#panel6title").css("background-color", color);
     $("#panel7title").css("background-color", color);
     $("#panel8title").css("background-color", color);
-    // $("#panel9title").css("background-color", color);
 
     //change color in document-cluster view
     var words = new Array(1);
@@ -1843,7 +1885,6 @@ function clusterDelete(clusterName) {
         $("#panel6title").css("background-color", "#CCC");
         $("#panel7title").css("background-color", "#CCC");
         $("#panel8title").css("background-color", "#CCC");
-        // $("#panel9title").css("background-color", "#99CCFF");
       }
 
       //remove the cluster in cluster view
@@ -1892,7 +1933,6 @@ function removeClusterInGraph(clusterName) {
       var newClusters = "";
 
       if (clusters.length == 1 && clusters[0] == clusterName) {
-        // console.log(documentsNameIndex[n.na]);
         removedDocuments[documentsName.indexOf(n.na)] = true;
       }
     });
@@ -2475,7 +2515,7 @@ function panelDrag(panelID) {
   $("#panel6").css("zIndex", 0);
   $("#panel7").css("zIndex", 0);
   $("#panel8").css("zIndex", 0);
-  $("#panel9").css("zIndex", 0);
+  // $("#panel9").css("zIndex", 0);//////////////
 
   $("#" + $(panelID).attr("id")).css("zIndex", 1);
   $(panelID).draggable("enable");
@@ -2623,6 +2663,7 @@ function fileClicked(fileName) {
   loadDoc($(fileName).text());
 
   highlightDocGeneralView($(fileName).text());
+  createTermClusterChart();
 
   //show the paralel cordinator view
   var words = new Array(1);
@@ -2932,6 +2973,7 @@ function docListLoad(clusterName) {
 
           //higlight the first document in general view
           highlightDocGeneralView(Data[j].ID);
+          createTermClusterChart();
         }
       }
     }
@@ -3558,7 +3600,7 @@ function enableDrag() {
   $("#panel6").css("zIndex", 0);
   $("#panel7").css("zIndex", 0);
   $("#panel8").css("zIndex", 0);
-  $("#panel9").css("zIndex", 0);
+  // $("#panel9").css("zIndex", 0);/////////////////
 }
 
 /*
@@ -5268,6 +5310,7 @@ function loadDocInCluster(documentName, clusterName) {
   //load the document
   document.getElementById("doc_content").innerHTML = "";
   loadDoc(documentName);
+  createTermClusterChart();
   highlightDocGeneralView(documentName);
 
   //show the paralel cordinator view
@@ -5306,7 +5349,6 @@ function getGeneralViewGraph(similarityThreshold) {
   var n1 = date1.getTime();
 
   var tsneSilhouetteState = false;
-  console.log;
   //run t-sne
   if (tsneResult.length < 1) {
     tsneSilhouetteState = true;
@@ -5317,7 +5359,6 @@ function getGeneralViewGraph(similarityThreshold) {
 
     // var opt = { epsilon: 10 }; // epsilon is learning rate (10 = default)
     var tsne = new tsnejs.tSNE(opt); // create a tSNE instance
-    // console.log("tsnejs.tSNE(opt)", tsnejs.tSNE(opt));
     tsne.initDataDist(documentDocumentSimilarity);
 
     for (var k = 0; k < 300; k++) {
@@ -5326,11 +5367,6 @@ function getGeneralViewGraph(similarityThreshold) {
 
     tsneResult = tsne.getSolution(); // Y is an array of 2-D points that you can plot
   }
-
-  var date2 = new Date();
-  var n2 = date2.getTime();
-  var time = (n2 - n1) / 1000;
-  console.log("Time to run T-SNE: " + time);
 
   var tsneLables = new Array();
 
@@ -5420,11 +5456,6 @@ function getGeneralViewGraph(similarityThreshold) {
 
   generalViewGraph2 = JSON.parse(tempGeneralViewGraph);
 
-  var date3 = new Date();
-  var n3 = date3.getTime();
-  time = (n3 - n2) / 1000;
-  console.log("Time to create graph: " + time);
-
   return JSON.parse(tempGeneralViewGraph);
 }
 
@@ -5443,7 +5474,7 @@ function getTsneSilhouette(tsneResult, tsneLables) {
     },
     success: function (msg) {
       var status = msg["status"];
-      console.trace("label");
+      // console.trace("label");
       if (status == "yes") {
         TsneSilhouette = eval(msg["TsneSilhouette"]);
         TsneSilhouette = TsneSilhouette.toFixed(4);
@@ -5887,7 +5918,7 @@ function showSelectedDocumentsCloud() {
         aggregatedTerms[allWords[j]] =
           aggregatedTerms[allWords[j]] + parseFloat(temp[j]);
       } catch (err) {
-        // console.log(err.message);
+        console.log(err.message);
       }
     }
   }
@@ -6120,4 +6151,214 @@ function getForceSilhouette(forceResult, forceLables) {
       alert("Error3 in getting Force Silhouette!");
     },
   });
+}
+
+//write a function to make ajax request to explanation.py
+function transformData(data) {
+  var transformed = [];
+  var clusters = Object.keys(data);
+
+  // Assuming each array in data has the same length
+  var numClusters = data[clusters[0]].length;
+
+  for (var i = 0; i < numClusters; i++) {
+    var clusterData = { cluster: "Cluster " + (i + 1) };
+    clusters.forEach(function (key) {
+      clusterData[key] = data[key][i];
+    });
+    transformed.push(clusterData);
+  }
+  return transformed;
+}
+function getExplanation() {
+  $.ajax({
+    type: "POST",
+    url: "./cgi-bin/explanation_details.py",
+    data: {
+      userID: JSON.stringify(userID),
+    },
+    success: function (msg) {
+      explanation_details = msg["explanation_details"];
+    },
+  });
+}
+
+function createTermClusterChart() {
+  doc = document.getElementById("doc_content").innerHTML.replace(/\n$/, "");
+  documentExplanation = explanation_details[doc];
+
+  var data = transformData(documentExplanation);
+
+  var margin = { top: 20, right: 160, bottom: 50, left: 30 };
+
+  var width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+  var svg = d3.select("#chart").select("svg");
+
+  // If SVG is already present, remove it before creating a new one
+  if (!svg.empty()) {
+    svg.remove();
+  }
+  var svg = d3
+    .select("#chart")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var x = d3.scale
+    .ordinal()
+    .rangeRoundBands([0, width / 1.5], 0.3)
+    .domain(
+      data.map(function (d) {
+        return d.cluster;
+      })
+    );
+
+  // var y = d3.scale
+  //   .linear()
+  //   .rangeRound([height, 0])
+  //   .domain([
+  //     0,
+  //     d3.max(data, function (d) {
+  //       return d["Michael Fincke"] + d["Astronaut"] + d["Orbit"] + d["Earth"];
+  //     }),
+  //   ]);
+  var color = d3.scale
+    .ordinal()
+    .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"])
+    .domain(
+      d3.keys(data[0]).filter(function (key) {
+        return key !== "cluster";
+      })
+    );
+  var y = d3.scale
+    .linear()
+    .rangeRound([height, 0])
+    .domain([
+      0,
+      d3.max(data, function (d) {
+        return d3.sum(
+          color.domain().map(function (key) {
+            return d[key];
+          })
+        );
+      }),
+    ]);
+
+  var xAxis = d3.svg.axis().scale(x).orient("bottom");
+
+  var yAxis = d3.svg.axis().scale(y).orient("left");
+
+  // Define the colors for each concept
+
+  svg
+    .append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+
+  svg
+    .append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Score");
+
+  var cluster = svg
+    .selectAll(".cluster")
+    .data(data)
+    .enter()
+    .append("g")
+    .attr("class", "g")
+    .attr("transform", function (d) {
+      return "translate(" + x(d.cluster) + ",0)";
+    });
+
+  cluster
+    .selectAll("rect")
+    .data(function (d) {
+      var y0 = 0;
+      return color.domain().map(function (name) {
+        return { name: name, y0: y0, y1: (y0 += +d[name]) };
+      });
+    })
+    .enter()
+    .append("rect")
+    .attr("width", x.rangeBand())
+    .attr("y", function (d) {
+      return y(d.y1);
+    })
+    .attr("height", function (d) {
+      return y(d.y0) - y(d.y1);
+    })
+    .style("fill", function (d) {
+      return color(d.name);
+    });
+
+  // Calculate the legend item offsets by accumulating widths
+  var legendItemOffsets = [0];
+  color
+    .domain()
+    .slice()
+    .reverse()
+    .forEach(function (d, i) {
+      var textWidth = getTextWidth(d, "20px sans-serif"); // Calculate text width (you may need a helper function for this)
+      var spacing = 48; // Adjust spacing based on your styling
+      if (i > 0) {
+        legendItemOffsets.push(legendItemOffsets[i - 1] + textWidth + spacing);
+      }
+    });
+
+  // Create legend
+  var legend = svg
+    .selectAll(".legend")
+    .data(color.domain().slice().reverse())
+    .enter()
+    .append("g")
+    .attr("class", "legend")
+    .attr("transform", function (d, i) {
+      return (
+        "translate(" +
+        legendItemOffsets[i] +
+        "," +
+        (height + margin.bottom - 20) +
+        ")"
+      );
+    });
+
+  legend
+    .append("rect")
+    .attr("x", 0)
+    .attr("width", 18)
+    .attr("height", 18)
+    .style("fill", color);
+
+  legend
+    .append("text")
+    .attr("x", 22)
+    .attr("y", 9)
+    .attr("dy", ".35em")
+    .style("text-anchor", "start")
+    .text(function (d) {
+      return d;
+    });
+
+  // Helper function to measure text width
+  function getTextWidth(text, font) {
+    // re-use canvas object for better performance
+    var canvas =
+      getTextWidth.canvas ||
+      (getTextWidth.canvas = document.createElement("canvas"));
+    var context = canvas.getContext("2d");
+    context.font = font;
+    var metrics = context.measureText(text);
+    return metrics.width;
+  }
 }

@@ -1,6 +1,5 @@
 #!/Applications/miniconda3/envs/IDC/bin/python
-import cgi, cgitb, sys
-import json
+import cgi, cgitb
 
 cgitb.enable()
 
