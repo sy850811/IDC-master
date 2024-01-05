@@ -113,7 +113,7 @@
         id="auto_save_session_text"
         >Auto save session</span
       ><br />
-      <input
+      <!-- <input
         id="button4"
         title="Cluster"
         class="button"
@@ -145,7 +145,7 @@
               $("#slider0_Textbox").removeAttr("disabled");
             }
           };
-      </script>
+      </script> -->
 
       <input
         id="textbox1"
@@ -207,38 +207,38 @@
       />
       <p id="doc_content"></p>
       <script>
-        document.getElementById("doc_select").onchange = function () {
-          document.getElementById("doc_content").innerHTML = "";
-          loadDoc(this.value);
-          createTermClusterChart(this.value);
+        // document.getElementById("doc_select").onchange = function () {
+        //   document.getElementById("doc_content").innerHTML = "vuyvuyvkuvuv";
+        //   loadDoc(this.value);
+        // createTermClusterChart(this.value);
 
-          //show the paralel cordinator view
-          var words = new Array(1);
-          var colors = {};
-          words[0] = this.value;
-          colors[words[0]] = $("#" + getSelectedClusterID() + " p").css(
-            "background-color"
-          ); //"Blue";
-          paralelCordinator(
-            documentClusterData,
-            "#panel6",
-            words,
-            "#DocumentClusterView",
-            colors
-          );
+        //   //show the paralel cordinator view
+        //   var words = new Array(1);
+        //   var colors = {};
+        //   words[0] = this.value;
+        //   colors[words[0]] = $("#" + getSelectedClusterID() + " p").css(
+        //     "background-color"
+        //   ); //"Blue";
+        //   paralelCordinator(
+        //     documentClusterData,
+        //     "#panel6",
+        //     words,
+        //     "#DocumentClusterView",
+        //     colors
+        //   );
 
-          //highlight the document in general view
-          // highlightDocGeneralView(this.value);
-          createTermClusterChart()
+        //   //highlight the document in general view
+        //   // highlightDocGeneralView(this.value);
+        //   createTermClusterChart();
 
-          //change the color of selected doc to red
-          $(this).css("color", "red");
-          var options = this.children;
-          for (var i = 0; i < this.childElementCount; i++) {
-            if (options[i].value == this.value) options[i].style.color = "red";
-            else options[i].style.color = "black";
-          }
-        };
+        //   //change the color of selected doc to red
+        //   $(this).css("color", "red");
+        //   var options = this.children;
+        //   for (var i = 0; i < this.childElementCount; i++) {
+        //     if (options[i].value == this.value) options[i].style.color = "red";
+        //     else options[i].style.color = "black";
+        //   }
+        // };
       </script>
     </div>
 
@@ -266,15 +266,15 @@
       ondrag="panelDrag(this)"
     >
       <p id="panel4title" class="panelTitle">Clusters View</p>
-      <input
+      <!-- <input
         id="button12"
         title="Add Cluster"
         class="button"
         type="button"
         value="Add Cluster"
         onclick="addCluster()"
-      />
-      <label id="silhouette"></label>
+      /> -->
+      <!-- <label id="silhouette"></label> -->
       <label id="userName"></label>
       <div id="spliter1"></div>
       <!-- spliter line -->
@@ -372,5 +372,16 @@
     </div>
     <script type="text/javascript" src="js/palette.js"></script>
     <!-- ---------------------------------------------------- -->
+    <!-- create a button -->
+    <div id="nextbuttondiv">
+      <input
+        id="button10"
+        title="Next"
+        type="button"
+        class="button"
+        value="Next Document"
+        onclick="showNewDocument()"
+      />
+    </div>
   </body>
 </html>

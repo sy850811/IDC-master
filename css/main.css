@@ -7,12 +7,12 @@
   position: absolute;
   left: 9%;
   top: 0.5%;
-  width:81.6%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;
+  width: 81.6%;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
   border-radius: 10px;
-  border-width:thin;
+  border-width: thin;
   height: 5.5%;
   margin: 3px;
   background-color: white;
@@ -35,13 +35,13 @@
   background-color: white;*/
   position: absolute;
   top: 28.5%;
-  left:9%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;
+  left: 9%;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
   border-radius: 10px;
-  border-width:thin;
-  width:15%;
+  border-width: thin;
+  width: 15%;
   float: left;
   height: 49%;
   margin: 3px;
@@ -54,20 +54,20 @@
   overflow: scroll;
   height: 90%;
   width: 97%;
-  left:2%;
+  left: 2%;
   font-size: 82%;
 }
 
 #panel3 {
   position: absolute;
   top: 69%;
-  left:65%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;
+  left: 65%;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
   border-radius: 10px;
-  border-width:thin;
-  width:13%;
+  border-width: thin;
+  width: 13%;
   float: left;
   height: 30%;
   margin: 3px;
@@ -101,8 +101,8 @@
   text-align: center;
   position: absolute;
   /*height: 250px;*/
-  height: 50%;
-  border-radius: 10px;  
+  height: 100%; /*/////////////////////////*/
+  border-radius: 10px;
   width: 24%;
   cursor: pointer;
 }
@@ -117,7 +117,7 @@
 }
 
 #panel4 {
-/*  position: absolute;
+  /*  position: absolute;
   top: 7.5%;
   left:31.5%;
   border:thin;
@@ -133,13 +133,13 @@
   /*overflow: scroll;*/
   position: absolute;
   top: 7.5%;
-  left:65%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;
+  left: 65%;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
   border-radius: 10px;
-  border-width:thin;
-  width:25.5%;
+  border-width: thin;
+  width: 25.5%;
   float: left;
   height: 35%;
   margin: 3px;
@@ -149,41 +149,41 @@
 #slider0_label {
   position: absolute;
   top: 1%;
-  left:53%;
+  left: 53%;
   font-size: 70%;
 }
 
 #slider0_Textbox {
   position: absolute;
   top: 35%;
-  left:53%;
-  width:2%;
+  left: 53%;
+  width: 2%;
   height: 15%;
   border-radius: 10px;
   border: 1px solid #808080;
-  text-align:center;
+  text-align: center;
   font-size: 60%;
 }
 
 #slider0_min {
   position: absolute;
   top: 60%;
-  left:56%;
+  left: 56%;
   font-size: 50%;
 }
 
 #slider0_max {
   position: absolute;
   top: 60%;
-  left:61%;
+  left: 61%;
   font-size: 50%;
 }
 
 #slider0 {
   position: absolute;
   top: 35%;
-  left:56%;
-  width:5%;
+  left: 56%;
+  width: 5%;
   height: 20%;
   padding-left: 2px;
   cursor: pointer;
@@ -192,23 +192,23 @@
 #Clustering_algo_text_main {
   position: absolute;
   top: 1%;
-  left:63%;
+  left: 63%;
   font-size: 70%;
 }
 
 #Clustering_algo_select_main {
   position: absolute;
   top: 1%;
-  left:67%;
+  left: 67%;
   font-size: 70%;
 }
 
 #spliter1 {
   position: absolute;
   top: 8.9%;
-  width:99%;
+  width: 99%;
   height: 1px;
-  background-color: #CCCCCC;
+  background-color: #cccccc;
 }
 
 #panel4_1 {
@@ -222,13 +222,13 @@
 #panel5 {
   position: absolute;
   top: 7.5%;
-  left:9%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;
+  left: 9%;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
   border-radius: 10px;
-  border-width:thin;
-  width:15%;
+  border-width: thin;
+  width: 15%;
   float: left;
   height: 20%;
   margin: 3px;
@@ -246,13 +246,13 @@
 #panel6 {
   position: absolute;
   top: 78.5%;
-  left:9%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;
+  left: 9%;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
   border-radius: 10px;
-  border-width:thin;
-  width:15%;
+  border-width: thin;
+  width: 15%;
   float: left;
   height: 20%;
   margin: 3px;
@@ -268,7 +268,7 @@
 }
 
 #panel7 {
-/*  position: absolute;
+  /*  position: absolute;
   top: 68.5%;
   left:16%;
   border:thin;
@@ -283,13 +283,13 @@
   background-color: white;*/
   position: absolute;
   top: 69%;
-  left:78.25%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;
+  left: 78.25%;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
   border-radius: 10px;
-  border-width:thin;
-  width:12.25%;
+  border-width: thin;
+  width: 12.25%;
   float: left;
   height: 30%;
   margin: 3px;
@@ -305,7 +305,7 @@
 }
 
 #panel8 {
-/*  position: absolute;
+  /*  position: absolute;
   top: 68.5%;
   left:31.5%;
   border:thin;
@@ -320,13 +320,13 @@
   background-color: white;*/
   position: absolute;
   top: 43.5%;
-  left:65%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;
+  left: 65%;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
   border-radius: 10px;
-  border-width:thin;
-  width:25.5%;
+  border-width: thin;
+  width: 25.5%;
   float: left;
   height: 24.5%;
   margin: 3px;
@@ -337,12 +337,12 @@
   position: absolute;
   top: 20%;
   overflow: scroll;
-  width:99%;
+  width: 99%;
   height: 80%;
 }
 
 #panel9 {
-/*  position: absolute;
+  /*  position: absolute;
   top: 28.5%;
   left:74%;
   border:thin;
@@ -357,16 +357,16 @@
   background-color: white;*/
   position: absolute;
   top: 7.5%;
-  left:24.25%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;
+  left: 24.25%;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
   border-radius: 10px;
-  border-width:thin;  
-  width:40.5%;
+  border-width: thin;
+  width: 40.5%;
   float: left;
   height: 91%;
-  margin: 3px; 
+  margin: 3px;
   background-color: white;
 }
 
@@ -407,7 +407,7 @@
 }
 
 #general_view2 {
-/*  top: 12%;
+  /*  top: 12%;
   position: absolute;
   overflow: auto;
   height: 62%;
@@ -422,7 +422,7 @@
 
 #tabs {
   top: 1.5%;
-  left: 0.0%;
+  left: 0%;
   position: absolute;
   height: 98.5%;
   width: 99.5%;
@@ -431,26 +431,26 @@
 }
 
 .panelTitle {
-  cursor:move;
-  border:thin;
-  border:#CCC;
+  cursor: move;
+  border: thin;
+  border: #ccc;
   border-bottom-style: dotted;
-  border-width:thin;
+  border-width: thin;
   text-align: center;
   top: -16px;
-  background-color: #CCC; 
+  background-color: #ccc;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   position: relative;
-  font-size: 80%;  
+  font-size: 80%;
 }
 
 .clusterTitle {
-  cursor:move;
-  border:thin;
-  border:#CCC;
+  cursor: move;
+  border: thin;
+  border: #ccc;
   border-bottom-style: dotted;
-  border-width:thin;
+  border-width: thin;
   text-align: center;
   position: relative;
   top: -18px;
@@ -462,62 +462,77 @@
 
 .button {
   width: 100%;
-  text-align:center;
-  margin:auto auto;
+  text-align: center;
+  margin: auto auto;
   width: 120px;
   font-size: 60%;
   color: #333;
-  border:1px solid #b7b7b7; 
-  -webkit-border-radius: 3px; 
+  border: 1px solid #b7b7b7;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   -moz-border-radius: 3px;
-/*  border-radius: 3px;
-  padding: 8px ;*/ 
-  text-decoration:none; 
+  /*  border-radius: 3px;
+  padding: 8px ;*/
+  text-decoration: none;
   /*text-shadow: -1px -1px 0 rgba(0,0,0,0.3);*/
   color: black;
-  background-color: #d3d3d3; background-image: -webkit-gradient(linear, left top, left bottom, from(#d3d3d3), to(#B5B5B5));
-  background-image: -webkit-linear-gradient(top, #d3d3d3, #B5B5B5);
-  background-image: -moz-linear-gradient(top, #d3d3d3, #B5B5B5);
-  background-image: -ms-linear-gradient(top, #d3d3d3, #B5B5B5);
-  background-image: -o-linear-gradient(top, #d3d3d3, #B5B5B5);
-  background-image: linear-gradient(to bottom, #d3d3d3, #B5B5B5);
-  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#d3d3d3, endColorstr=#B5B5B5);
+  background-color: #d3d3d3;
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(#d3d3d3),
+    to(#b5b5b5)
+  );
+  background-image: -webkit-linear-gradient(top, #d3d3d3, #b5b5b5);
+  background-image: -moz-linear-gradient(top, #d3d3d3, #b5b5b5);
+  background-image: -ms-linear-gradient(top, #d3d3d3, #b5b5b5);
+  background-image: -o-linear-gradient(top, #d3d3d3, #b5b5b5);
+  background-image: linear-gradient(to bottom, #d3d3d3, #b5b5b5);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#d3d3d3, endColorstr=#B5B5B5);
 }
 
-.button:hover { 
+.button:hover {
   cursor: pointer;
-  border:1px solid #a0a0a0;
-  background-color: #bababa; background-image: -webkit-gradient(linear, left top, left bottom, from(#bababa), to(#9c9c9c));
+  border: 1px solid #a0a0a0;
+  background-color: #bababa;
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(#bababa),
+    to(#9c9c9c)
+  );
   background-image: -webkit-linear-gradient(top, #bababa, #9c9c9c);
   background-image: -moz-linear-gradient(top, #bababa, #9c9c9c);
   background-image: -ms-linear-gradient(top, #bababa, #9c9c9c);
   background-image: -o-linear-gradient(top, #bababa, #9c9c9c);
   background-image: linear-gradient(to bottom, #bababa, #9c9c9c);
-  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#bababa, endColorstr=#9c9c9c);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#bababa, endColorstr=#9c9c9c);
 }
 
-#button1 {  
+#button1 {
   position: absolute;
   top: 25%;
-  left:0.5%;
+  left: 0.5%;
   width: 5%;
-  height: 50%;  
+  height: 50%;
 }
 
-#button2 {  
+#button2 {
   position: absolute;
   top: 25%;
   left: 5.7%;
   width: 5%;
-  height: 50%;  
+  height: 50%;
 }
 
-#button3 {  
+#button3 {
   position: absolute;
   top: 25%;
   left: 12.5%;
   width: 5%;
-  height: 50%;  
+  height: 50%;
 }
 
 #session_select {
@@ -532,22 +547,22 @@
 }
 
 #session_select:hover {
-  background-color: #FFFAF0 !important;
+  background-color: #fffaf0 !important;
   cursor: pointer;
 }
 
-#button14 {  
+#button14 {
   position: absolute;
   top: 25%;
   left: 24.4%;
   width: 5%;
-  height: 50%;  
+  height: 50%;
 }
 
 #button18 {
   position: absolute;
   top: 25%;
-  left:29.7%;
+  left: 29.7%;
   width: 3%;
   height: 50%;
 }
@@ -555,66 +570,66 @@
 #auto_save_session {
   position: absolute;
   top: 25%;
-  left:33.1%;
+  left: 33.1%;
 }
 
 #auto_save_session_text {
   position: absolute;
   top: 25%;
-  left:34.2%;
+  left: 34.2%;
   font-size: 90%;
 }
 
-#button4 {  
+#button4 {
   position: absolute;
   top: 25%;
-  left:45%;
+  left: 45%;
   width: 6%;
-  height: 50%;  
+  height: 50%;
 }
 
-#button6 {  
-  position: absolute;  
-  left:1%;  
+#button6 {
+  position: absolute;
+  left: 1%;
   width: 15%;
-  top: 7%;  
-  height: 10%;  
+  top: 7%;
+  height: 10%;
 }
 
-#button7 {  
+#button7 {
   position: absolute;
-  top: 7%;  
+  top: 7%;
   height: 10%;
-  left:17%;
-  width: 15%;  
+  left: 17%;
+  width: 15%;
 }
 
-#button8 {  
+#button8 {
   position: absolute;
-  top: 7%;  
+  top: 7%;
   height: 10%;
-  left:33%;
-  width: 15%;  
+  left: 33%;
+  width: 15%;
 }
 
 #colorCheckBox {
   position: absolute;
-  top: 3.5%; 
-  right:3%;
+  top: 3.5%;
+  right: 3%;
   font-size: 80%;
 }
 
 #filter1_label {
   position: absolute;
-  top: 20%;  
-  left:20%;
+  top: 20%;
+  left: 20%;
   font-size: 70%;
 }
 
 #filter1_select {
   top: 20%;
   position: absolute;
-  left:55%;
+  left: 55%;
   height: 30%;
   width: 35%;
   background: #ececec;
@@ -624,15 +639,15 @@
 
 #filter2_label {
   position: absolute;
-  top: 60%;  
-  left:20%;
+  top: 60%;
+  left: 20%;
   font-size: 70%;
 }
 
 #filter2_select {
   top: 60%;
   position: absolute;
-  left:55%;
+  left: 55%;
   height: 30%;
   width: 35%;
   background: #ececec;
@@ -643,52 +658,52 @@
 #TsneSilhouette_label {
   top: 5%;
   position: absolute;
-  left:1%;
+  left: 1%;
   font-size: 100%;
 }
 
 #button19 {
   top: 4%;
   position: absolute;
-  left:1%;
+  left: 1%;
   width: 10%;
-  height: 1.9%; 
+  height: 1.9%;
 }
 
 #forceSilhouette_label {
-/*  top: 9.5%;
+  /*  top: 9.5%;
   position: absolute;
   left:18%;
   font-size: 100%;*/
   top: 4.3%;
   position: absolute;
-  left:12%;
+  left: 12%;
   font-size: 100%;
 }
 
 #slider1_label {
   position: absolute;
   top: 15%;
-  left:1%;  
+  left: 1%;
   font-size: 70%;
 }
 
 #slider1_Textbox {
   position: absolute;
   top: 15%;
-  left:37%;
-  width:10%;
+  left: 37%;
+  width: 10%;
   height: 15%;
   border-radius: 10px;
   border: 1px solid #808080;
-  text-align:center;
+  text-align: center;
   font-size: 60%;
 }
 
 #slider1_min {
   position: absolute;
   top: 30%;
-  left:50%;
+  left: 50%;
   font-size: 60%;
 }
 
@@ -702,48 +717,48 @@
 #slider1 {
   position: absolute;
   top: 15%;
-  left:50%;
-  width:45%;
+  left: 50%;
+  width: 45%;
   height: 15%;
   padding-left: 5px;
   cursor: pointer;
 }
 
 #slider2_min {
-/*  position: absolute;
+  /*  position: absolute;
   bottom: 12%;
   left:45%;
   font-size: 50%;*/
   position: absolute;
   bottom: 0.2%;
-  left:53%;
+  left: 53%;
   font-size: 70%;
 }
 
 #slider2_max {
-/*  position: absolute;
+  /*  position: absolute;
   bottom: 12%;
   left:91%;
   font-size: 50%;*/
   position: absolute;
   bottom: 0.2%;
-  left:71.5%;
+  left: 71.5%;
   font-size: 70%;
 }
 
 #slider2_label {
-/*  position: absolute;
+  /*  position: absolute;
   bottom: 13%;
   right:69%;
   font-size: 90%;*/
   position: absolute;
   bottom: 0.6%;
-  left:36%;
+  left: 36%;
   font-size: 90%;
 }
 
 #slider2_Textbox {
-/*  position: absolute;
+  /*  position: absolute;
   bottom: 13%;
   left:32%;
   width:10%;
@@ -753,50 +768,50 @@
   text-align:center;
   font-size: 90%;*/
   position: absolute;
-  bottom: 0.6%; 
-  left:48%;
-  width:4%;
+  bottom: 0.6%;
+  left: 48%;
+  width: 4%;
   height: 1.2%;
   border-radius: 5px;
   border: 1px solid #808080;
-  text-align:center;
+  text-align: center;
   font-size: 90%;
 }
 
 #slider2 {
   position: absolute;
   bottom: 1%;
-  left:53%;
-  width:18%;
+  left: 53%;
+  width: 18%;
   height: 1%;
   padding-left: 5px;
   cursor: pointer;
 }
 
 #slider3_min {
-/*  position: absolute;
+  /*  position: absolute;
   bottom: 17.5%;
   left:45%;
   font-size: 70%;*/
   position: absolute;
   bottom: 3.8%;
-  left:53%;
+  left: 53%;
   font-size: 70%;
 }
 
 #slider3_max {
-/*  position: absolute;
+  /*  position: absolute;
   bottom: 17.5%;
   left:91%;
   font-size: 70%;*/
   position: absolute;
   bottom: 3.8%;
-  left:71.5%;
+  left: 71.5%;
   font-size: 70%;
 }
 
 #slider3_label {
-/*  position: absolute;
+  /*  position: absolute;
   bottom: 18%;
   right:69%;
   font-size: 90%;*/
@@ -807,7 +822,7 @@
 }
 
 #slider3_Textbox {
-/*  position: absolute;
+  /*  position: absolute;
   bottom: 18.5%;
   left:32%;
   width:10%;
@@ -817,18 +832,18 @@
   text-align:center;
   font-size: 90%;*/
   position: absolute;
-  bottom: 4.5%; 
-  left:48%;
-  width:4%;
+  bottom: 4.5%;
+  left: 48%;
+  width: 4%;
   height: 1.2%;
   border-radius: 5px;
   border: 1px solid #808080;
-  text-align:center;
+  text-align: center;
   font-size: 90%;
 }
 
 #slider3 {
-/*  position: absolute;
+  /*  position: absolute;
   bottom: 19%;
   left:45%;
   width:46%;
@@ -837,8 +852,8 @@
   cursor: pointer;*/
   position: absolute;
   bottom: 4.5%;
-  left:53%;
-  width:18%;
+  left: 53%;
+  width: 18%;
   height: 1%;
   padding-left: 5px;
   cursor: pointer;
@@ -861,19 +876,19 @@
 #slider4_label {
   position: absolute;
   top: 15%;
-  left:8%;  
+  left: 8%;
   font-size: 95%;
 }
 
 #slider4_Textbox {
   position: absolute;
   top: 15%;
-  left:35%;
-  width:10%;
+  left: 35%;
+  width: 10%;
   height: 15%;
   border-radius: 10px;
   border: 1px solid #808080;
-  text-align:center;
+  text-align: center;
   font-size: 100%;
 }
 
@@ -881,25 +896,25 @@
   position: absolute;
   top: 15%;
   left: 47%;
-  width:34%;
+  width: 34%;
   height: 15%;
   padding-left: 5px;
   cursor: pointer;
 }
 
-#button41 {  
+#button41 {
   position: absolute;
   top: 15%;
-  left:85%;
+  left: 85%;
   width: 15%;
   height: 20%;
   font-size: 80%;
 }
 
-#slider1 .ui-slider-handle, 
+#slider1 .ui-slider-handle,
 #slider2 .ui-slider-handle,
 #slider3 .ui-slider-handle,
-#slider4 .ui-slider-handle{
+#slider4 .ui-slider-handle {
   position: absolute;
   cursor: pointer;
   height: 200%;
@@ -914,7 +929,7 @@
 #span1 {
   position: absolute;
   bottom: 1%;
-  left:1%;
+  left: 1%;
   font-size: 70%;
 }
 
@@ -928,7 +943,7 @@
 #span3 {
   position: absolute;
   top: 50%;
-  left:1%;
+  left: 1%;
   font-size: 70%;
 }
 
@@ -937,42 +952,41 @@
   top: 50%;
   left: 30%;
   font-size: 70%;
-  
 }
 
 #button17 {
   position: absolute;
   bottom: 1%;
-  right:22%;
+  right: 22%;
   width: 15%;
   height: 30%;
   width: 20%;
   font-size: 50%;
 }
 
-#button11 {  
+#button11 {
   position: absolute;
   bottom: 1%;
-  right:3%;
+  right: 3%;
   width: 18%;
   height: 30%;
   font-size: 50%;
 }
 
-#button12 {  
+#button12 {
   position: absolute;
-  left:1%;
+  left: 1%;
   top: 3.4%;
   width: 15%;
   height: 5%;
 }
 
-#silhouette {
+/* #silhouette {
   position: absolute;
   left: 17%;
   top: 5%;
   font-size: 80%;
-}
+} */
 
 #userName {
   position: absolute;
@@ -985,7 +999,7 @@
   width: 400px;
   height: 70%;
   border-radius: 5px;
-  border: 1px solid #b8b8b9;  
+  border: 1px solid #b8b8b9;
   font-size: 24px;
   color: #333;
 }
@@ -1001,28 +1015,29 @@
 }
 
 #textbox1:hover {
-  background: #FFFAF0;
+  background: #fffaf0;
 }
 
 .axis path,
 .axis line {
-    fill: none;
-    stroke: black;
-    shape-rendering: crispEdges;
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
 }
 
 .axis text {
-    font-family: sans-serif;
-    font-size: 11px;
-    /*writing-mode: tb-rl;*/
+  font-family: sans-serif;
+  font-size: 11px;
+  /*writing-mode: tb-rl;*/
 }
 
-.sortable { 
-  list-style-type: none; 
-  margin: 0; 
-  padding: 0; width: 60%;
+.sortable {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 60%;
   text-align: center;
-  display:inline;
+  display: inline;
 }
 
 #doc_select {
@@ -1035,65 +1050,64 @@
 }
 
 #doc_select:hover {
-  background-color: #FFFAF0 !important;
+  background-color: #fffaf0 !important;
   cursor: pointer;
 }
 
 #button15 {
   position: absolute;
-  left:60%;
-  top: 3.4%;;
+  left: 60%;
+  top: 3.4%;
   width: 20%;
   height: 3.5%;
 }
 
 #button16 {
   position: absolute;
-  left:80%;
+  left: 80%;
   top: 3.4%;
   width: 20%;
   height: 3.5%;
   font-size: 50%;
 }
 
-#selectable .ui-selecting { 
-  background: #767676; 
+#selectable .ui-selecting {
+  background: #767676;
 }
-#selectable .ui-selected { 
-  background: #767676; 
+#selectable .ui-selected {
+  background: #767676;
 }
-#selectable { 
+#selectable {
   list-style-type: none;
-   margin: 0; 
-   padding: 0; 
-   width: 100%; 
- }
-#selectable li { 
-  margin: 2px; 
-  padding: 0.6em; 
-  font-size: 70%; 
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+#selectable li {
+  margin: 2px;
+  padding: 0.6em;
+  font-size: 70%;
   height: 5px;
 }
 
 #selectable li:hover {
   cursor: pointer;
-  background: #E6D5E1;
+  background: #e6d5e1;
 }
 
 #word_lists {
   float: left;
-  width:65%;
+  width: 65%;
   overflow: auto;
 }
 
 #barcharts {
-  width:35%;
-  overflow: auto; 
+  width: 35%;
+  overflow: auto;
 }
 
 .svg_par_cor {
   font: 60% sans-serif;
-
 }
 
 /*.axis_par_cor text { 
@@ -1125,7 +1139,7 @@
 
 /*for term highlight back color*/
 .highlight {
-  background-color: yellow 
+  background-color: yellow;
 }
 
 .ui-sortable:hover {
@@ -1134,12 +1148,12 @@
 
 /*for preventing change of the fade out on disabled dragable*/
 div.ui-state-disabled.ui-draggable-disabled {
- opacity : 1;
+  opacity: 1;
 }
 
 /*for remvoing small dotted box inside the term list*/
 .ui-selectable-helper {
-  display:none;
+  display: none;
 }
 
 .terms:hover {
@@ -1151,21 +1165,21 @@ div.ui-state-disabled.ui-draggable-disabled {
 }
 
 /*for the size of the auto complete in search bar*/
-.ui-autocomplete { 
-  height: 200px; 
-  overflow-y: scroll; 
+.ui-autocomplete {
+  height: 200px;
+  overflow-y: scroll;
   overflow-x: hidden;
-  z-index:3 !important;
+  z-index: 3 !important;
 }
 
 /*for the size of the font in search bar*/
 ::-webkit-input-placeholder {
-   font-size: 85%;
+  font-size: 85%;
 }
 
 .node {
   stroke-width: 1px;
-  stroke: #414A4C;
+  stroke: #414a4c;
 }
 
 .node:hover {
@@ -1179,7 +1193,7 @@ div.ui-state-disabled.ui-draggable-disabled {
 
 .node2 {
   stroke-width: 1px;
-  stroke: #414A4C;
+  stroke: #414a4c;
 }
 
 .node2:hover {
@@ -1206,13 +1220,13 @@ div.ui-state-disabled.ui-draggable-disabled {
 #video {
   position: absolute;
   top: 10%;
-  width:80%;
+  width: 80%;
   left: 10%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
   border-radius: 10px;
-  border-width:thin;
+  border-width: thin;
   height: 80%;
   margin: 3px;
   background-color: white;
@@ -1221,13 +1235,13 @@ div.ui-state-disabled.ui-draggable-disabled {
 #excelFrame {
   position: absolute;
   top: 3%;
-  width:50%;
+  width: 50%;
   left: 25%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
   border-radius: 10px;
-  border-width:thin;
+  border-width: thin;
   height: 94%;
   margin: 3px;
   background-color: white;
@@ -1238,12 +1252,12 @@ div.ui-state-disabled.ui-draggable-disabled {
   position: absolute;
   left: 1%;
   top: 4.5%;
-  width:97%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;
+  width: 97%;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
   border-radius: 10px;
-  border-width:thin;
+  border-width: thin;
   height: 40%;
   margin: 3px;
   background-color: white;
@@ -1253,49 +1267,49 @@ div.ui-state-disabled.ui-draggable-disabled {
   background-color: #99ccff;
   font-size: 80%;
   top: 0px;
-  cursor:default;
+  cursor: default;
 }
 
 #file_list_pannel {
   position: absolute;
   top: 46%;
-  left: 1%;  
-  width:97%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;
+  left: 1%;
+  width: 97%;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
   border-radius: 10px;
-  border-width:thin;
+  border-width: thin;
   height: 48%;
   margin: 3px;
   background-color: white;
 }
 
 #buttonPreprocess {
-    position: absolute;
-    bottom: 1%;
-    left: 40%;
-    width: 16%;
-    height: 3%;
+  position: absolute;
+  bottom: 1%;
+  left: 40%;
+  width: 16%;
+  height: 3%;
 }
 
 #file_list_title {
   background-color: #99ccff;
   font-size: 80%;
   top: 0px;
-  cursor:default;
+  cursor: default;
 }
 
 #uploadFrame {
   position: absolute;
   top: 3%;
-  width:50%;
+  width: 50%;
   left: 25%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
   border-radius: 10px;
-  border-width:thin;
+  border-width: thin;
   height: 94%;
   margin: 3px;
   background-color: white;
@@ -1305,7 +1319,7 @@ div.ui-state-disabled.ui-draggable-disabled {
 #userWelcome {
   position: absolute;
   top: 1%;
-  left: 3%; 
+  left: 3%;
   font-size: 90%;
 }
 
@@ -1313,9 +1327,8 @@ div.ui-state-disabled.ui-draggable-disabled {
   position: absolute;
   top: 1%;
   width: 40%;
-  left: 30%; 
+  left: 30%;
   height: 3%;
-
 }
 
 #input_info {
@@ -1329,13 +1342,13 @@ div.ui-state-disabled.ui-draggable-disabled {
   overflow: auto;
   position: absolute;
   top: 30%;
-  width:97%;
+  width: 97%;
   left: 1%;
   height: 65%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;  
-  border-width:thin;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
+  border-width: thin;
   margin: 3px;
   background-color: GhostWhite;
 }
@@ -1343,13 +1356,13 @@ div.ui-state-disabled.ui-draggable-disabled {
 #csv_pannel {
   position: absolute;
   top: 14%;
-  width:31%;
+  width: 31%;
   left: 1%;
   height: 13%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;  
-  border-width:thin;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
+  border-width: thin;
   margin: 3px;
   background-color: white;
 }
@@ -1358,7 +1371,7 @@ div.ui-state-disabled.ui-draggable-disabled {
   background-color: LightSeaGreen;
   font-size: 80%;
   top: 0px;
-  cursor:pointer;
+  cursor: pointer;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
 }
@@ -1366,7 +1379,7 @@ div.ui-state-disabled.ui-draggable-disabled {
 #button_csv {
   position: absolute;
   bottom: 10%;
-  width:97%;
+  width: 97%;
   left: 1%;
   height: 45%;
 }
@@ -1374,7 +1387,7 @@ div.ui-state-disabled.ui-draggable-disabled {
 #button_pdf {
   position: absolute;
   bottom: 10%;
-  width:97%;
+  width: 97%;
   left: 1%;
   height: 45%;
 }
@@ -1382,7 +1395,7 @@ div.ui-state-disabled.ui-draggable-disabled {
 #button_txt {
   position: absolute;
   bottom: 10%;
-  width:97%;
+  width: 97%;
   left: 1%;
   height: 45%;
 }
@@ -1390,13 +1403,13 @@ div.ui-state-disabled.ui-draggable-disabled {
 #pdf_pannel {
   position: absolute;
   top: 14%;
-  width:31%;
+  width: 31%;
   left: 34%;
   height: 13%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;  
-  border-width:thin;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
+  border-width: thin;
   margin: 3px;
   background-color: white;
 }
@@ -1405,7 +1418,7 @@ div.ui-state-disabled.ui-draggable-disabled {
   background-color: LightCoral;
   font-size: 80%;
   top: 0px;
-  cursor:pointer;
+  cursor: pointer;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
 }
@@ -1413,13 +1426,13 @@ div.ui-state-disabled.ui-draggable-disabled {
 #txt_pannel {
   position: absolute;
   top: 14%;
-  width:31%;
+  width: 31%;
   left: 67%;
   height: 13%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;  
-  border-width:thin;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
+  border-width: thin;
   margin: 3px;
   background-color: white;
 }
@@ -1434,28 +1447,28 @@ div.ui-state-disabled.ui-draggable-disabled {
 }
 
 #buttonDeleteAll {
-  position: absolute; 
+  position: absolute;
   left: 2%;
   width: 10%;
   height: 5%;
 }
 
 #buttonDeleteSelected {
-  position: absolute; 
+  position: absolute;
   left: 13%;
   width: 13%;
   height: 5%;
 }
 
 #buttonShowFiles {
-  position: absolute; 
+  position: absolute;
   left: 27%;
   width: 13%;
   height: 5%;
 }
 
 #numberOfFiles {
-  position: absolute; 
+  position: absolute;
   left: 42%;
   font-size: 100%;
 }
@@ -1464,13 +1477,13 @@ div.ui-state-disabled.ui-draggable-disabled {
   overflow: auto;
   position: absolute;
   top: 13%;
-  width:97%;
+  width: 97%;
   left: 1%;
   height: 82%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;  
-  border-width:thin;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
+  border-width: thin;
   margin: 3px;
   background-color: GhostWhite;
 }
@@ -1478,7 +1491,7 @@ div.ui-state-disabled.ui-draggable-disabled {
 #onlyEnglish {
   position: absolute;
   bottom: 1%;
-  left: 2%;  
+  left: 2%;
 }
 
 #onlyEnglishText {
@@ -1491,7 +1504,7 @@ div.ui-state-disabled.ui-draggable-disabled {
 #numbers {
   position: absolute;
   bottom: 3%;
-  left: 2%;  
+  left: 2%;
 }
 
 #numbersText {
@@ -1504,7 +1517,7 @@ div.ui-state-disabled.ui-draggable-disabled {
 #lematizer {
   position: absolute;
   bottom: 1%;
-  left: 25%;  
+  left: 25%;
 }
 
 #lematizerText {
@@ -1517,7 +1530,7 @@ div.ui-state-disabled.ui-draggable-disabled {
 #bigram {
   position: absolute;
   bottom: 3%;
-  left: 25%;  
+  left: 25%;
 }
 
 #bigramText {
@@ -1557,4 +1570,13 @@ div.ui-state-disabled.ui-draggable-disabled {
   bottom: 1.8%;
   left: 88.5%;
   font-size: 70%;
+}
+
+#nextbuttondiv {
+  position: absolute;
+  bottom: 1%;
+  left: 90%;
+  font-size: 80%;
+  height: 15%;
+  width: 15%;
 }

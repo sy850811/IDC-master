@@ -21,10 +21,10 @@ try:
 	os.system("cat "+ userDirectory + "out" + userID + ".Matrix"+" | tr ',' '\t' | ./bhtsne.py -d 2 -p "+perplexityNew+" > "+tsneFile)
 
 
-	#save perplexity number
-	perplexity_File = open(userDirectory + "perplexity", 'w')
-	perplexity_File.write(perplexityNew)
-	perplexity_File.close()
+	# #save perplexity number
+	# perplexity_File = open(userDirectory + "perplexity", 'w')
+	# perplexity_File.write(perplexityNew)
+	# perplexity_File.close()
 
 	print("Content-type:application/json\r\n\r\n")	
 	print(json.dumps({'status':'success'}))

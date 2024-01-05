@@ -13,7 +13,6 @@ import sys, os
 import math
 # env = importlib.import_module("env")
 from dotenv import load_dotenv
-import os
 
 # Load environment variables from .env file
 load_dotenv()
@@ -128,7 +127,8 @@ try:
 
     #run kmeans
     # clusterer = KMeans(n_clusters=numberOfClusters, init=seedDocuments, n_init=1) //////////////
-    clusterer = KMeans(n_clusters=numberOfClusters, init=seedDocuments, n_init=1)
+    # clusterer = KMeans(n_clusters=numberOfClusters, init=seedDocuments, n_init=1)
+    clusterer = KMeans(n_clusters=numberOfClusters, n_init=1)
     labels_pred = clusterer.fit_predict(document_term_matrix)
 
     #calculate average silhouette

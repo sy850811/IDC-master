@@ -50,9 +50,48 @@ var clusterNumber = -1;
 var explanation_details = "";
 var userSubsetDetails = null;
 var currentSubset = null;
+var currentDocumentName = "";
+var numberOfDocumnetsVariable = 20;
 /**
  * Load the system and clusters
  */
+function showNewDocument() {
+  /*
+  Given:
+  1. currentDocumentName ""
+  2. documentNames  []
+
+  To do:
+  3. get the name of next document
+  4. get its content
+  5. se doc_content to the content of the document
+  */
+  console.log("Hello from showNewDocument");
+  //if $("#doc_content") is empty, then load the first document named paper0.txt
+  if ($("#doc_content").html() == "") {
+    currentDocumentName = "paper0.txt";
+    $("#doc_content").html(getDocumentContent(currentDocumentName));
+  }
+  //else, load the next document
+  else {
+    var currentDocumentNumber = currentDocumentName
+      .substring(5)
+      .replace(".txt", "");
+    var nextDocumentName =
+      "paper" + (parseInt(currentDocumentNumber) + 1).toString() + ".txt";
+    // Extract number from text after paper and before .
+    if (parseInt(currentDocumentNumber) + 1 >= numberOfDocumnetsVariable) {
+      //call questionnaires
+      alert("You have reached the end of the document list!");
+      return;
+    }
+    nextDocText = getDocumentContent(nextDocumentName);
+    $("#doc_content").html(nextDocText);
+    currentDocumentName = nextDocumentName;
+    createTermClusterChart();
+  }
+}
+
 function pageLoad() {
   $("#slider1").slider("disable");
   $("#slider2").slider("disable");
@@ -193,6 +232,10 @@ function pageLoad() {
   }
 }
 function panelVisibility(currentSubset) {
+  // #check if we need the three lines below
+  $("#doc_select").hide();
+  $("#button15").hide();
+  $("#button16").hide();
   /**
   select panel div from the html file
   if currentSubset is 0, keep 1,2,5,9
@@ -206,6 +249,7 @@ function panelVisibility(currentSubset) {
     $("#panel8").hide(); //Term Cloud
   }
   if (currentSubset == BASELINE_GLOBAL) {
+    console.log("Here");
     $("#panel9").hide(); //Local Explanation
   }
 }
@@ -282,13 +326,13 @@ function callServer() {
         silhouette = silhouette.toFixed(4);
       }
 
-      $("#silhouette").append("Silhouette: " + silhouette);
+      // $("#silhouette").append("Silhouette: " + silhouette);
 
       if (
         clusterKeytermsOriginal == null ||
-        clusterDocs == null ||
-        clusterDocs[0].length == 2 ||
-        clusterDocs[1].length == 2
+        clusterDocs == null //|| ///////////////////////
+        // clusterDocs[0].length == 2 ||
+        // clusterDocs[1].length == 2
       ) {
         alert(
           "Internal server error in clustering your data collection! Please re-try with a different number of clusters."
@@ -460,7 +504,7 @@ function callServer() {
         var n2 = date2.getTime();
 
         // get general view graph
-        generalViewGraph = getGeneralViewGraph(0.97);
+        // generalViewGraph = getGeneralViewGraph(0.97);
 
         var date3 = new Date();
         var n3 = date3.getTime();
@@ -694,12 +738,12 @@ function getClusterWords() {
     for (var j = 0; j < temp.length; j++) {
       tempClusterWords += '{"word":"' + temp[j] + '"}';
 
-      if (j < 4) {
+      if (j < 10) {
         //only top 5
         tempClusterWords += ",";
       }
 
-      if (j == 4) {
+      if (j == 10) {
         //only top 5
         break;
       }
@@ -746,7 +790,7 @@ function clusterClicked(elementID) {
   $("#" + elementID).draggable("enable");
 
   //show cluster nodes
-  showClusterNodes(elementID);
+  // showClusterNodes(elementID);
 
   //check if the cluster is not selected before
   if (
@@ -778,7 +822,9 @@ function clusterClicked(elementID) {
     $("#panel8title").css("background-color", clusterColor);
 
     //load list of documnets of each cluster
-    docListLoad(elementID);
+    // docListLoad(elementID);
+    showNewDocument();
+    createTermClusterChart();
 
     //load list of key terms of each cluster
     listLoad(elementID, $("#" + elementID + " p").css("background-color"));
@@ -1328,63 +1374,10 @@ function loadDoc(index) {
 /**
  * Add new term to the cluster (if a term in key term list double clicked)
  */
-$(document).ready(function () {
-  saveLog("AddTermDoubleClickList");
-  $("#selectable").dblclick(function () {
-    var term = $(this.getElementsByClassName("ui-selected")).text();
-
-    var terms = document
-      .getElementById(getSelectedClusterID())
-      .getElementsByClassName("sortable");
-
-    if (!termExists($(terms).children(), term)) {
-      //check if the term exists or not
-      appendTerm(term);
-    } else {
-      alert('This cluster already have "' + term + '"');
-    }
-  });
-});
 
 /**
  * Add new term to the cluster (if a word in a documnet content double clicked)
  */
-$(document).ready(function () {
-  saveLog("AddTermDoubleClickDocContent");
-  //if a word in a documnet content double clicked
-  $("#doc_content").dblclick(function () {
-    var term = getSelectedText();
-
-    var terms = document
-      .getElementById(getSelectedClusterID())
-      .getElementsByClassName("sortable");
-
-    if (!termExists($(terms).children(), term)) {
-      appendTerm(term);
-    } else {
-      alert('This cluster already have "' + term + '"');
-    }
-  });
-});
-
-/**
- * append the selected term to the cluster
- * @param term = the term
- */
-function appendTerm(term) {
-  var x;
-  x = document.getElementsByClassName("cluster");
-  var i;
-  for (i = 0; i < x.length; i++) {
-    if (x[i].style.borderColor == "rgb(254, 46, 154)") {
-      $(x[i].getElementsByClassName("sortable")).append(
-        "<li class='ui-state-default ui-sortable-handle' onmousedown=\"wordMouseDown(event)\"><span class='terms'>" +
-          term +
-          "</span></li>"
-      );
-    }
-  }
-}
 
 /**
  * Get the selected text inside of document view
@@ -1451,7 +1444,7 @@ $(function () {
       }
 
       if (key == "showNodes") {
-        showClusterNodes(clusterName);
+        // showClusterNodes(clusterName);
       }
 
       if (key == "Download") {
@@ -1799,28 +1792,6 @@ function downloadCluster(clusterName) {
 }
 
 /**
- * For right click of clusters files in tree view
- */
-$(function () {
-  $.contextMenu({
-    selector: ".context-menu-three",
-    callback: function (key, options) {
-      if (key == "ShowPDF") {
-        showDocumentPDF($(this).text());
-      }
-
-      if (key == "ShowCloud") {
-        showDocumentCloud($(this).text());
-      }
-    },
-    items: {
-      ShowPDF: { name: "ShowPDF", icon: "edit" },
-      ShowCloud: { name: "ShowCloud", icon: "paste" },
-    },
-  });
-});
-
-/**
  * @param documentName = name of the document
  * Show the content of the document PDF
  */
@@ -1838,70 +1809,60 @@ function showDocumentPDF(documentName) {
  * @param clusterName = the name of right clicked cluster
  */
 function clusterDelete(clusterName) {
-  saveLog("clusterDelete");
-
-  if (clusterName != null) {
-    if (confirm('Are you sure about deleting "' + clusterName + '"')) {
-      $("body").css("cursor", "wait");
-
-      var selectedCluster = getSelectedClusterID();
-
-      //rename the cluster in json data files
-      //because data are temp it does not need to delele it just
-      //rename it to a strange name
-      renameClusterNameInJson(
-        clusterKeyTerms,
-        clusterName,
-        "@!@@@%%@@@@%@@!!!@@"
-      );
-      renameClusterNameInJson(clusterCloud, clusterName, "@!@@@%%@@@@%@@!!!@@");
-      renameClusterNameInJson(clusterWords, clusterName, "@!@@@%%@@@@%@@!!!@@");
-      renameClusterNameInJson(
-        clusterDocuments,
-        clusterName,
-        "@!@@@%%@@@@%@@!!!@@"
-      );
-
-      //rename the cluster in csv data files
-      renameClusterNameInCSV("data2", clusterName, "@!@@@%%@@@@%@@!!!@@");
-      renameClusterNameInCSV("data1", clusterName, "@!@@@%%@@@@%@@!!!@@");
-
-      //clear document view, term view, term cloud and paralel cordinator
-      //if the selected cluster was removed!
-      if (clusterName == selectedCluster) {
-        $("#doc_content").html("");
-        $("#doc_select").html("");
-        $("#DocumentClusterView").html("");
-        $("#barcharts").html("");
-        $("#selectable").html("");
-        $("#TermClusterView").html("");
-        $("#panel8_2").html("");
-
-        //change the title colors to defualt
-        $("#panel2title").css("background-color", "#CCC");
-        $("#panel3title").css("background-color", "#CCC");
-        $("#panel4title").css("background-color", "#CCC");
-        // $("#panel5title").css("background-color", "#CCC");
-        $("#panel6title").css("background-color", "#CCC");
-        $("#panel7title").css("background-color", "#CCC");
-        $("#panel8title").css("background-color", "#CCC");
-      }
-
-      //remove the cluster in cluster view
-      $("#" + clusterName).remove();
-
-      //remove the name of cluster in tree view
-      refreshTreeView();
-
-      //remove cluster from general view graph
-      removeClusterInGraph(clusterName);
-
-      $("body").css("cursor", "auto");
-    }
-  } else {
-    alert("Please select the cluster first.");
-    $("body").css("cursor", "auto");
-  }
+  // saveLog("clusterDelete");
+  // if (clusterName != null) {
+  //   if (confirm('Are you sure about deleting "' + clusterName + '"')) {
+  //     $("body").css("cursor", "wait");
+  //     var selectedCluster = getSelectedClusterID();
+  //     //rename the cluster in json data files
+  //     //because data are temp it does not need to delele it just
+  //     //rename it to a strange name
+  //     renameClusterNameInJson(
+  //       clusterKeyTerms,
+  //       clusterName,
+  //       "@!@@@%%@@@@%@@!!!@@"
+  //     );
+  //     renameClusterNameInJson(clusterCloud, clusterName, "@!@@@%%@@@@%@@!!!@@");
+  //     renameClusterNameInJson(clusterWords, clusterName, "@!@@@%%@@@@%@@!!!@@");
+  //     renameClusterNameInJson(
+  //       clusterDocuments,
+  //       clusterName,
+  //       "@!@@@%%@@@@%@@!!!@@"
+  //     );
+  //     //rename the cluster in csv data files
+  //     renameClusterNameInCSV("data2", clusterName, "@!@@@%%@@@@%@@!!!@@");
+  //     renameClusterNameInCSV("data1", clusterName, "@!@@@%%@@@@%@@!!!@@");
+  //     //clear document view, term view, term cloud and paralel cordinator
+  //     //if the selected cluster was removed!
+  //     if (clusterName == selectedCluster) {
+  //       $("#doc_content").html("");
+  //       $("#doc_select").html("");
+  //       $("#DocumentClusterView").html("");
+  //       $("#barcharts").html("");
+  //       $("#selectable").html("");
+  //       $("#TermClusterView").html("");
+  //       $("#panel8_2").html("");
+  //       //change the title colors to defualt
+  //       $("#panel2title").css("background-color", "#CCC");
+  //       $("#panel3title").css("background-color", "#CCC");
+  //       $("#panel4title").css("background-color", "#CCC");
+  //       // $("#panel5title").css("background-color", "#CCC");
+  //       $("#panel6title").css("background-color", "#CCC");
+  //       $("#panel7title").css("background-color", "#CCC");
+  //       $("#panel8title").css("background-color", "#CCC");
+  //     }
+  //     //remove the cluster in cluster view
+  //     $("#" + clusterName).remove();
+  //     //remove the name of cluster in tree view
+  //     refreshTreeView();
+  //     //remove cluster from general view graph
+  //     removeClusterInGraph(clusterName);
+  //     $("body").css("cursor", "auto");
+  //   }
+  // } else {
+  //   alert("Please select the cluster first.");
+  //   $("body").css("cursor", "auto");
+  // }
 }
 
 /**
@@ -1939,7 +1900,7 @@ function removeClusterInGraph(clusterName) {
 
     //update the generalViewGraph
     //get general view graph
-    generalViewGraph = getGeneralViewGraph(0.97);
+    // generalViewGraph = getGeneralViewGraph(0.97);
 
     //load General View
     var threshold = $("#slider1").slider("value") / 100;
@@ -2391,7 +2352,7 @@ function createCluster(clusterName) {
       clusterName +
       "')\"" +
       'ondrop="drop(event)" ondragover="allowDrop(event)" ondrag="clusterDrag(this)">' +
-      '<p class="clusterTitle" onclick = "showClusterNodes($(this).text().trim())"> ' +
+      '<p class="clusterTitle"> ' +
       clusterName +
       "</p>" +
       '<div class="clusterwordlist">' +
@@ -2406,6 +2367,7 @@ function createCluster(clusterName) {
   //for styling the cluster
   $("#" + clusterName).css("background-color", "White");
   document.getElementById(clusterName).style.borderColor = "#cccccc";
+  document.getElementById(clusterName).style.height = "93%";
   document.getElementById(clusterName).style.borderStyle = "outset";
   document.getElementById(clusterName).style.borderWidth = "1px";
   $("#" + clusterName + " p").css("background-color", setBackGroundColor());
@@ -2444,6 +2406,56 @@ function createCluster(clusterName) {
 
   //for cluster tooltip
   clusterToolTip(clusterName);
+  if (currentSubset == BASELINE_LOCAL) {
+    // panel5 cluster tree view directory
+    let panel5 = document.getElementById("panel5");
+    panel5.style.height = "91%";
+    cluster_tree_view.style.top = "5%";
+    let panel2 = document.getElementById("panel2");
+    panel2.style.width = "66%";
+    panel2.style.top = "7.5%";
+    panel2.style.height = "20%";
+    panel2.style.left = "24.25%";
+    let button15 = document.getElementById("button15");
+    button15.style.height = "10%";
+    button15.style.top = "10%";
+    let button16 = document.getElementById("button16");
+    button16.style.height = "10%";
+    button16.style.top = "10%";
+    let panel2title = document.getElementById("panel2title");
+    panel2title.style.height = "10%";
+    let doc_select = document.getElementById("doc_select");
+    doc_select.style.height = "10%";
+    doc_select.style.top = "10%";
+    let doc_content = document.getElementById("doc_content");
+    doc_content.style.top = "20%";
+    let panel9 = document.getElementById("panel9");
+    panel9.style.height = "68.5%";
+    panel9.style.top = "29%";
+    panel9.style.width = "66%";
+  }
+  if (currentSubset == BASELINE_GLOBAL) {
+    let panle4 = document.getElementById("panel4");
+    panle4.style.left = "24.25%";
+    panle4.style.width = "66%";
+    panle4.style.height = "30%";
+    // $("#panel4").hide();
+    let panel3 = document.getElementById("panel3");
+    panel3.style.left = "24.25%";
+    panel3.style.top = "40%";
+    panel3.style.width = "18%";
+    let panel7 = document.getElementById("panel7");
+    panel7.style.left = "43%";
+    panel7.style.top = "40%";
+    panel7.style.width = "18%";
+    let panel8 = document.getElementById("panel8");
+    panel8.style.left = "61.75%";
+    panel8.style.top = "40%";
+    panel8.style.width = "28.5%";
+    panel8.style.height = "30%";
+    let panel2 = document.getElementById("panel2");
+    panel2.style.height = "41.5%";
+  }
 }
 
 /**
@@ -2659,35 +2671,35 @@ function getFiles(clusterName) {
  * @param fileName = the name of selected file
  */
 function fileClicked(fileName) {
-  document.getElementById("doc_content").innerHTML = "";
-  loadDoc($(fileName).text());
-
-  highlightDocGeneralView($(fileName).text());
-  createTermClusterChart();
-
-  //show the paralel cordinator view
-  var words = new Array(1);
-  var colors = {};
-  words[0] = $(fileName).text();
-  colors[words[0]] = $("#" + getSelectedClusterID() + " p").css(
-    "background-color"
-  ); //"Blue";
-  paralelCordinator(
-    documentClusterData,
-    "#panel6",
-    words,
-    "#DocumentClusterView",
-    colors
-  );
-
-  //change the selected list of documents
-  var docSelect = document.getElementById("doc_select");
-  for (var i = 0; i < docSelect.options.length; i++) {
-    if (docSelect.options[i].innerHTML == $(fileName).text()) {
-      docSelect.selectedIndex = i;
-      break;
-    }
-  }
+  ////////////////////////////////////////////////////////////////////////////////////////  ///////////////////////////
+  //// /////////// Add a dialog box maybe to show the selected document in the cluster ree //////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////  ///////////////////////////
+  // document.getElementById("doc_content").innerHTML = "";
+  // loadDoc($(fileName).text());
+  // // highlightDocGeneralView($(fileName).text());
+  // createTermClusterChart();
+  // //show the paralel cordinator view
+  // var words = new Array(1);
+  // var colors = {};
+  // words[0] = $(fileName).text();
+  // colors[words[0]] = $("#" + getSelectedClusterID() + " p").css(
+  //   "background-color"
+  // ); //"Blue";
+  // paralelCordinator(
+  //   documentClusterData,
+  //   "#panel6",
+  //   words,
+  //   "#DocumentClusterView",
+  //   colors
+  // );
+  // //change the selected list of documents
+  // var docSelect = document.getElementById("doc_select");
+  // for (var i = 0; i < docSelect.options.length; i++) {
+  //   if (docSelect.options[i].innerHTML == $(fileName).text()) {
+  //     docSelect.selectedIndex = i;
+  //     break;
+  //   }
+  // }
 }
 
 /**
@@ -2972,8 +2984,8 @@ function docListLoad(clusterName) {
           );
 
           //higlight the first document in general view
-          highlightDocGeneralView(Data[j].ID);
-          createTermClusterChart();
+          // highlightDocGeneralView(Data[j].ID);
+          // createTermClusterChart();
         }
       }
     }
@@ -3391,13 +3403,13 @@ $(function () {
             "'?"
         );
 
-        if (ok) {
-          if (!termExists($(terms).children(), term)) {
-            appendTerm(term);
-          } else {
-            alert('This cluster already have "' + term + '"');
-          }
-        }
+        // if (ok) {
+        //   if (!termExists($(terms).children(), term)) {
+        //     appendTerm(term);
+        //   } else {
+        //     alert('This cluster already have "' + term + '"');
+        //   }
+        // }
       }
     },
   });
@@ -3615,47 +3627,47 @@ function MindMapClicked() {
 /*
  * Send the desired terms of the users to the server in order to reclustering.
  */
-function SendData2Server() {
-  //save session before
-  sessionDescription =
-    "This session was saved automatically before reclustering.";
-  callSaveSession("AutoSave");
+// function SendData2Server() { ///////////////
+//   //save session before
+//   sessionDescription =
+//     "This session was saved automatically before reclustering.";
+//   callSaveSession("AutoSave");
 
-  clusterNumber = document.getElementsByClassName("cluster").length;
+//   clusterNumber = document.getElementsByClassName("cluster").length;
 
-  if (clusterNumber < 2) {
-    userU = -1;
-    alert("Your desired number of clusters should be at least 2!");
-  } else {
-    userU = +1;
-    serverData = new Array();
+//   if (clusterNumber < 2) {
+//     userU = -1;
+//     alert("Your desired number of clusters should be at least 2!");
+//   } else {
+//     userU = +1;
+//     serverData = new Array();
 
-    var confirmed = confirm(
-      "Your desired number of clusters is " + clusterNumber
-    );
-    if (confirmed) {
-      var clusters = document.getElementsByClassName("cluster");
+//     var confirmed = confirm(
+//       "Your desired number of clusters is " + clusterNumber
+//     );
+//     if (confirmed) {
+//       var clusters = document.getElementsByClassName("cluster");
 
-      for (var i = 0; i < clusters.length; i++) {
-        var clusterName = $(clusters[i]).attr("id");
-        var terms = $(
-          document
-            .getElementById(clusterName)
-            .getElementsByClassName("sortable")
-        ).children();
+//       for (var i = 0; i < clusters.length; i++) {
+//         var clusterName = $(clusters[i]).attr("id");
+//         var terms = $(
+//           document
+//             .getElementById(clusterName)
+//             .getElementsByClassName("sortable")
+//         ).children();
 
-        serverClusetrName[i] = clusterName;
-        serverData[i] = new Array();
-        for (var j = 0; j < terms.length; j++) {
-          serverData[i][j] = $(terms[j]).text();
-        }
-      }
+//         serverClusetrName[i] = clusterName;
+//         serverData[i] = new Array();
+//         for (var j = 0; j < terms.length; j++) {
+//           serverData[i][j] = $(terms[j]).text();
+//         }
+//       }
 
-      clearScreen();
-      callServer();
-    }
-  }
-}
+//       clearScreen();
+//       callServer();
+//     }
+//   }
+// }
 
 /*
  * clear the screen.
@@ -3697,7 +3709,7 @@ function clearScreen() {
 
   $.jstree.destroy(); //clear tree view
 
-  $("#silhouette").html("");
+  // $("#silhouette").html("");
 }
 
 /*
@@ -4204,7 +4216,7 @@ function loadSession(sessionName) {
         }
 
         //get general view graph
-        generalViewGraph = getGeneralViewGraph(0.97);
+        // generalViewGraph = getGeneralViewGraph(0.97);
 
         //load General View
         generalViewLoader(cosineDistance);
@@ -4231,7 +4243,7 @@ function loadSession(sessionName) {
         $("#slider3_Textbox").removeAttr("disabled");
 
         //show silhouette
-        $("#silhouette").append("Silhouette: " + silhouette);
+        // $("#silhouette").append("Silhouette: " + silhouette);
 
         $("body").css("cursor", "auto");
       }
@@ -4278,10 +4290,9 @@ var highlight_trans = 0.25;
  */
 function generalViewLoader(threshold) {
   //load T-SNE layout
-  loadT_SNE(threshold);
-
+  // loadT_SNE(threshold);
   //load Force layout
-  load_Force(threshold);
+  // load_Force(threshold);
 }
 
 /*
@@ -5310,8 +5321,8 @@ function loadDocInCluster(documentName, clusterName) {
   //load the document
   document.getElementById("doc_content").innerHTML = "";
   loadDoc(documentName);
-  createTermClusterChart();
-  highlightDocGeneralView(documentName);
+  // createTermClusterChart();
+  // highlightDocGeneralView(documentName);
 
   //show the paralel cordinator view
   var words = new Array(1);
@@ -5759,63 +5770,7 @@ function graphGravityChange(value) {
 }
 
 /*
- * Highlight the document in general view graph
- * @param docName = docuemnt name
- */
-function highlightDocGeneralView(docName) {
-  node.style("stroke", function (o) {
-    if (o.na == docName) {
-      return "red";
-    }
-    // else if(docsHighlight[o.na])
-    // {
-    //   return "blue";
-    // }
-    else {
-      return "#a6a6a6";
-    }
-  });
-
-  node.style("stroke-width", function (o) {
-    if (o.na == docName) {
-      return "2px";
-    }
-    // else if(docsHighlight[o.na])
-    // {
-    //   return "2px";
-    // }
-    else {
-      return "0.5px";
-    }
-  });
-
-  node2.style("stroke", function (o) {
-    if (o.na == docName) {
-      return "red";
-    }
-    // else if(docsHighlight[o.na])
-    // {
-    //   return "blue";
-    // }
-    else {
-      return "#a6a6a6";
-    }
-  });
-
-  node2.style("stroke-width", function (o) {
-    if (o.na == docName) {
-      return "2px";
-    }
-    // else if(docsHighlight[o.na])
-    // {
-    //   return "2px";
-    // }
-    else {
-      return "0.5px";
-    }
-  });
-}
-
+ 
 /**
  * Show the term cload of the document
  * @param documentName = docuemnt name
@@ -6184,6 +6139,22 @@ function getExplanation() {
 }
 
 function createTermClusterChart() {
+  // Assuming the container div 'panel9' has been rendered and has width and height
+  var panel9 = document.getElementById("panel9");
+  console.log(document.getElementById("panel9"));
+  console.log(panel9);
+  var computedStyle = window.getComputedStyle(panel9);
+
+  // Get the computed width and height from the CSS properties
+  var panelWidth = parseFloat(computedStyle.width);
+  var panelHeight = parseFloat(computedStyle.height);
+
+  // Define margins as an object, you can adjust these values as needed
+  var margin = { top: 20, right: 20, bottom: 40, left: 40 };
+
+  // Calculate the actual width and height of the SVG canvas
+  var width = panelWidth - margin.left - margin.right;
+  var height = panelHeight - margin.top - margin.bottom;
   doc = document.getElementById("doc_content").innerHTML.replace(/\n$/, "");
   documentExplanation = explanation_details[doc];
 
@@ -6217,15 +6188,6 @@ function createTermClusterChart() {
       })
     );
 
-  // var y = d3.scale
-  //   .linear()
-  //   .rangeRound([height, 0])
-  //   .domain([
-  //     0,
-  //     d3.max(data, function (d) {
-  //       return d["Michael Fincke"] + d["Astronaut"] + d["Orbit"] + d["Earth"];
-  //     }),
-  //   ]);
   var color = d3.scale
     .ordinal()
     .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"])
@@ -6286,7 +6248,7 @@ function createTermClusterChart() {
     .data(function (d) {
       var y0 = 0;
       return color.domain().map(function (name) {
-        return { name: name, y0: y0, y1: (y0 += +d[name]) };
+        return { name: name, y0: y0, y1: (y0 += +d[name]), cluster: d.cluster };
       });
     })
     .enter()
@@ -6300,6 +6262,27 @@ function createTermClusterChart() {
     })
     .style("fill", function (d) {
       return color(d.name);
+    })
+    // Add text labels
+    .each(function (d) {
+      var bar = d3.select(this);
+      var barHeight = y(d.y0) - y(d.y1);
+      if (barHeight > 20) {
+        // Only add text if the bar is tall enough
+        var barWidth = x.rangeBand();
+        var barX = x(d.cluster) + barWidth / 2; // Center of the bar
+        var barY = y(d.y1) + (y(d.y0) - y(d.y1)) / 2; // Middle of the bar height
+
+        svg
+          .append("text")
+          .attr("x", barX)
+          .attr("y", barY)
+          .attr("dy", "0.35em")
+          .attr("text-anchor", "middle")
+          .text(d3.format(".2f")(d.y1 - d.y0))
+          .style("fill", "black") // Choose a fill color that contrasts with the bar
+          .style("font-size", "20px"); // Adjust font size as needed
+      }
     });
 
   // Calculate the legend item offsets by accumulating widths
