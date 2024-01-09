@@ -1,0 +1,269 @@
+panel9 (General View) 
+
+    <div
+      class="resizable"
+      id="panel9"
+      ondrag="panelDrag(this)"
+      onclick="panelDrag(this)"
+    >
+      <p id="panel9title" class="panelTitle">Graph View</p>
+      <div id="tabs">
+        <ul>
+          <li><a href="#tabs-1">t-SNE</a></li>
+          <li><a href="#tabs-2">Force Layout</a></li>
+        </ul>
+        <div id="tabs-1" class="context-menu-four box menu-1">
+          <!-- tab1 -->
+          <span id="TsneSilhouette_label"></span>
+          <div id="general_view1">
+            <!-- Documents graph goes here (T-SNE layout) -->
+          </div>
+          <div id="tabs-1_controls">
+            <span id="slider4_label">Perplexity [5-50]:</span>
+            <input id="slider4_Textbox" type="text" onkeyup="changeSlider4()" />
+            <span id="slider4_min">5</span>
+            <span id="slider4_max">50</span>
+            <div id="slider4"></div>
+            <input
+              id="button41"
+              title="apply"
+              class="button"
+              type="button"
+              value="apply"
+              onclick="changePerplexity()"
+            />
+          </div>
+        </div>
+        <div id="tabs-2" class="context-menu-four box menu-1">
+          <!-- tab2 -->
+          <input
+            id="button19"
+            title="Silhouette"
+            class="button"
+            type="button"
+            value="Silhouette"
+            onclick="forceSilhouette()"
+          />
+          <span id="forceSilhouette_label"></span>
+          <div id="general_view2">
+            <!-- Documents graph goes here (Force layout) -->
+          </div>
+          <span id="slider3_label">Gravity (%):</span>
+          <input id="slider3_Textbox" type="text" onkeyup="changeSlider3()" />
+          <span id="slider3_min">0</span>
+          <span id="slider3_max">100</span>
+          <div id="slider3"></div>
+
+          <span id="slider2_label">Link Distance [0-100]:</span>
+          <input id="slider2_Textbox" type="text" onkeyup="changeSlider2()" />
+          <span id="slider2_min">0</span>
+          <span id="slider2_max">100</span>
+          <div id="slider2"></div>
+        </div>
+      </div>
+
+      <div id="panel9_filters">
+        <span id="filter1_label">First Filter:</span>
+        <select id="filter1_select">
+          <!-- list of filter1 are here! -->
+          <option value=""></option>
+        </select>
+        <script>
+          document.getElementById("filter1_select").onchange = function () {
+            applyFilter();
+          };
+        </script>
+        <span id="filter2_label">Second Filter:</span>
+        <select id="filter2_select">
+          <!-- list of filter2 are here! -->
+          <option value=""></option>
+        </select>
+        <script>
+          document.getElementById("filter2_select").onchange = function () {
+            applyFilter();
+          };
+        </script>
+      </div>
+
+      <div id="tabs-common-control">
+        <span id="slider1_label">Cosine Distance (%):</span>
+        <input id="slider1_Textbox" type="text" onkeyup="changeSlider1()" />
+        <span id="slider1_min">0</span>
+        <span id="slider1_max">97</span>
+        <div id="slider1"></div>
+
+        <span id="span1">#Documents: </span><span id="span2"></span>
+        <span id="span3">#Links: </span><span id="span4"></span>
+        <input
+          id="button17"
+          title="Graph VNA"
+          class="button"
+          type="button"
+          value="Graph VNA"
+          onclick="exportGraphToVNAformat($('#slider1_Textbox').val()/100)"
+        />
+        <input
+          id="button11"
+          title="MindMap"
+          class="button"
+          type="button"
+          value="MindMap"
+          onclick="MindMapClicked()"
+        />
+      </div>
+    </div>
+
+panel6 (Document-Cluster View)
+    <div
+      class="resizable"
+      id="panel6"
+      ondrag="panelDrag(this)"
+      onclick="panelDrag(this)"
+    >
+      <p id="panel6title" class="panelTitle">Document-Cluster View</p>
+      <div id="DocumentClusterView">
+        <!-- the svg of paralelCordinator goes here -->
+      </div>
+    </div>
+
+/**
+ * Add new term to the cluster (if a term in key term list double clicked)
+ */
+$(document).ready(function () {
+  saveLog("AddTermDoubleClickList");
+  $("#selectable").dblclick(function () {
+    var term = $(this.getElementsByClassName("ui-selected")).text();
+
+    var terms = document
+      .getElementById(getSelectedClusterID())
+      .getElementsByClassName("sortable");
+
+    if (!termExists($(terms).children(), term)) {
+      //check if the term exists or not
+      appendTerm(term);
+    } else {
+      alert('This cluster already have "' + term + '"');
+    }
+  });
+});
+
+/**
+ * Add new term to the cluster (if a word in a documnet content double clicked)
+ */
+$(document).ready(function () {
+  saveLog("AddTermDoubleClickDocContent");
+  //if a word in a documnet content double clicked
+  $("#doc_content").dblclick(function () {
+    var term = getSelectedText();
+
+    var terms = document
+      .getElementById(getSelectedClusterID())
+      .getElementsByClassName("sortable");
+
+    if (!termExists($(terms).children(), term)) {
+      appendTerm(term);
+    } else {
+      alert('This cluster already have "' + term + '"');
+    }
+  });
+});
+
+/**
+ * append the selected term to the cluster
+ * @param term = the term
+ */
+function appendTerm(term) {
+  var x;
+  x = document.getElementsByClassName("cluster");
+  var i;
+  for (i = 0; i < x.length; i++) {
+    if (x[i].style.borderColor == "rgb(254, 46, 154)") {
+      $(x[i].getElementsByClassName("sortable")).append(
+        "<li class='ui-state-default ui-sortable-handle' onmousedown=\"wordMouseDown(event)\"><span class='terms'>" +
+          term +
+          "</span></li>"
+      );
+    }
+  }
+}
+
+
+/**
+ * For right click of clusters files in tree view
+ */
+// $(function () {
+//   $.contextMenu({
+//     selector: ".context-menu-three",
+//     callback: function (key, options) {
+//       if (key == "ShowPDF") {
+//         showDocumentPDF($(this).text());
+//       }
+
+//       if (key == "ShowCloud") {
+//         showDocumentCloud($(this).text());
+//       }
+//     },
+//     items: {
+//       ShowPDF: { name: "ShowPDF", icon: "edit" },
+//       ShowCloud: { name: "ShowCloud", icon: "paste" },
+//     },
+//   });
+// });
+
+
+* Highlight the document in general view graph
+ * @param docName = docuemnt name
+ */
+// function highlightDocGeneralView(docName) {
+//   node.style("stroke", function (o) {
+//     if (o.na == docName) {
+//       return "red";
+//     }
+//     // else if(docsHighlight[o.na])
+//     // {
+//     //   return "blue";
+//     // }
+//     else {
+//       return "#a6a6a6";
+//     }
+//   });
+
+//   node.style("stroke-width", function (o) {
+//     if (o.na == docName) {
+//       return "2px";
+//     }
+//     // else if(docsHighlight[o.na])
+//     // {
+//     //   return "2px";
+//     // }
+//     else {
+//       return "0.5px";
+//     }
+//   });
+
+//   node2.style("stroke", function (o) {
+//     if (o.na == docName) {
+//       return "red";
+//     }
+//     // else if(docsHighlight[o.na])
+//     // {
+//     //   return "blue";
+//     // }
+//     else {
+//       return "#a6a6a6";
+//     }
+//   });
+
+//   node2.style("stroke-width", function (o) {
+//     if (o.na == docName) {
+//       return "2px";
+//     }
+//     // else if(docsHighlight[o.na])
+//     // {
+//     //   return "2px";
+//     // }
+//     else {
+//       return "0.5px";
+//     }
+//   });
+// }
