@@ -66,7 +66,6 @@ function showNewDocument() {
   4. get its content
   5. se doc_content to the content of the document
   */
-  console.log("Hello from showNewDocument");
   //if $("#doc_content") is empty, then load the first document named paper0.txt
   if ($("#doc_content").html() == "") {
     currentDocumentName = "paper0.txt";
@@ -110,8 +109,8 @@ function pageLoad() {
   // //get the user id
   // else
   {
-    // var input = prompt("Please enter your userId", "");
-    var input = "baqia";
+    var input = prompt("Please enter your userId", "");
+    // var input = "baqia";
     var loadSessionConfirmed = false;
 
     if (input != null && input.trim() != "") {
@@ -159,7 +158,7 @@ function pageLoad() {
 
               if (found) {
                 panelVisibility(currentSubset);
-                console.log("-----currentSubset is: " + currentSubset);
+                // console.log("-----currentSubset is: " + currentSubset);
               } else {
                 alert(
                   "You are not a member of any subset. Please contact the administrator."
@@ -4830,391 +4829,391 @@ function isConnected(a, b) {
  * load T-SNE layout
  * @param threshold = threshold for cosine distance
  */
-function loadT_SNE(threshold) {
-  $("#general_view1").html(""); //clear the screen
+// function loadT_SNE(threshold) {
+//   $("#general_view1").html(""); //clear the screen
 
-  linkedByIndex = new Array();
+//   linkedByIndex = new Array();
 
-  var margin = { top: 5, right: 5, bottom: 5, left: 5 },
-    width = $("#general_view1").width() - margin.left - margin.right,
-    height = $("#general_view1").height() - margin.top - margin.bottom;
+//   var margin = { top: 5, right: 5, bottom: 5, left: 5 },
+//     width = $("#general_view1").width() - margin.left - margin.right,
+//     height = $("#general_view1").height() - margin.top - margin.bottom;
 
-  var nominal_base_node_size = 8;
-  var focus_node = null,
-    highlight_node = null;
-  var highlight_color = "black";
-  var outline = false;
-  var default_link_color = "#a6a6a6";
-  var nominal_stroke = 0.5;
-  var max_stroke = 4.5;
-  var max_base_node_size = 36;
-  var min_zoom = 0.1;
-  var max_zoom = 8;
-  var zoom = d3.behavior.zoom().scaleExtent([min_zoom, max_zoom]);
-  var towhite = "stroke";
-  if (outline) {
-    tocolor = "stroke";
-    towhite = "fill";
-  }
-  var size = d3.scale.pow().exponent(1).domain([1, 100]).range([8, 24]);
+//   var nominal_base_node_size = 8;
+//   var focus_node = null,
+//     highlight_node = null;
+//   var highlight_color = "black";
+//   var outline = false;
+//   var default_link_color = "#a6a6a6";
+//   var nominal_stroke = 0.5;
+//   var max_stroke = 4.5;
+//   var max_base_node_size = 36;
+//   var min_zoom = 0.1;
+//   var max_zoom = 8;
+//   var zoom = d3.behavior.zoom().scaleExtent([min_zoom, max_zoom]);
+//   var towhite = "stroke";
+//   if (outline) {
+//     tocolor = "stroke";
+//     towhite = "fill";
+//   }
+//   var size = d3.scale.pow().exponent(1).domain([1, 100]).range([8, 24]);
 
-  // svg = d3.select("#general_view").append("svg")
-  //   .attr("class", "svg")
-  //   .attr("width", width)
-  //   .attr("height", height);
+//   // svg = d3.select("#general_view").append("svg")
+//   //   .attr("class", "svg")
+//   //   .attr("width", width)
+//   //   .attr("height", height);
 
-  //in order to have enough space to show the graph (min width is 300)
-  // if($("#general_view").width() < 400) {
-  //   svg = d3.select("#general_view").append("svg")
-  //   .attr("class", "svg")
-  //   .attr("width", "400px")
-  //   .attr("height", "400px");
+//   //in order to have enough space to show the graph (min width is 300)
+//   // if($("#general_view").width() < 400) {
+//   //   svg = d3.select("#general_view").append("svg")
+//   //   .attr("class", "svg")
+//   //   .attr("width", "400px")
+//   //   .attr("height", "400px");
 
-  //   width = 400 - margin.left - margin.right;
-  //   height = 400 - margin.top - margin.bottom;
+//   //   width = 400 - margin.left - margin.right;
+//   //   height = 400 - margin.top - margin.bottom;
 
-  // }
-  // else
-  {
-    svg = d3
-      .select("#general_view1")
-      .append("svg")
-      .attr("class", "svg")
-      .attr("width", "100%")
-      .attr("height", "100%");
-  }
+//   // }
+//   // else
+//   {
+//     svg = d3
+//       .select("#general_view1")
+//       .append("svg")
+//       .attr("class", "svg")
+//       .attr("width", "100%")
+//       .attr("height", "100%");
+//   }
 
-  g = svg.append("g");
+//   g = svg.append("g");
 
-  force = d3.layout
-    .force()
-    .size([width, height])
-    .gravity(0.3)
-    .distance(20)
-    .charge(-300)
-    .alpha(0)
-    .on("tick", tick);
+//   force = d3.layout
+//     .force()
+//     .size([width, height])
+//     .gravity(0.3)
+//     .distance(20)
+//     .charge(-300)
+//     .alpha(0)
+//     .on("tick", tick);
 
-  var drag = force.drag().on("dragstart", dragstart);
+//   var drag = force.drag().on("dragstart", dragstart);
 
-  node = force.nodes();
-  link - force.links();
+//   node = force.nodes();
+//   link - force.links();
 
-  (link = g.append("g").selectAll(".link")),
-    (node = g.append("g").selectAll(".node"));
+//   (link = g.append("g").selectAll(".link")),
+//     (node = g.append("g").selectAll(".node"));
 
-  // d3.json("data/json5.json", function(error, json) {
-  //  if (error) throw error;
+//   // d3.json("data/json5.json", function(error, json) {
+//   //  if (error) throw error;
 
-  //filter links by threshold
-  var linkData = generalViewGraph.links.filter(function (n) {
-    if (n.v <= threshold) {
-      return n;
-    }
-  });
+//   //filter links by threshold
+//   var linkData = generalViewGraph.links.filter(function (n) {
+//     if (n.v <= threshold) {
+//       return n;
+//     }
+//   });
 
-  linkData.forEach(function (d) {
-    linkedByIndex[d.source + "," + d.target] = true;
-  });
+//   linkData.forEach(function (d) {
+//     linkedByIndex[d.source + "," + d.target] = true;
+//   });
 
-  //update #documents and # links statistics
-  $("#span2").text(generalViewGraph.nodes.length);
-  $("#span4").text(linkData.length / 2);
+//   //update #documents and # links statistics
+//   $("#span2").text(generalViewGraph.nodes.length);
+//   $("#span4").text(linkData.length / 2);
 
-  force.nodes(generalViewGraph.nodes).links(linkData);
-  // .start();
+//   force.nodes(generalViewGraph.nodes).links(linkData);
+//   // .start();
 
-  link = link.data(linkData).enter().append("line").attr("class", "link");
+//   link = link.data(linkData).enter().append("line").attr("class", "link");
 
-  node = node
-    .data(generalViewGraph.nodes)
-    .enter()
-    .append("circle")
-    .attr("class", "node")
-    .style("fill", function (d) {
-      return d.co;
-    })
-    .attr("r", r)
-    .on("dblclick", dblclick)
-    .call(drag)
-    .attr("data-hasqtip", function (d) {
-      $(this).qtip({
-        content: {
-          text:
-            '<strong>Document name:</strong><br><u class="hyperLink" onclick="showDocumentPDF($(this).text())">' +
-            d.na +
-            "</u><br><br><strong>List of clusters name:</strong><br>" +
-            createListOfDocumentClustersName(d.cl, d.na) +
-            "</u><br><strong>List of top 5 terms:</strong><br>" +
-            getListOfTermsOfDocument(d.na),
-        },
-        hide: {
-          fixed: true,
-          delay: 700,
-        },
-        show: {
-          delay: 700,
-        },
-        style: {
-          classes: "qtip-rounded qtip-shadow",
-        },
-        position: {
-          my: "center right",
-          at: "center left",
-        },
-      });
-    });
+//   node = node
+//     .data(generalViewGraph.nodes)
+//     .enter()
+//     .append("circle")
+//     .attr("class", "node")
+//     .style("fill", function (d) {
+//       return d.co;
+//     })
+//     .attr("r", r)
+//     .on("dblclick", dblclick)
+//     .call(drag)
+//     .attr("data-hasqtip", function (d) {
+//       $(this).qtip({
+//         content: {
+//           text:
+//             '<strong>Document name:</strong><br><u class="hyperLink" onclick="showDocumentPDF($(this).text())">' +
+//             d.na +
+//             "</u><br><br><strong>List of clusters name:</strong><br>" +
+//             createListOfDocumentClustersName(d.cl, d.na) +
+//             "</u><br><strong>List of top 5 terms:</strong><br>" +
+//             getListOfTermsOfDocument(d.na),
+//         },
+//         hide: {
+//           fixed: true,
+//           delay: 700,
+//         },
+//         show: {
+//           delay: 700,
+//         },
+//         style: {
+//           classes: "qtip-rounded qtip-shadow",
+//         },
+//         position: {
+//           my: "center right",
+//           at: "center left",
+//         },
+//       });
+//     });
 
-  node
-    .on("mouseover", function (d) {
-      saveLog("tSneLayoutNodeMouseOver");
-      set_highlight(d);
-    })
-    .on("click", function (d) {
-      d3.event.stopPropagation();
-      focus_node = d;
-      set_focus(d);
-      set_highlight(d);
-      saveLog("tSneLayoutNodeClick");
-    })
-    .on("mousedown", function (d) {
-      d3.event.stopPropagation();
-    })
-    .on("mouseout", function (d) {
-      exit_highlight();
-    })
-    .on("contextmenu", function (d, i) {
-      saveLog("tSneLayoutNodeContextMenue");
-      d3.event.preventDefault();
-      // react on right-clicking
-    });
+//   node
+//     .on("mouseover", function (d) {
+//       saveLog("tSneLayoutNodeMouseOver");
+//       set_highlight(d);
+//     })
+//     .on("click", function (d) {
+//       d3.event.stopPropagation();
+//       focus_node = d;
+//       set_focus(d);
+//       set_highlight(d);
+//       saveLog("tSneLayoutNodeClick");
+//     })
+//     .on("mousedown", function (d) {
+//       d3.event.stopPropagation();
+//     })
+//     .on("mouseout", function (d) {
+//       exit_highlight();
+//     })
+//     .on("contextmenu", function (d, i) {
+//       saveLog("tSneLayoutNodeContextMenue");
+//       d3.event.preventDefault();
+//       // react on right-clicking
+//     });
 
-  svg
-    .on("click", function () {
-      if (focus_node != null) {
-        focus_node = null;
-        if (highlight_trans < 1) {
-          node.style("opacity", 1);
-          link.style("opacity", 1);
+//   svg
+//     .on("click", function () {
+//       if (focus_node != null) {
+//         focus_node = null;
+//         if (highlight_trans < 1) {
+//           node.style("opacity", 1);
+//           link.style("opacity", 1);
 
-          node2.style("opacity", 1);
-          link2.style("opacity", 1);
-        }
-      } else {
-        node.style("opacity", 1);
-        link.style("opacity", 1);
+//           node2.style("opacity", 1);
+//           link2.style("opacity", 1);
+//         }
+//       } else {
+//         node.style("opacity", 1);
+//         link.style("opacity", 1);
 
-        node2.style("opacity", 1);
-        link2.style("opacity", 1);
-      }
-      if (highlight_node == null) exit_highlight();
-    })
-    .on("contextmenu", function (d, i) {
-      d3.event.preventDefault();
-      // react on right-clicking
-    });
+//         node2.style("opacity", 1);
+//         link2.style("opacity", 1);
+//       }
+//       if (highlight_node == null) exit_highlight();
+//     })
+//     .on("contextmenu", function (d, i) {
+//       d3.event.preventDefault();
+//       // react on right-clicking
+//     });
 
-  // node.on("dblclick.zoom", function(d) { d3.event.stopPropagation();
-  //   var dcx = (window.innerWidth/2-d.x*zoom.scale());
-  //   var dcy = (window.innerHeight/2-d.y*zoom.scale());
-  //   zoom.translate([dcx,dcy]);
-  //   g.attr("transform", "translate("+ dcx + "," + dcy  + ")scale(" + zoom.scale() + ")");
-  // });
+//   // node.on("dblclick.zoom", function(d) { d3.event.stopPropagation();
+//   //   var dcx = (window.innerWidth/2-d.x*zoom.scale());
+//   //   var dcy = (window.innerHeight/2-d.y*zoom.scale());
+//   //   zoom.translate([dcx,dcy]);
+//   //   g.attr("transform", "translate("+ dcx + "," + dcy  + ")scale(" + zoom.scale() + ")");
+//   // });
 
-  // });
+//   // });
 
-  node.classed("fixed", function (d) {
-    d.fixed = false;
-  });
+//   node.classed("fixed", function (d) {
+//     d.fixed = false;
+//   });
 
-  force.start();
-  for (var i = 0; i < 2; i++) force.tick();
+//   force.start();
+//   for (var i = 0; i < 2; i++) force.tick();
 
-  node.classed("fixed", function (d) {
-    d.fixed = true;
-  });
+//   node.classed("fixed", function (d) {
+//     d.fixed = true;
+//   });
 
-  function tick() {
-    // node.attr("cx", function(d) { return d.x = Math.max(r, Math.min(width - r, d.x)); })
-    //     .attr("cy", function(d) { return d.y = Math.max(r, Math.min(height - r, d.y)); });
+//   function tick() {
+//     // node.attr("cx", function(d) { return d.x = Math.max(r, Math.min(width - r, d.x)); })
+//     //     .attr("cy", function(d) { return d.y = Math.max(r, Math.min(height - r, d.y)); });
 
-    node
-      .attr("cx", function (d) {
-        return (d.x = d.x);
-      })
-      .attr("cy", function (d) {
-        return (d.y = d.y);
-      });
+//     node
+//       .attr("cx", function (d) {
+//         return (d.x = d.x);
+//       })
+//       .attr("cy", function (d) {
+//         return (d.y = d.y);
+//       });
 
-    link
-      .attr("x1", function (d) {
-        return d.source.x;
-      })
-      .attr("y1", function (d) {
-        return d.source.y;
-      })
-      .attr("x2", function (d) {
-        return d.target.x;
-      })
-      .attr("y2", function (d) {
-        return d.target.y;
-      });
-  }
+//     link
+//       .attr("x1", function (d) {
+//         return d.source.x;
+//       })
+//       .attr("y1", function (d) {
+//         return d.source.y;
+//       })
+//       .attr("x2", function (d) {
+//         return d.target.x;
+//       })
+//       .attr("y2", function (d) {
+//         return d.target.y;
+//       });
+//   }
 
-  function dblclick(d) {
-    // d3.select(this).classed("fixed", d.fixed = false);
-  }
+//   function dblclick(d) {
+//     // d3.select(this).classed("fixed", d.fixed = false);
+//   }
 
-  function dragstart(d) {
-    // d3.select(this).classed("fixed", d.fixed = true);
-  }
+//   function dragstart(d) {
+//     // d3.select(this).classed("fixed", d.fixed = true);
+//   }
 
-  function isNumber(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
-  }
+//   function isNumber(n) {
+//     return !isNaN(parseFloat(n)) && isFinite(n);
+//   }
 
-  function set_highlight(d) {
-    svg.style("cursor", "pointer");
-    svg2.style("cursor", "pointer");
-    if (focus_node != null) d = focus_node;
-    highlight_node = d;
+//   function set_highlight(d) {
+//     svg.style("cursor", "pointer");
+//     svg2.style("cursor", "pointer");
+//     if (focus_node != null) d = focus_node;
+//     highlight_node = d;
 
-    if (highlight_color != "#a6a6a6") {
-      node.style(towhite, function (o) {
-        if (o.na == $(doc_select).val()) {
-          return "red";
-        }
-        // else if(docsHighlight[o.na])
-        // {
-        //   return "blue";
-        // }
-        else if (isConnected(d, o)) {
-          return highlight_color;
-        } else {
-          return "#a6a6a6";
-        }
-      });
+//     if (highlight_color != "#a6a6a6") {
+//       node.style(towhite, function (o) {
+//         if (o.na == $(doc_select).val()) {
+//           return "red";
+//         }
+//         // else if(docsHighlight[o.na])
+//         // {
+//         //   return "blue";
+//         // }
+//         else if (isConnected(d, o)) {
+//           return highlight_color;
+//         } else {
+//           return "#a6a6a6";
+//         }
+//       });
 
-      link.style("stroke", function (o) {
-        return o.source.index == d.index || o.target.index == d.index
-          ? highlight_color
-          : isNumber(o.score) && o.score >= 0
-          ? color(o.score)
-          : default_link_color;
-      });
+//       link.style("stroke", function (o) {
+//         return o.source.index == d.index || o.target.index == d.index
+//           ? highlight_color
+//           : isNumber(o.score) && o.score >= 0
+//           ? color(o.score)
+//           : default_link_color;
+//       });
 
-      //set node stroke
-      node.style("stroke-width", function (o) {
-        if (
-          (docsHighlight[o.na] && isConnected(d, o)) ||
-          o.na == $(doc_select).val()
-        ) {
-          return "2px";
-        } else {
-          return "0.5px";
-        }
-      });
+//       //set node stroke
+//       node.style("stroke-width", function (o) {
+//         if (
+//           (docsHighlight[o.na] && isConnected(d, o)) ||
+//           o.na == $(doc_select).val()
+//         ) {
+//           return "2px";
+//         } else {
+//           return "0.5px";
+//         }
+//       });
 
-      node2.style(towhite, function (o) {
-        if (o.na == $(doc_select).val()) {
-          return "red";
-        }
-        // else if(docsHighlight[o.na])
-        // {
-        //   return "blue";
-        // }
-        else if (isConnected(d, o)) {
-          return highlight_color;
-        } else {
-          return "#a6a6a6";
-        }
-      });
+//       node2.style(towhite, function (o) {
+//         if (o.na == $(doc_select).val()) {
+//           return "red";
+//         }
+//         // else if(docsHighlight[o.na])
+//         // {
+//         //   return "blue";
+//         // }
+//         else if (isConnected(d, o)) {
+//           return highlight_color;
+//         } else {
+//           return "#a6a6a6";
+//         }
+//       });
 
-      link2.style("stroke", function (o) {
-        return o.source.index == d.index || o.target.index == d.index
-          ? highlight_color
-          : isNumber(o.score) && o.score >= 0
-          ? color(o.score)
-          : default_link_color;
-      });
+//       link2.style("stroke", function (o) {
+//         return o.source.index == d.index || o.target.index == d.index
+//           ? highlight_color
+//           : isNumber(o.score) && o.score >= 0
+//           ? color(o.score)
+//           : default_link_color;
+//       });
 
-      //set node stroke
-      node2.style("stroke-width", function (o) {
-        if (
-          (docsHighlight[o.na] && isConnected(d, o)) ||
-          o.na == $(doc_select).val()
-        ) {
-          return "2px";
-        } else {
-          return "0.5px";
-        }
-      });
-    }
-  }
+//       //set node stroke
+//       node2.style("stroke-width", function (o) {
+//         if (
+//           (docsHighlight[o.na] && isConnected(d, o)) ||
+//           o.na == $(doc_select).val()
+//         ) {
+//           return "2px";
+//         } else {
+//           return "0.5px";
+//         }
+//       });
+//     }
+//   }
 
-  function exit_highlight() {
-    highlight_node = null;
-    if (focus_node == null) {
-      svg.style("cursor", "move");
-      if (highlight_color != "#a6a6a6") {
-        node.style(towhite, function (o) {
-          if (o.na == $(doc_select).val()) {
-            return "red";
-          }
-          // else if(docsHighlight[o.na])
-          // {
-          //   return "blue";
-          // }
-          else {
-            return "#a6a6a6";
-          }
-        });
-        link.style("stroke", function (o) {
-          return isNumber(o.score) && o.score >= 0
-            ? color(o.score)
-            : default_link_color;
-        });
+//   function exit_highlight() {
+//     highlight_node = null;
+//     if (focus_node == null) {
+//       svg.style("cursor", "move");
+//       if (highlight_color != "#a6a6a6") {
+//         node.style(towhite, function (o) {
+//           if (o.na == $(doc_select).val()) {
+//             return "red";
+//           }
+//           // else if(docsHighlight[o.na])
+//           // {
+//           //   return "blue";
+//           // }
+//           else {
+//             return "#a6a6a6";
+//           }
+//         });
+//         link.style("stroke", function (o) {
+//           return isNumber(o.score) && o.score >= 0
+//             ? color(o.score)
+//             : default_link_color;
+//         });
 
-        //set node stroke
-        node.style("stroke-width", function (o) {
-          if (o.na == $(doc_select).val()) {
-            return "2px";
-          } else {
-            return "0.5px";
-          }
-        });
-      }
-    }
-  }
+//         //set node stroke
+//         node.style("stroke-width", function (o) {
+//           if (o.na == $(doc_select).val()) {
+//             return "2px";
+//           } else {
+//             return "0.5px";
+//           }
+//         });
+//       }
+//     }
+//   }
 
-  zoom.on("zoom", function () {
-    var stroke = nominal_stroke;
+//   zoom.on("zoom", function () {
+//     var stroke = nominal_stroke;
 
-    if (nominal_stroke * zoom.scale() > max_stroke) {
-      stroke = max_stroke / zoom.scale();
-    }
+//     if (nominal_stroke * zoom.scale() > max_stroke) {
+//       stroke = max_stroke / zoom.scale();
+//     }
 
-    link.style("stroke-width", stroke);
-    // node.style("stroke-width",stroke);
+//     link.style("stroke-width", stroke);
+//     // node.style("stroke-width",stroke);
 
-    node.style("stroke-width", function (o) {
-      if (o.na == $(doc_select).val()) {
-        return stroke * 3;
-      } else {
-        return stroke;
-      }
-    });
+//     node.style("stroke-width", function (o) {
+//       if (o.na == $(doc_select).val()) {
+//         return stroke * 3;
+//       } else {
+//         return stroke;
+//       }
+//     });
 
-    var base_radius = nominal_base_node_size;
+//     var base_radius = nominal_base_node_size;
 
-    g.attr(
-      "transform",
-      "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"
-    );
-  });
+//     g.attr(
+//       "transform",
+//       "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"
+//     );
+//   });
 
-  svg.call(zoom);
-} //*******************************End of T-SNE
+//   svg.call(zoom);
+// } //*******************************End of T-SNE
 
 /*
  * Create list of documents clusters name
@@ -5347,273 +5346,7 @@ function loadDocInCluster(documentName, clusterName) {
   }
 }
 
-/*
- * Get general view graph
- * @param similarityThreshold = the similarity threshold
- * @return generalViewGraph = the general view graph
- */
-function getGeneralViewGraph(similarityThreshold) {
-  var scale_width = $("#general_view1").width() / 11;
-  var scale_height = $("#general_view1").height() / 11;
 
-  var date1 = new Date();
-  var n1 = date1.getTime();
-
-  var tsneSilhouetteState = false;
-  //run t-sne
-  if (tsneResult.length < 1) {
-    tsneSilhouetteState = true;
-    var opt = {};
-    opt.epsilon = 10;
-    opt.perplexity = 5;
-    opt.dim = 2;
-
-    // var opt = { epsilon: 10 }; // epsilon is learning rate (10 = default)
-    var tsne = new tsnejs.tSNE(opt); // create a tSNE instance
-    tsne.initDataDist(documentDocumentSimilarity);
-
-    for (var k = 0; k < 300; k++) {
-      tsne.step(); // every time you call this, solution gets better
-    }
-
-    tsneResult = tsne.getSolution(); // Y is an array of 2-D points that you can plot
-  }
-
-  var tsneLables = new Array();
-
-  var tempGeneralViewGraph = "{";
-
-  //add nodes
-  var documentNewIndex = [];
-  var index = 0;
-  tempGeneralViewGraph += '"nodes":[';
-  for (var i = 0; i < documentDocumentSimilarity.length; i++) {
-    if (removedDocuments[i] == false) {
-      documentNewIndex[i] = index;
-
-      var documentClustersName = getDocumentClustersName(documentsName[i]);
-      tempGeneralViewGraph +=
-        '{"x": ' +
-        (tsneResult[i][0] + scale_width) * 6 +
-        ', "y": ' +
-        (tsneResult[i][1] + scale_height) * 6 +
-        ', "fixed":false' +
-        ', "na":"' +
-        documentsName[i] +
-        '", "cl":"' +
-        documentClustersName +
-        '", "co":"';
-
-      tsneLables[index] = documentClustersName.split(",")[0];
-      index++;
-
-      if (documentClustersName.split(",").length > 1) {
-        tempGeneralViewGraph += 'black"},';
-      } else {
-        tempGeneralViewGraph += getClusterColor(documentClustersName) + '"},';
-      }
-    }
-  }
-
-  //get tsne avg silhouette
-  if (tsneSilhouetteState) {
-    getTsneSilhouette(tsneResult, tsneLables);
-  }
-
-  //remove the last comma
-  tempGeneralViewGraph = tempGeneralViewGraph.substring(
-    0,
-    tempGeneralViewGraph.length - 1
-  );
-
-  tempGeneralViewGraph += "],";
-
-  //add links
-  var count = 0;
-  tempGeneralViewGraph += '"links":[';
-  for (var i = 0; i < documentDocumentSimilarity.length; i++) {
-    if (removedDocuments[i] == false) {
-      for (var j = 0; j < documentDocumentSimilarity.length; j++) {
-        if (removedDocuments[j] == false) {
-          if (i != j) {
-            // no self loop (cycle)
-            if (
-              parseFloat(documentDocumentSimilarity[i][j]) <=
-              similarityThreshold
-            ) {
-              tempGeneralViewGraph +=
-                '{"source":' +
-                documentNewIndex[i] +
-                ',"target":' +
-                documentNewIndex[j] +
-                ',"v":' +
-                documentDocumentSimilarity[i][j] +
-                "},";
-              count++;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  //remove the last comma
-  tempGeneralViewGraph = tempGeneralViewGraph.substring(
-    0,
-    tempGeneralViewGraph.length - 1
-  );
-
-  tempGeneralViewGraph += "]}";
-
-  generalViewGraph2 = JSON.parse(tempGeneralViewGraph);
-
-  return JSON.parse(tempGeneralViewGraph);
-}
-
-/*
- * Get  Silhouette
- * @param tsneResult =  x and y dimensions
- * @param tsneLables = labels of documents
- */
-function getTsneSilhouette(tsneResult, tsneLables) {
-  $.ajax({
-    type: "POST",
-    url: "./cgi-bin/tsneSilhouette.py",
-    data: {
-      tsneResult: JSON.stringify(tsneResult),
-      tsneLables: JSON.stringify(tsneLables),
-    },
-    success: function (msg) {
-      var status = msg["status"];
-      // console.trace("label");
-      if (status == "yes") {
-        TsneSilhouette = eval(msg["TsneSilhouette"]);
-        TsneSilhouette = TsneSilhouette.toFixed(4);
-
-        //show the tsne Silhouette
-        $("#TsneSilhouette_label").html("T-SNE Silhouette: " + TsneSilhouette);
-      }
-      if (status == "no") {
-        alert("Error1 in getting Tsne Silhouette!");
-      }
-      if (status == "error") {
-        alert("Error2 in getting Tsne Silhouette!");
-      }
-    },
-    error: function (msg) {
-      alert("Error3 in getting Tsne Silhouette!");
-    },
-  });
-}
-
-/*
- * Get general view graph
- * @param similarityThreshold = the similarity threshold
- * @return graph in VNA format
- */
-function exportGraphToVNAformat(similarityThreshold) {
-  saveLog("exportGraphToVNAformat");
-
-  if (userID == "") {
-    return null;
-  }
-
-  //get VNA
-  var vna = getVNA(similarityThreshold);
-
-  //save VNA to file
-  $.ajax({
-    type: "POST",
-    url: "./cgi-bin/VNASave.py",
-    data: {
-      vna: JSON.stringify(vna),
-      userDirectory: JSON.stringify(userDirectory),
-    },
-    success: function (msg) {
-      var status = msg["status"];
-
-      if (status == "yes") {
-        //open the link of VNA in new Tab
-        window.open("./" + userID + "/vna", "_blank");
-      }
-      if (status == "no") {
-        alert("Error1 in getting graph VNA!");
-      }
-    },
-    error: function (msg) {
-      alert("Error2 in getting graph VNA!");
-    },
-  });
-}
-
-/*
- * Get general view graph
- * @param similarityThreshold = the similarity threshold
- * @return graph in VNA format
- */
-function getVNA(similarityThreshold) {
-  saveLog("getVNA");
-
-  var VNA_Format = "*Node data\n";
-  VNA_Format += "id name clusters color\n";
-
-  //add nodes
-  var documentNewIndex = [];
-  var index = 0;
-  for (var i = 0; i < documentDocumentSimilarity.length; i++) {
-    if (removedDocuments[i] == false) {
-      documentNewIndex[i] = index;
-
-      var documentClustersName = getDocumentClustersName(documentsName[i]);
-      VNA_Format +=
-        index +
-        " " +
-        '"' +
-        documentsName[i] +
-        '" "' +
-        documentClustersName +
-        '" "';
-
-      index++;
-
-      if (documentClustersName.split(",").length > 1) {
-        VNA_Format += 'black"\n';
-      } else {
-        VNA_Format += getClusterColor(documentClustersName) + '"\n';
-      }
-    }
-  }
-
-  //add links
-  VNA_Format += "*Tie data\n";
-  VNA_Format += "from to distance\n";
-
-  for (var i = 0; i < documentDocumentSimilarity.length; i++) {
-    if (removedDocuments[i] == false) {
-      for (var j = 0; j < documentDocumentSimilarity.length; j++) {
-        if (removedDocuments[j] == false) {
-          if (i != j) {
-            // no self loop (cycle)
-            if (
-              parseFloat(documentDocumentSimilarity[i][j]) <=
-              similarityThreshold
-            ) {
-              VNA_Format +=
-                documentNewIndex[i] +
-                " " +
-                documentNewIndex[j] +
-                " " +
-                documentDocumentSimilarity[i][j] +
-                "\n";
-            }
-          }
-        }
-      }
-    }
-  }
-
-  return VNA_Format;
-}
 
 /*
  * Get cluster color
@@ -6107,9 +5840,100 @@ function getForceSilhouette(forceResult, forceLables) {
     },
   });
 }
+// Step 1: Calculate Feature Averages Across Clusters
+function calculateFeatureAverages(rawScores) {
+  let featureAverages = {};
+  for (let feature in rawScores) {
+    let total = rawScores[feature].reduce((acc, score) => acc + score, 0);
+    featureAverages[feature] = total / rawScores[feature].length;
+  }
+  return featureAverages;
+}
+// Step 2: Compute Relative Differences
+function computeRelativeDifferences(rawScores, featureAverages) {
+  let relativeDifferences = {};
+  for (let feature in rawScores) {
+    relativeDifferences[feature] = rawScores[feature].map(score => score - featureAverages[feature]);
+  }
+  return relativeDifferences;
+}
+// Step 3: Scale Up the Relative Differences
+function scaleUpDifferences(relativeDifferences, scalingFactor) {
+  let scaledDifferences = {};
+  for (let feature in relativeDifferences) {
+    scaledDifferences[feature] = relativeDifferences[feature].map(difference => difference * scalingFactor);
+  }
+  return scaledDifferences;
+}
+// Step 4: Separate Positive and Negative Contributions
+function separatePositiveNegativeValues(scaledDifferences) {
+  let positiveValues = {};
+  let negativeValues = {};
+  for (let feature in scaledDifferences) {
+    positiveValues[feature] = scaledDifferences[feature].map(value => Math.max(0, value));
+    negativeValues[feature] = scaledDifferences[feature].map(value => Math.min(0, value));
+  }
+  return { positiveValues, negativeValues };
+}
+
+
+
 
 //write a function to make ajax request to explanation.py
-function transformData(data) {
+function getExplanation() {
+  $.ajax({
+    type: "POST",
+    url: "./cgi-bin/explanation_details.py",
+    data: {
+      userID: JSON.stringify(userID),
+    },
+    success: function (msg) {
+      explanation_details = msg["explanation_details"];
+    },
+  });
+}
+// Calculate mean score for each feature across all clusters
+function calculateMeanScores(data) {
+  var meanScores = {};
+  for (var feature in data) {
+      var scores = data[feature];
+      var sum = scores.reduce(function(a, b) { return a + b; }, 0);
+      meanScores[feature] = sum / scores.length;
+  }
+  return meanScores;
+}
+// Calculate differential scores for each feature
+function calculateDifferentialScores(data, meanScores) {
+  var differentialScores = {};
+  for (var feature in data) {
+      differentialScores[feature] = data[feature].map(function(score) {
+          return score - meanScores[feature];
+      });
+  }
+  return differentialScores;
+}
+// Normalize the differential scores
+function normalizeScores(differentialScores) {
+  var allDifferentials = [].concat.apply([], Object.values(differentialScores));
+  var minDiff = Math.min.apply(Math, allDifferentials);
+  var maxDiff = Math.max.apply(Math, allDifferentials.map(function(d) { return d - minDiff; }));
+
+  var normalizedScores = {};
+  for (var feature in differentialScores) {
+      normalizedScores[feature] = differentialScores[feature].map(function(d) {
+          return (d - minDiff) / maxDiff;
+      });
+  }
+  return normalizedScores;
+}
+
+
+
+function transformData_differential_value(data) {
+  var meanScores = calculateMeanScores(data);
+  var differentialScores = calculateDifferentialScores(data, meanScores);
+  var data = normalizeScores(differentialScores);
+  
   var transformed = [];
   var clusters = Object.keys(data);
 
@@ -6125,20 +5949,7 @@ function transformData(data) {
   }
   return transformed;
 }
-function getExplanation() {
-  $.ajax({
-    type: "POST",
-    url: "./cgi-bin/explanation_details.py",
-    data: {
-      userID: JSON.stringify(userID),
-    },
-    success: function (msg) {
-      explanation_details = msg["explanation_details"];
-    },
-  });
-}
-
-function createTermClusterChart() {
+function createTermClusterChart_differential_values() {
   // Assuming the container div 'panel9' has been rendered and has width and height
   var panel9 = document.getElementById("panel9");
   console.log(document.getElementById("panel9"));
@@ -6157,6 +5968,509 @@ function createTermClusterChart() {
   var height = panelHeight - margin.top - margin.bottom;
   doc = document.getElementById("doc_content").innerHTML.replace(/\n$/, "");
   documentExplanation = explanation_details[doc];
+  // var documentExplanation = {
+  //   "Michael Fincke": [0.269, 0.268, 0.304, 0.290], feature: cluster 1, cluster 2, cluster 3, cluster 4
+  //   "Astronaut": [0.217, 0.272, 0.278, 0.313],feature: cluster 1, cluster 2, cluster 3, cluster 4
+  //   "Orbit": [0.241, 0.272, 0.280, 0.305],feature: cluster 1, cluster 2, cluster 3, cluster 4
+  //   "Earth": [0.262, 0.304, 0.300, 0.304]feature: cluster 1, cluster 2, cluster 3, cluster 4
+  // };
+
+  var data = transformData_differential_value(documentExplanation);
+
+  var margin = { top: 20, right: 160, bottom: 50, left: 30 };
+
+  var width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+  var svg = d3.select("#chart").select("svg");
+
+  // If SVG is already present, remove it before creating a new one
+  if (!svg.empty()) {
+    svg.remove();
+  }
+  var svg = d3
+    .select("#chart")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var x = d3.scale
+    .ordinal()
+    .rangeRoundBands([0, width / 1.5], 0.3)
+    .domain(
+      data.map(function (d) {
+        return d.cluster;
+      })
+    );
+
+  var color = d3.scale
+    .ordinal()
+    .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"])
+    .domain(
+      d3.keys(data[0]).filter(function (key) {
+        return key !== "cluster";
+      })
+    );
+  var y = d3.scale
+    .linear()
+    .rangeRound([height, 0])
+    .domain([
+      0,
+      d3.max(data, function (d) {
+        return d3.sum(
+          color.domain().map(function (key) {
+            return d[key];
+          })
+        );
+      }),
+    ]);
+
+  var xAxis = d3.svg.axis().scale(x).orient("bottom");
+
+  var yAxis = d3.svg.axis().scale(y).orient("left");
+
+  // Define the colors for each concept
+
+  svg
+    .append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+
+  svg
+    .append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Score");
+
+  var cluster = svg
+    .selectAll(".cluster")
+    .data(data)
+    .enter()
+    .append("g")
+    .attr("class", "g")
+    .attr("transform", function (d) {
+      return "translate(" + x(d.cluster) + ",0)";
+    });
+
+  cluster
+    .selectAll("rect")
+    .data(function (d) {
+      var y0 = 0;
+      return color.domain().map(function (name) {
+        return { name: name, y0: y0, y1: (y0 += +d[name]), cluster: d.cluster };
+      });
+    })
+    .enter()
+    .append("rect")
+    .attr("width", x.rangeBand())
+    .attr("y", function (d) {
+      return y(d.y1);
+    })
+    .attr("height", function (d) {
+      return y(d.y0) - y(d.y1);
+    })
+    .style("fill", function (d) {
+      return color(d.name);
+    })
+    // Add text labels
+    .each(function (d) {
+      var bar = d3.select(this);
+      var barHeight = y(d.y0) - y(d.y1);
+      if (barHeight > 20) {
+        // Only add text if the bar is tall enough
+        var barWidth = x.rangeBand();
+        var barX = x(d.cluster) + barWidth / 2; // Center of the bar
+        var barY = y(d.y1) + (y(d.y0) - y(d.y1)) / 2; // Middle of the bar height
+
+        svg
+          .append("text")
+          .attr("x", barX)
+          .attr("y", barY)
+          .attr("dy", "0.35em")
+          .attr("text-anchor", "middle")
+          .text(d3.format(".2f")(d.y1 - d.y0))
+          .style("fill", "black") // Choose a fill color that contrasts with the bar
+          .style("font-size", "20px"); // Adjust font size as needed
+      }
+    });
+
+  // Calculate the legend item offsets by accumulating widths
+  var legendItemOffsets = [0];
+  color
+    .domain()
+    .slice()
+    .reverse()
+    .forEach(function (d, i) {
+      var textWidth = getTextWidth(d, "20px sans-serif"); // Calculate text width (you may need a helper function for this)
+      var spacing = 48; // Adjust spacing based on your styling
+      if (i > 0) {
+        legendItemOffsets.push(legendItemOffsets[i - 1] + textWidth + spacing);
+      }
+    });
+
+  // Create legend
+  var legend = svg
+    .selectAll(".legend")
+    .data(color.domain().slice().reverse())
+    .enter()
+    .append("g")
+    .attr("class", "legend")
+    .attr("transform", function (d, i) {
+      return (
+        "translate(" +
+        legendItemOffsets[i] +
+        "," +
+        (height + margin.bottom - 20) +
+        ")"
+      );
+    });
+
+  legend
+    .append("rect")
+    .attr("x", 0)
+    .attr("width", 18)
+    .attr("height", 18)
+    .style("fill", color);
+
+  legend
+    .append("text")
+    .attr("x", 22)
+    .attr("y", 9)
+    .attr("dy", ".35em")
+    .style("text-anchor", "start")
+    .text(function (d) {
+      return d;
+    });
+
+  // Helper function to measure text width
+  function getTextWidth(text, font) {
+    // re-use canvas object for better performance
+    var canvas =
+      getTextWidth.canvas ||
+      (getTextWidth.canvas = document.createElement("canvas"));
+    var context = canvas.getContext("2d");
+    context.font = font;
+    var metrics = context.measureText(text);
+    return metrics.width;
+  }
+}
+
+
+function transformData_relative_value(data, scalingFactor) {
+  var transformed = [];
+  var clusters = Object.keys(data);
+  var numClusters = data[clusters[0]].length;
+  var featureAverages = {};
+
+  // Calculate feature averages
+  clusters.forEach(function (key) {
+    var total = 0;
+    for (var i = 0; i < numClusters; i++) {
+      total += data[key][i];
+    }
+    featureAverages[key] = total / numClusters;
+  });
+
+  // Calculate scaled relative differences
+  for (var i = 0; i < numClusters; i++) {
+    var clusterData = { cluster: "Cluster " + (i + 1) };
+    clusters.forEach(function (key) {
+      var relativeDifference = data[key][i] - featureAverages[key];
+      clusterData[key] = relativeDifference * scalingFactor;
+    });
+    transformed.push(clusterData);
+  }
+  return transformed;
+}
+function createTermClusterChart_relative_value() {
+  // Assuming the container div 'panel9' has been rendered and has width and height
+  var panel9 = document.getElementById("panel9");
+  console.log(document.getElementById("panel9"));
+  console.log(panel9);
+  var computedStyle = window.getComputedStyle(panel9);
+
+  // Get the computed width and height from the CSS properties
+  var panelWidth = parseFloat(computedStyle.width);
+  var panelHeight = parseFloat(computedStyle.height);
+
+  // Define margins as an object, you can adjust these values as needed
+  var margin = { top: 20, right: 20, bottom: 40, left: 40 };
+
+  // Calculate the actual width and height of the SVG canvas
+  var width = panelWidth - margin.left - margin.right;
+  var height = panelHeight - margin.top - margin.bottom;
+  doc = document.getElementById("doc_content").innerHTML.replace(/\n$/, "");
+  documentExplanation = explanation_details[doc];
+  // var documentExplanation = {
+  //   "Michael Fincke": [0.269, 0.268, 0.304, 0.290], feature: cluster 1, cluster 2, cluster 3, cluster 4
+  //   "Astronaut": [0.217, 0.272, 0.278, 0.313],feature: cluster 1, cluster 2, cluster 3, cluster 4
+  //   "Orbit": [0.241, 0.272, 0.280, 0.305],feature: cluster 1, cluster 2, cluster 3, cluster 4
+  //   "Earth": [0.262, 0.304, 0.300, 0.304]feature: cluster 1, cluster 2, cluster 3, cluster 4
+  // };
+
+  var scalingFactor = 10; // Choose a suitable scaling factor
+  var data = transformData_relative_value(documentExplanation, scalingFactor);
+
+
+  var margin = { top: 20, right: 160, bottom: 50, left: 30 };
+
+  var width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+  var svg = d3.select("#chart").select("svg");
+
+  // If SVG is already present, remove it before creating a new one
+  if (!svg.empty()) {
+    svg.remove();
+  }
+  var svg = d3
+    .select("#chart")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var x = d3.scale
+    .ordinal()
+    .rangeRoundBands([0, width / 1.5], 0.3)
+    .domain(
+      data.map(function (d) {
+        return d.cluster;
+      })
+    );
+
+  var color = d3.scale
+    .ordinal()
+    .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"])
+    .domain(
+      d3.keys(data[0]).filter(function (key) {
+        return key !== "cluster";
+      })
+    );
+    var y = d3.scale
+    .linear()
+    .rangeRound([height, 0])
+    .domain([
+      d3.min(data, function (d) {
+        return d3.min(
+          color.domain().map(function (key) {
+            return d[key];
+          })
+        );
+      }),
+      d3.max(data, function (d) {
+        return d3.max(
+          color.domain().map(function (key) {
+            return d[key];
+          })
+        );
+      }),
+    ]);
+
+  var xAxis = d3.svg.axis().scale(x).orient("bottom");
+
+  var yAxis = d3.svg.axis().scale(y).orient("left");
+
+  // Define the colors for each concept
+
+  svg
+    .append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+
+  svg
+    .append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Score");
+
+  var cluster = svg
+    .selectAll(".cluster")
+    .data(data)
+    .enter()
+    .append("g")
+    .attr("class", "g")
+    .attr("transform", function (d) {
+      return "translate(" + x(d.cluster) + ",0)";
+    });
+
+    cluster
+    .selectAll("rect")
+    .data(function (d) {
+      var y0 = 0;
+      return color.domain().map(function (name) {
+        var y1;
+        if (d[name] >= 0) {
+          y1 = y0 + Math.abs(d[name]);
+        } else {
+          y1 = y0 - Math.abs(d[name]);
+        }
+        var barData = { name: name, y0: y0, y1: y1, cluster: d.cluster };
+        y0 = y1;
+        return barData;
+      });
+    })
+    .enter()
+    .append("rect")
+    .attr("width", x.rangeBand())
+    .attr("y", function (d) {
+      return d.y1 >= 0 ? y(d.y1) : y(0);
+    })
+    .attr("height", function (d) {
+      return Math.abs(y(d.y0) - y(d.y1));
+    })
+    .style("fill", function (d) {
+      return color(d.name);
+    })
+    .style("opacity", 0.8) // Adjust opacity as needed
+  .style("stroke", "white") // Add a white border
+  .style("stroke-width", "1px") // Adjust stroke width as needed
+    .each(function (d) {
+      var bar = d3.select(this);
+  var barHeight = Math.abs(y(d.y0) - y(d.y1));
+  
+  if (barHeight > 20) {  // Only add text if the bar is tall enough
+    var barWidth = x.rangeBand();
+    var barX = x(d.cluster) + barWidth / 2;  // Center of the bar
+    var barY;
+
+    if (d.y1 > 0) {
+      // Positive value: place the annotation inside the bar, near the top
+      barY = y(d.y1) + barHeight / 2; 
+    } else {
+      // Negative value: place the annotation inside the bar, near the bottom
+      barY = y(d.y0) + barHeight / 2;  // Change from minus to plus
+    }
+
+    svg
+      .append("text")
+      .attr("x", barX)
+      .attr("y", barY)
+      .attr("dy", ".35em")
+      .attr("text-anchor", "middle")
+      .text(d3.format(".2f")(Math.abs(d.y1 - d.y0)))
+      .style("fill", "white")  // Consider changing the text color to white for better contrast
+      .style("font-size", "10px"); // Adjust font size based on the bar height
+  }
+    });
+
+  // Calculate the legend item offsets by accumulating widths
+  var legendItemOffsets = [0];
+  color
+    .domain()
+    .slice()
+    .reverse()
+    .forEach(function (d, i) {
+      var textWidth = getTextWidth(d, "20px sans-serif"); // Calculate text width (you may need a helper function for this)
+      var spacing = 48; // Adjust spacing based on your styling
+      if (i > 0) {
+        legendItemOffsets.push(legendItemOffsets[i - 1] + textWidth + spacing);
+      }
+    });
+
+  // Create legend
+  var legend = svg
+    .selectAll(".legend")
+    .data(color.domain().slice().reverse())
+    .enter()
+    .append("g")
+    .attr("class", "legend")
+    .attr("transform", function (d, i) {
+      return (
+        "translate(" +
+        legendItemOffsets[i] +
+        "," +
+        (height + margin.bottom - 20) +
+        ")"
+      );
+    });
+
+  legend
+    .append("rect")
+    .attr("x", 0)
+    .attr("width", 18)
+    .attr("height", 18)
+    .style("fill", color);
+
+  legend
+    .append("text")
+    .attr("x", 22)
+    .attr("y", 9)
+    .attr("dy", ".35em")
+    .style("text-anchor", "start")
+    .text(function (d) {
+      return d;
+    });
+
+  // Helper function to measure text width
+  function getTextWidth(text, font) {
+    // re-use canvas object for better performance
+    var canvas =
+      getTextWidth.canvas ||
+      (getTextWidth.canvas = document.createElement("canvas"));
+    var context = canvas.getContext("2d");
+    context.font = font;
+    var metrics = context.measureText(text);
+    return metrics.width;
+  }
+}
+
+function transformData(data) {
+  var transformed = [];
+  var clusters = Object.keys(data);
+
+  // Assuming each array in data has the same length
+  var numClusters = data[clusters[0]].length;
+
+  for (var i = 0; i < numClusters; i++) {
+    var clusterData = { cluster: "Cluster " + (i + 1) };
+    clusters.forEach(function (key) {
+      clusterData[key] = data[key][i];
+    });
+    transformed.push(clusterData);
+  }
+  return transformed;
+}
+function createTermClusterChartOriginal() {
+  // Assuming the container div 'panel9' has been rendered and has width and height
+  var panel9 = document.getElementById("panel9");
+  console.log(document.getElementById("panel9"));
+  console.log(panel9);
+  var computedStyle = window.getComputedStyle(panel9);
+
+  // Get the computed width and height from the CSS properties
+  var panelWidth = parseFloat(computedStyle.width);
+  var panelHeight = parseFloat(computedStyle.height);
+
+  // Define margins as an object, you can adjust these values as needed
+  var margin = { top: 20, right: 20, bottom: 40, left: 40 };
+
+  // Calculate the actual width and height of the SVG canvas
+  var width = panelWidth - margin.left - margin.right;
+  var height = panelHeight - margin.top - margin.bottom;
+  doc = document.getElementById("doc_content").innerHTML.replace(/\n$/, "");
+  documentExplanation = explanation_details[doc];
+  // var documentExplanation = {
+  //   "Michael Fincke": [0.269, 0.268, 0.304, 0.290], feature: cluster 1, cluster 2, cluster 3, cluster 4
+  //   "Astronaut": [0.217, 0.272, 0.278, 0.313],feature: cluster 1, cluster 2, cluster 3, cluster 4
+  //   "Orbit": [0.241, 0.272, 0.280, 0.305],feature: cluster 1, cluster 2, cluster 3, cluster 4
+  //   "Earth": [0.262, 0.304, 0.300, 0.304]feature: cluster 1, cluster 2, cluster 3, cluster 4
+  // };
 
   var data = transformData(documentExplanation);
 
@@ -6345,3 +6659,10 @@ function createTermClusterChart() {
     return metrics.width;
   }
 }
+
+function createTermClusterChart(){
+  // createTermClusterChart_relative_value()
+  // createTermClusterChart_differential_values()
+  // createTermClusterChartOriginal()
+}
+
