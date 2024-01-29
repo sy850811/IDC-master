@@ -731,18 +731,19 @@ function getClusterWords() {
   var tempClusterWords = "[";
 
   for (var i = 0; i < clusterKeytermsOriginal.length; i++) {
+    tempClusterNumber = i;
     var temp = eval(clusterKeytermsOriginal[i]);
-    tempClusterWords += '{"cluster":"cluster' + i + '", "words": [';
+    tempClusterWords += '{"cluster":"cluster' + tempClusterNumber + '", "words": [';
 
     for (var j = 0; j < temp.length; j++) {
       tempClusterWords += '{"word":"' + temp[j] + '"}';
 
-      if (j < 10) {
+      if (j + 1 < temp.length) {
         //only top 5
         tempClusterWords += ",";
       }
 
-      if (j == 10) {
+      if (j+1 == temp.length) {
         //only top 5
         break;
       }
@@ -2529,7 +2530,7 @@ function panelDrag(panelID) {
   // $("#panel9").css("zIndex", 0);//////////////
 
   $("#" + $(panelID).attr("id")).css("zIndex", 1);
-  $(panelID).draggable("enable");
+  // $(panelID).draggable("enable");
 }
 
 /**
@@ -4825,395 +4826,6 @@ function isConnected(a, b) {
   );
 }
 
-/*
- * load T-SNE layout
- * @param threshold = threshold for cosine distance
- */
-// function loadT_SNE(threshold) {
-//   $("#general_view1").html(""); //clear the screen
-
-//   linkedByIndex = new Array();
-
-//   var margin = { top: 5, right: 5, bottom: 5, left: 5 },
-//     width = $("#general_view1").width() - margin.left - margin.right,
-//     height = $("#general_view1").height() - margin.top - margin.bottom;
-
-//   var nominal_base_node_size = 8;
-//   var focus_node = null,
-//     highlight_node = null;
-//   var highlight_color = "black";
-//   var outline = false;
-//   var default_link_color = "#a6a6a6";
-//   var nominal_stroke = 0.5;
-//   var max_stroke = 4.5;
-//   var max_base_node_size = 36;
-//   var min_zoom = 0.1;
-//   var max_zoom = 8;
-//   var zoom = d3.behavior.zoom().scaleExtent([min_zoom, max_zoom]);
-//   var towhite = "stroke";
-//   if (outline) {
-//     tocolor = "stroke";
-//     towhite = "fill";
-//   }
-//   var size = d3.scale.pow().exponent(1).domain([1, 100]).range([8, 24]);
-
-//   // svg = d3.select("#general_view").append("svg")
-//   //   .attr("class", "svg")
-//   //   .attr("width", width)
-//   //   .attr("height", height);
-
-//   //in order to have enough space to show the graph (min width is 300)
-//   // if($("#general_view").width() < 400) {
-//   //   svg = d3.select("#general_view").append("svg")
-//   //   .attr("class", "svg")
-//   //   .attr("width", "400px")
-//   //   .attr("height", "400px");
-
-//   //   width = 400 - margin.left - margin.right;
-//   //   height = 400 - margin.top - margin.bottom;
-
-//   // }
-//   // else
-//   {
-//     svg = d3
-//       .select("#general_view1")
-//       .append("svg")
-//       .attr("class", "svg")
-//       .attr("width", "100%")
-//       .attr("height", "100%");
-//   }
-
-//   g = svg.append("g");
-
-//   force = d3.layout
-//     .force()
-//     .size([width, height])
-//     .gravity(0.3)
-//     .distance(20)
-//     .charge(-300)
-//     .alpha(0)
-//     .on("tick", tick);
-
-//   var drag = force.drag().on("dragstart", dragstart);
-
-//   node = force.nodes();
-//   link - force.links();
-
-//   (link = g.append("g").selectAll(".link")),
-//     (node = g.append("g").selectAll(".node"));
-
-//   // d3.json("data/json5.json", function(error, json) {
-//   //  if (error) throw error;
-
-//   //filter links by threshold
-//   var linkData = generalViewGraph.links.filter(function (n) {
-//     if (n.v <= threshold) {
-//       return n;
-//     }
-//   });
-
-//   linkData.forEach(function (d) {
-//     linkedByIndex[d.source + "," + d.target] = true;
-//   });
-
-//   //update #documents and # links statistics
-//   $("#span2").text(generalViewGraph.nodes.length);
-//   $("#span4").text(linkData.length / 2);
-
-//   force.nodes(generalViewGraph.nodes).links(linkData);
-//   // .start();
-
-//   link = link.data(linkData).enter().append("line").attr("class", "link");
-
-//   node = node
-//     .data(generalViewGraph.nodes)
-//     .enter()
-//     .append("circle")
-//     .attr("class", "node")
-//     .style("fill", function (d) {
-//       return d.co;
-//     })
-//     .attr("r", r)
-//     .on("dblclick", dblclick)
-//     .call(drag)
-//     .attr("data-hasqtip", function (d) {
-//       $(this).qtip({
-//         content: {
-//           text:
-//             '<strong>Document name:</strong><br><u class="hyperLink" onclick="showDocumentPDF($(this).text())">' +
-//             d.na +
-//             "</u><br><br><strong>List of clusters name:</strong><br>" +
-//             createListOfDocumentClustersName(d.cl, d.na) +
-//             "</u><br><strong>List of top 5 terms:</strong><br>" +
-//             getListOfTermsOfDocument(d.na),
-//         },
-//         hide: {
-//           fixed: true,
-//           delay: 700,
-//         },
-//         show: {
-//           delay: 700,
-//         },
-//         style: {
-//           classes: "qtip-rounded qtip-shadow",
-//         },
-//         position: {
-//           my: "center right",
-//           at: "center left",
-//         },
-//       });
-//     });
-
-//   node
-//     .on("mouseover", function (d) {
-//       saveLog("tSneLayoutNodeMouseOver");
-//       set_highlight(d);
-//     })
-//     .on("click", function (d) {
-//       d3.event.stopPropagation();
-//       focus_node = d;
-//       set_focus(d);
-//       set_highlight(d);
-//       saveLog("tSneLayoutNodeClick");
-//     })
-//     .on("mousedown", function (d) {
-//       d3.event.stopPropagation();
-//     })
-//     .on("mouseout", function (d) {
-//       exit_highlight();
-//     })
-//     .on("contextmenu", function (d, i) {
-//       saveLog("tSneLayoutNodeContextMenue");
-//       d3.event.preventDefault();
-//       // react on right-clicking
-//     });
-
-//   svg
-//     .on("click", function () {
-//       if (focus_node != null) {
-//         focus_node = null;
-//         if (highlight_trans < 1) {
-//           node.style("opacity", 1);
-//           link.style("opacity", 1);
-
-//           node2.style("opacity", 1);
-//           link2.style("opacity", 1);
-//         }
-//       } else {
-//         node.style("opacity", 1);
-//         link.style("opacity", 1);
-
-//         node2.style("opacity", 1);
-//         link2.style("opacity", 1);
-//       }
-//       if (highlight_node == null) exit_highlight();
-//     })
-//     .on("contextmenu", function (d, i) {
-//       d3.event.preventDefault();
-//       // react on right-clicking
-//     });
-
-//   // node.on("dblclick.zoom", function(d) { d3.event.stopPropagation();
-//   //   var dcx = (window.innerWidth/2-d.x*zoom.scale());
-//   //   var dcy = (window.innerHeight/2-d.y*zoom.scale());
-//   //   zoom.translate([dcx,dcy]);
-//   //   g.attr("transform", "translate("+ dcx + "," + dcy  + ")scale(" + zoom.scale() + ")");
-//   // });
-
-//   // });
-
-//   node.classed("fixed", function (d) {
-//     d.fixed = false;
-//   });
-
-//   force.start();
-//   for (var i = 0; i < 2; i++) force.tick();
-
-//   node.classed("fixed", function (d) {
-//     d.fixed = true;
-//   });
-
-//   function tick() {
-//     // node.attr("cx", function(d) { return d.x = Math.max(r, Math.min(width - r, d.x)); })
-//     //     .attr("cy", function(d) { return d.y = Math.max(r, Math.min(height - r, d.y)); });
-
-//     node
-//       .attr("cx", function (d) {
-//         return (d.x = d.x);
-//       })
-//       .attr("cy", function (d) {
-//         return (d.y = d.y);
-//       });
-
-//     link
-//       .attr("x1", function (d) {
-//         return d.source.x;
-//       })
-//       .attr("y1", function (d) {
-//         return d.source.y;
-//       })
-//       .attr("x2", function (d) {
-//         return d.target.x;
-//       })
-//       .attr("y2", function (d) {
-//         return d.target.y;
-//       });
-//   }
-
-//   function dblclick(d) {
-//     // d3.select(this).classed("fixed", d.fixed = false);
-//   }
-
-//   function dragstart(d) {
-//     // d3.select(this).classed("fixed", d.fixed = true);
-//   }
-
-//   function isNumber(n) {
-//     return !isNaN(parseFloat(n)) && isFinite(n);
-//   }
-
-//   function set_highlight(d) {
-//     svg.style("cursor", "pointer");
-//     svg2.style("cursor", "pointer");
-//     if (focus_node != null) d = focus_node;
-//     highlight_node = d;
-
-//     if (highlight_color != "#a6a6a6") {
-//       node.style(towhite, function (o) {
-//         if (o.na == $(doc_select).val()) {
-//           return "red";
-//         }
-//         // else if(docsHighlight[o.na])
-//         // {
-//         //   return "blue";
-//         // }
-//         else if (isConnected(d, o)) {
-//           return highlight_color;
-//         } else {
-//           return "#a6a6a6";
-//         }
-//       });
-
-//       link.style("stroke", function (o) {
-//         return o.source.index == d.index || o.target.index == d.index
-//           ? highlight_color
-//           : isNumber(o.score) && o.score >= 0
-//           ? color(o.score)
-//           : default_link_color;
-//       });
-
-//       //set node stroke
-//       node.style("stroke-width", function (o) {
-//         if (
-//           (docsHighlight[o.na] && isConnected(d, o)) ||
-//           o.na == $(doc_select).val()
-//         ) {
-//           return "2px";
-//         } else {
-//           return "0.5px";
-//         }
-//       });
-
-//       node2.style(towhite, function (o) {
-//         if (o.na == $(doc_select).val()) {
-//           return "red";
-//         }
-//         // else if(docsHighlight[o.na])
-//         // {
-//         //   return "blue";
-//         // }
-//         else if (isConnected(d, o)) {
-//           return highlight_color;
-//         } else {
-//           return "#a6a6a6";
-//         }
-//       });
-
-//       link2.style("stroke", function (o) {
-//         return o.source.index == d.index || o.target.index == d.index
-//           ? highlight_color
-//           : isNumber(o.score) && o.score >= 0
-//           ? color(o.score)
-//           : default_link_color;
-//       });
-
-//       //set node stroke
-//       node2.style("stroke-width", function (o) {
-//         if (
-//           (docsHighlight[o.na] && isConnected(d, o)) ||
-//           o.na == $(doc_select).val()
-//         ) {
-//           return "2px";
-//         } else {
-//           return "0.5px";
-//         }
-//       });
-//     }
-//   }
-
-//   function exit_highlight() {
-//     highlight_node = null;
-//     if (focus_node == null) {
-//       svg.style("cursor", "move");
-//       if (highlight_color != "#a6a6a6") {
-//         node.style(towhite, function (o) {
-//           if (o.na == $(doc_select).val()) {
-//             return "red";
-//           }
-//           // else if(docsHighlight[o.na])
-//           // {
-//           //   return "blue";
-//           // }
-//           else {
-//             return "#a6a6a6";
-//           }
-//         });
-//         link.style("stroke", function (o) {
-//           return isNumber(o.score) && o.score >= 0
-//             ? color(o.score)
-//             : default_link_color;
-//         });
-
-//         //set node stroke
-//         node.style("stroke-width", function (o) {
-//           if (o.na == $(doc_select).val()) {
-//             return "2px";
-//           } else {
-//             return "0.5px";
-//           }
-//         });
-//       }
-//     }
-//   }
-
-//   zoom.on("zoom", function () {
-//     var stroke = nominal_stroke;
-
-//     if (nominal_stroke * zoom.scale() > max_stroke) {
-//       stroke = max_stroke / zoom.scale();
-//     }
-
-//     link.style("stroke-width", stroke);
-//     // node.style("stroke-width",stroke);
-
-//     node.style("stroke-width", function (o) {
-//       if (o.na == $(doc_select).val()) {
-//         return stroke * 3;
-//       } else {
-//         return stroke;
-//       }
-//     });
-
-//     var base_radius = nominal_base_node_size;
-
-//     g.attr(
-//       "transform",
-//       "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"
-//     );
-//   });
-
-//   svg.call(zoom);
-// } //*******************************End of T-SNE
 
 /*
  * Create list of documents clusters name
@@ -5840,41 +5452,8 @@ function getForceSilhouette(forceResult, forceLables) {
     },
   });
 }
-// Step 1: Calculate Feature Averages Across Clusters
-function calculateFeatureAverages(rawScores) {
-  let featureAverages = {};
-  for (let feature in rawScores) {
-    let total = rawScores[feature].reduce((acc, score) => acc + score, 0);
-    featureAverages[feature] = total / rawScores[feature].length;
-  }
-  return featureAverages;
-}
-// Step 2: Compute Relative Differences
-function computeRelativeDifferences(rawScores, featureAverages) {
-  let relativeDifferences = {};
-  for (let feature in rawScores) {
-    relativeDifferences[feature] = rawScores[feature].map(score => score - featureAverages[feature]);
-  }
-  return relativeDifferences;
-}
-// Step 3: Scale Up the Relative Differences
-function scaleUpDifferences(relativeDifferences, scalingFactor) {
-  let scaledDifferences = {};
-  for (let feature in relativeDifferences) {
-    scaledDifferences[feature] = relativeDifferences[feature].map(difference => difference * scalingFactor);
-  }
-  return scaledDifferences;
-}
-// Step 4: Separate Positive and Negative Contributions
-function separatePositiveNegativeValues(scaledDifferences) {
-  let positiveValues = {};
-  let negativeValues = {};
-  for (let feature in scaledDifferences) {
-    positiveValues[feature] = scaledDifferences[feature].map(value => Math.max(0, value));
-    negativeValues[feature] = scaledDifferences[feature].map(value => Math.min(0, value));
-  }
-  return { positiveValues, negativeValues };
-}
+
+
 
 
 
@@ -5891,276 +5470,6 @@ function getExplanation() {
       explanation_details = msg["explanation_details"];
     },
   });
-}
-// Calculate mean score for each feature across all clusters
-function calculateMeanScores(data) {
-  var meanScores = {};
-  for (var feature in data) {
-      var scores = data[feature];
-      var sum = scores.reduce(function(a, b) { return a + b; }, 0);
-      meanScores[feature] = sum / scores.length;
-  }
-  return meanScores;
-}
-// Calculate differential scores for each feature
-function calculateDifferentialScores(data, meanScores) {
-  var differentialScores = {};
-  for (var feature in data) {
-      differentialScores[feature] = data[feature].map(function(score) {
-          return score - meanScores[feature];
-      });
-  }
-  return differentialScores;
-}
-// Normalize the differential scores
-function normalizeScores(differentialScores) {
-  var allDifferentials = [].concat.apply([], Object.values(differentialScores));
-  var minDiff = Math.min.apply(Math, allDifferentials);
-  var maxDiff = Math.max.apply(Math, allDifferentials.map(function(d) { return d - minDiff; }));
-
-  var normalizedScores = {};
-  for (var feature in differentialScores) {
-      normalizedScores[feature] = differentialScores[feature].map(function(d) {
-          return (d - minDiff) / maxDiff;
-      });
-  }
-  return normalizedScores;
-}
-
-
-
-function transformData_differential_value(data) {
-  var meanScores = calculateMeanScores(data);
-  var differentialScores = calculateDifferentialScores(data, meanScores);
-  var data = normalizeScores(differentialScores);
-  
-  var transformed = [];
-  var clusters = Object.keys(data);
-
-  // Assuming each array in data has the same length
-  var numClusters = data[clusters[0]].length;
-
-  for (var i = 0; i < numClusters; i++) {
-    var clusterData = { cluster: "Cluster " + (i + 1) };
-    clusters.forEach(function (key) {
-      clusterData[key] = data[key][i];
-    });
-    transformed.push(clusterData);
-  }
-  return transformed;
-}
-function createTermClusterChart_differential_values() {
-  // Assuming the container div 'panel9' has been rendered and has width and height
-  var panel9 = document.getElementById("panel9");
-  console.log(document.getElementById("panel9"));
-  console.log(panel9);
-  var computedStyle = window.getComputedStyle(panel9);
-
-  // Get the computed width and height from the CSS properties
-  var panelWidth = parseFloat(computedStyle.width);
-  var panelHeight = parseFloat(computedStyle.height);
-
-  // Define margins as an object, you can adjust these values as needed
-  var margin = { top: 20, right: 20, bottom: 40, left: 40 };
-
-  // Calculate the actual width and height of the SVG canvas
-  var width = panelWidth - margin.left - margin.right;
-  var height = panelHeight - margin.top - margin.bottom;
-  doc = document.getElementById("doc_content").innerHTML.replace(/\n$/, "");
-  documentExplanation = explanation_details[doc];
-  // var documentExplanation = {
-  //   "Michael Fincke": [0.269, 0.268, 0.304, 0.290], feature: cluster 1, cluster 2, cluster 3, cluster 4
-  //   "Astronaut": [0.217, 0.272, 0.278, 0.313],feature: cluster 1, cluster 2, cluster 3, cluster 4
-  //   "Orbit": [0.241, 0.272, 0.280, 0.305],feature: cluster 1, cluster 2, cluster 3, cluster 4
-  //   "Earth": [0.262, 0.304, 0.300, 0.304]feature: cluster 1, cluster 2, cluster 3, cluster 4
-  // };
-
-  var data = transformData_differential_value(documentExplanation);
-
-  var margin = { top: 20, right: 160, bottom: 50, left: 30 };
-
-  var width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
-
-  var svg = d3.select("#chart").select("svg");
-
-  // If SVG is already present, remove it before creating a new one
-  if (!svg.empty()) {
-    svg.remove();
-  }
-  var svg = d3
-    .select("#chart")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-  var x = d3.scale
-    .ordinal()
-    .rangeRoundBands([0, width / 1.5], 0.3)
-    .domain(
-      data.map(function (d) {
-        return d.cluster;
-      })
-    );
-
-  var color = d3.scale
-    .ordinal()
-    .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"])
-    .domain(
-      d3.keys(data[0]).filter(function (key) {
-        return key !== "cluster";
-      })
-    );
-  var y = d3.scale
-    .linear()
-    .rangeRound([height, 0])
-    .domain([
-      0,
-      d3.max(data, function (d) {
-        return d3.sum(
-          color.domain().map(function (key) {
-            return d[key];
-          })
-        );
-      }),
-    ]);
-
-  var xAxis = d3.svg.axis().scale(x).orient("bottom");
-
-  var yAxis = d3.svg.axis().scale(y).orient("left");
-
-  // Define the colors for each concept
-
-  svg
-    .append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
-
-  svg
-    .append("g")
-    .attr("class", "y axis")
-    .call(yAxis)
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .text("Score");
-
-  var cluster = svg
-    .selectAll(".cluster")
-    .data(data)
-    .enter()
-    .append("g")
-    .attr("class", "g")
-    .attr("transform", function (d) {
-      return "translate(" + x(d.cluster) + ",0)";
-    });
-
-  cluster
-    .selectAll("rect")
-    .data(function (d) {
-      var y0 = 0;
-      return color.domain().map(function (name) {
-        return { name: name, y0: y0, y1: (y0 += +d[name]), cluster: d.cluster };
-      });
-    })
-    .enter()
-    .append("rect")
-    .attr("width", x.rangeBand())
-    .attr("y", function (d) {
-      return y(d.y1);
-    })
-    .attr("height", function (d) {
-      return y(d.y0) - y(d.y1);
-    })
-    .style("fill", function (d) {
-      return color(d.name);
-    })
-    // Add text labels
-    .each(function (d) {
-      var bar = d3.select(this);
-      var barHeight = y(d.y0) - y(d.y1);
-      if (barHeight > 20) {
-        // Only add text if the bar is tall enough
-        var barWidth = x.rangeBand();
-        var barX = x(d.cluster) + barWidth / 2; // Center of the bar
-        var barY = y(d.y1) + (y(d.y0) - y(d.y1)) / 2; // Middle of the bar height
-
-        svg
-          .append("text")
-          .attr("x", barX)
-          .attr("y", barY)
-          .attr("dy", "0.35em")
-          .attr("text-anchor", "middle")
-          .text(d3.format(".2f")(d.y1 - d.y0))
-          .style("fill", "black") // Choose a fill color that contrasts with the bar
-          .style("font-size", "20px"); // Adjust font size as needed
-      }
-    });
-
-  // Calculate the legend item offsets by accumulating widths
-  var legendItemOffsets = [0];
-  color
-    .domain()
-    .slice()
-    .reverse()
-    .forEach(function (d, i) {
-      var textWidth = getTextWidth(d, "20px sans-serif"); // Calculate text width (you may need a helper function for this)
-      var spacing = 48; // Adjust spacing based on your styling
-      if (i > 0) {
-        legendItemOffsets.push(legendItemOffsets[i - 1] + textWidth + spacing);
-      }
-    });
-
-  // Create legend
-  var legend = svg
-    .selectAll(".legend")
-    .data(color.domain().slice().reverse())
-    .enter()
-    .append("g")
-    .attr("class", "legend")
-    .attr("transform", function (d, i) {
-      return (
-        "translate(" +
-        legendItemOffsets[i] +
-        "," +
-        (height + margin.bottom - 20) +
-        ")"
-      );
-    });
-
-  legend
-    .append("rect")
-    .attr("x", 0)
-    .attr("width", 18)
-    .attr("height", 18)
-    .style("fill", color);
-
-  legend
-    .append("text")
-    .attr("x", 22)
-    .attr("y", 9)
-    .attr("dy", ".35em")
-    .style("text-anchor", "start")
-    .text(function (d) {
-      return d;
-    });
-
-  // Helper function to measure text width
-  function getTextWidth(text, font) {
-    // re-use canvas object for better performance
-    var canvas =
-      getTextWidth.canvas ||
-      (getTextWidth.canvas = document.createElement("canvas"));
-    var context = canvas.getContext("2d");
-    context.font = font;
-    var metrics = context.measureText(text);
-    return metrics.width;
-  }
 }
 
 
@@ -6181,7 +5490,7 @@ function transformData_relative_value(data, scalingFactor) {
 
   // Calculate scaled relative differences
   for (var i = 0; i < numClusters; i++) {
-    var clusterData = { cluster: "Cluster " + (i + 1) };
+    var clusterData = { cluster: "Cluster " + (i) };
     clusters.forEach(function (key) {
       var relativeDifference = data[key][i] - featureAverages[key];
       clusterData[key] = relativeDifference * scalingFactor;
@@ -6190,7 +5499,7 @@ function transformData_relative_value(data, scalingFactor) {
   }
   return transformed;
 }
-function createTermClusterChart_relative_value() {
+function createTermClusterChart() {
   // Assuming the container div 'panel9' has been rendered and has width and height
   var panel9 = document.getElementById("panel9");
   console.log(document.getElementById("panel9"));
@@ -6208,6 +5517,10 @@ function createTermClusterChart_relative_value() {
   var width = panelWidth - margin.left - margin.right;
   var height = panelHeight - margin.top - margin.bottom;
   doc = document.getElementById("doc_content").innerHTML.replace(/\n$/, "");
+  // remove extra spaces within the document
+  doc = doc.replace(/\s+/g, " ");
+  console.log(doc);
+  console.log(explanation_details);
   documentExplanation = explanation_details[doc];
   // var documentExplanation = {
   //   "Michael Fincke": [0.269, 0.268, 0.304, 0.290], feature: cluster 1, cluster 2, cluster 3, cluster 4
@@ -6250,7 +5563,8 @@ function createTermClusterChart_relative_value() {
 
   var color = d3.scale
     .ordinal()
-    .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"])
+    // .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"])
+    .range(["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5"])
     .domain(
       d3.keys(data[0]).filter(function (key) {
         return key !== "cluster";
@@ -6299,15 +5613,16 @@ function createTermClusterChart_relative_value() {
     .style("text-anchor", "end")
     .text("Score");
 
-  var cluster = svg
-    .selectAll(".cluster")
+    var cluster = svg.selectAll(".cluster")
     .data(data)
     .enter()
     .append("g")
     .attr("class", "g")
-    .attr("transform", function (d) {
-      return "translate(" + x(d.cluster) + ",0)";
-    });
+    .attr("transform", function(d) { return "translate(" + x(d.cluster) + ",0)"; });
+    var maxContribution = 0;
+    var maxCluster = null;
+    var highestTotals = {};
+  
 
     cluster
     .selectAll("rect")
@@ -6337,9 +5652,18 @@ function createTermClusterChart_relative_value() {
     .style("fill", function (d) {
       return color(d.name);
     })
-    .style("opacity", 0.8) // Adjust opacity as needed
-  .style("stroke", "white") // Add a white border
-  .style("stroke-width", "1px") // Adjust stroke width as needed
+    .each(function(d) {
+      // Calculate the total contribution for the current bar
+      var totalContribution = d3.sum(color.domain().map(function(name) {
+        return Math.abs(d[name]); // Use absolute value in case of negative contributions
+      }));
+  
+      // Check if the current total contribution is the maximum
+      if (totalContribution > maxContribution) {
+        maxContribution = totalContribution;
+        maxCluster = d.cluster; // Save the cluster name or index
+      }
+    })
     .each(function (d) {
       var bar = d3.select(this);
   var barHeight = Math.abs(y(d.y0) - y(d.y1));
@@ -6368,236 +5692,11 @@ function createTermClusterChart_relative_value() {
       .style("font-size", "10px"); // Adjust font size based on the bar height
   }
     });
-
-  // Calculate the legend item offsets by accumulating widths
-  var legendItemOffsets = [0];
-  color
-    .domain()
-    .slice()
-    .reverse()
-    .forEach(function (d, i) {
-      var textWidth = getTextWidth(d, "20px sans-serif"); // Calculate text width (you may need a helper function for this)
-      var spacing = 48; // Adjust spacing based on your styling
-      if (i > 0) {
-        legendItemOffsets.push(legendItemOffsets[i - 1] + textWidth + spacing);
-      }
-    });
-
-  // Create legend
-  var legend = svg
-    .selectAll(".legend")
-    .data(color.domain().slice().reverse())
-    .enter()
-    .append("g")
-    .attr("class", "legend")
-    .attr("transform", function (d, i) {
-      return (
-        "translate(" +
-        legendItemOffsets[i] +
-        "," +
-        (height + margin.bottom - 20) +
-        ")"
-      );
-    });
-
-  legend
-    .append("rect")
-    .attr("x", 0)
-    .attr("width", 18)
-    .attr("height", 18)
-    .style("fill", color);
-
-  legend
-    .append("text")
-    .attr("x", 22)
-    .attr("y", 9)
-    .attr("dy", ".35em")
-    .style("text-anchor", "start")
-    .text(function (d) {
-      return d;
-    });
-
-  // Helper function to measure text width
-  function getTextWidth(text, font) {
-    // re-use canvas object for better performance
-    var canvas =
-      getTextWidth.canvas ||
-      (getTextWidth.canvas = document.createElement("canvas"));
-    var context = canvas.getContext("2d");
-    context.font = font;
-    var metrics = context.measureText(text);
-    return metrics.width;
-  }
-}
-
-function transformData(data) {
-  var transformed = [];
-  var clusters = Object.keys(data);
-
-  // Assuming each array in data has the same length
-  var numClusters = data[clusters[0]].length;
-
-  for (var i = 0; i < numClusters; i++) {
-    var clusterData = { cluster: "Cluster " + (i + 1) };
-    clusters.forEach(function (key) {
-      clusterData[key] = data[key][i];
-    });
-    transformed.push(clusterData);
-  }
-  return transformed;
-}
-function createTermClusterChartOriginal() {
-  // Assuming the container div 'panel9' has been rendered and has width and height
-  var panel9 = document.getElementById("panel9");
-  console.log(document.getElementById("panel9"));
-  console.log(panel9);
-  var computedStyle = window.getComputedStyle(panel9);
-
-  // Get the computed width and height from the CSS properties
-  var panelWidth = parseFloat(computedStyle.width);
-  var panelHeight = parseFloat(computedStyle.height);
-
-  // Define margins as an object, you can adjust these values as needed
-  var margin = { top: 20, right: 20, bottom: 40, left: 40 };
-
-  // Calculate the actual width and height of the SVG canvas
-  var width = panelWidth - margin.left - margin.right;
-  var height = panelHeight - margin.top - margin.bottom;
-  doc = document.getElementById("doc_content").innerHTML.replace(/\n$/, "");
-  documentExplanation = explanation_details[doc];
-  // var documentExplanation = {
-  //   "Michael Fincke": [0.269, 0.268, 0.304, 0.290], feature: cluster 1, cluster 2, cluster 3, cluster 4
-  //   "Astronaut": [0.217, 0.272, 0.278, 0.313],feature: cluster 1, cluster 2, cluster 3, cluster 4
-  //   "Orbit": [0.241, 0.272, 0.280, 0.305],feature: cluster 1, cluster 2, cluster 3, cluster 4
-  //   "Earth": [0.262, 0.304, 0.300, 0.304]feature: cluster 1, cluster 2, cluster 3, cluster 4
-  // };
-
-  var data = transformData(documentExplanation);
-
-  var margin = { top: 20, right: 160, bottom: 50, left: 30 };
-
-  var width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
-
-  var svg = d3.select("#chart").select("svg");
-
-  // If SVG is already present, remove it before creating a new one
-  if (!svg.empty()) {
-    svg.remove();
-  }
-  var svg = d3
-    .select("#chart")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-  var x = d3.scale
-    .ordinal()
-    .rangeRoundBands([0, width / 1.5], 0.3)
-    .domain(
-      data.map(function (d) {
-        return d.cluster;
-      })
-    );
-
-  var color = d3.scale
-    .ordinal()
-    .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"])
-    .domain(
-      d3.keys(data[0]).filter(function (key) {
-        return key !== "cluster";
-      })
-    );
-  var y = d3.scale
-    .linear()
-    .rangeRound([height, 0])
-    .domain([
-      0,
-      d3.max(data, function (d) {
-        return d3.sum(
-          color.domain().map(function (key) {
-            return d[key];
-          })
-        );
-      }),
-    ]);
-
-  var xAxis = d3.svg.axis().scale(x).orient("bottom");
-
-  var yAxis = d3.svg.axis().scale(y).orient("left");
-
-  // Define the colors for each concept
-
-  svg
-    .append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
-
-  svg
-    .append("g")
-    .attr("class", "y axis")
-    .call(yAxis)
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .text("Score");
-
-  var cluster = svg
-    .selectAll(".cluster")
-    .data(data)
-    .enter()
-    .append("g")
-    .attr("class", "g")
-    .attr("transform", function (d) {
-      return "translate(" + x(d.cluster) + ",0)";
-    });
-
-  cluster
+    svg.selectAll(".g")
+    .filter(function(d) { return d.cluster === maxCluster; }) // Select the group with the maximum cluster
     .selectAll("rect")
-    .data(function (d) {
-      var y0 = 0;
-      return color.domain().map(function (name) {
-        return { name: name, y0: y0, y1: (y0 += +d[name]), cluster: d.cluster };
-      });
-    })
-    .enter()
-    .append("rect")
-    .attr("width", x.rangeBand())
-    .attr("y", function (d) {
-      return y(d.y1);
-    })
-    .attr("height", function (d) {
-      return y(d.y0) - y(d.y1);
-    })
-    .style("fill", function (d) {
-      return color(d.name);
-    })
-    // Add text labels
-    .each(function (d) {
-      var bar = d3.select(this);
-      var barHeight = y(d.y0) - y(d.y1);
-      if (barHeight > 20) {
-        // Only add text if the bar is tall enough
-        var barWidth = x.rangeBand();
-        var barX = x(d.cluster) + barWidth / 2; // Center of the bar
-        var barY = y(d.y1) + (y(d.y0) - y(d.y1)) / 2; // Middle of the bar height
-
-        svg
-          .append("text")
-          .attr("x", barX)
-          .attr("y", barY)
-          .attr("dy", "0.35em")
-          .attr("text-anchor", "middle")
-          .text(d3.format(".2f")(d.y1 - d.y0))
-          .style("fill", "black") // Choose a fill color that contrasts with the bar
-          .style("font-size", "20px"); // Adjust font size as needed
-      }
-    });
+    .style("stroke", "black") // Change to your preferred border color
+    .style("stroke-width", "200px"); // Adjust the border width as needed
 
   // Calculate the legend item offsets by accumulating widths
   var legendItemOffsets = [0];
@@ -6658,11 +5757,5 @@ function createTermClusterChartOriginal() {
     var metrics = context.measureText(text);
     return metrics.width;
   }
-}
-
-function createTermClusterChart(){
-  // createTermClusterChart_relative_value()
-  // createTermClusterChart_differential_values()
-  // createTermClusterChartOriginal()
 }
 

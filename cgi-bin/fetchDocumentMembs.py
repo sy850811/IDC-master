@@ -1,8 +1,6 @@
 #!/Applications/miniconda3/envs/IDC/bin/python
-import cgi, cgitb, sys, os
-import json, importlib
+import cgi, cgitb, os
 from dotenv import load_dotenv
-import os
 
 # Load environment variables from .env file
 load_dotenv()
