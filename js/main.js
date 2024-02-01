@@ -736,7 +736,8 @@ function getClusterWords() {
   for (var i = 0; i < clusterKeytermsOriginal.length; i++) {
     tempClusterNumber = i;
     var temp = eval(clusterKeytermsOriginal[i]);
-    tempClusterWords += '{"cluster":"cluster' + tempClusterNumber + '", "words": [';
+    tempClusterWords +=
+      '{"cluster":"cluster' + tempClusterNumber + '", "words": [';
 
     for (var j = 0; j < temp.length; j++) {
       tempClusterWords += '{"word":"' + temp[j] + '"}';
@@ -746,7 +747,7 @@ function getClusterWords() {
         tempClusterWords += ",";
       }
 
-      if (j+1 == temp.length) {
+      if (j + 1 == temp.length) {
         //only top 5
         break;
       }
@@ -4829,7 +4830,6 @@ function isConnected(a, b) {
   );
 }
 
-
 /*
  * Create list of documents clusters name
  * @param clustersNames = the list of clusters name (comma separated)
@@ -4961,8 +4961,6 @@ function loadDocInCluster(documentName, clusterName) {
   }
 }
 
-
-
 /*
  * Get cluster color
  * @param clusterName = cluster Name
@@ -5085,7 +5083,6 @@ function graphCosineDistanceChange(value) {
     $("#span4").text(newLinks.length / 2);
   }
 }
-
 /*
  * Change link distance of general view graph
  * @param value = value
@@ -5100,7 +5097,6 @@ function graphLinkDistanceChange(value) {
     force2.start();
   }
 }
-
 /*
  * Change Gravity of general view graph
  * @param value = value
@@ -5116,9 +5112,7 @@ function graphGravityChange(value) {
     force2.start();
   }
 }
-
 /*
- 
 /**
  * Show the term cload of the document
  * @param documentName = docuemnt name
@@ -5164,7 +5158,6 @@ function showDocumentCloud(documentName) {
     );
   }
 }
-
 /**
  * For right click in general view graph
  */
@@ -5181,7 +5174,6 @@ $(function () {
     },
   });
 });
-
 /**
  * Show the terms cloud of selected documents in general view graph
  */
@@ -5278,7 +5270,6 @@ function showSelectedDocumentsCloud() {
     );
   }
 }
-
 /**
  * show the cluster nodes in general view graph
  * @param clusterName = neme of cluster
@@ -5374,7 +5365,6 @@ function showClusterNodes(clusterName) {
     }
   });
 }
-
 /**
  * Save log of user operations.
  * @param command = The number related to a command
@@ -5391,7 +5381,6 @@ function saveLog(command) {
     },
   });
 }
-
 /**
  * Get Silhouette of force layout.
  */
@@ -5417,7 +5406,6 @@ function forceSilhouette() {
 
   getForceSilhouette(forceResult, forceLables);
 }
-
 /*
  * Get  force Silhouette
  * @param forceResult =  x and y dimensions
@@ -5455,12 +5443,6 @@ function getForceSilhouette(forceResult, forceLables) {
     },
   });
 }
-
-
-
-
-
-
 //write a function to make ajax request to explanation.py
 function getExplanation() {
   $.ajax({
@@ -5474,8 +5456,6 @@ function getExplanation() {
     },
   });
 }
-
-
 function transformData_relative_value(data, scalingFactor) {
   var transformed = [];
   var clusters = Object.keys(data);
@@ -5493,7 +5473,7 @@ function transformData_relative_value(data, scalingFactor) {
 
   // Calculate scaled relative differences
   for (var i = 0; i < numClusters; i++) {
-    var clusterData = { cluster: "Cluster " + (i) };
+    var clusterData = { cluster: "Cluster " + i };
     clusters.forEach(function (key) {
       var relativeDifference = data[key][i] - featureAverages[key];
       clusterData[key] = relativeDifference * scalingFactor;
@@ -5503,8 +5483,8 @@ function transformData_relative_value(data, scalingFactor) {
   return transformed;
 }
 function findMaxPositiveMinNegativeAggregates(documentExplanation) {
-    let maxPositiveWithinDocument = 0;
-    let minNegativeWithinDocument = 0;
+  let maxPositiveWithinDocument = 0;
+  let minNegativeWithinDocument = 0;
   // [
   //   {
   //       "cluster": "Cluster 0",
@@ -5516,47 +5496,45 @@ function findMaxPositiveMinNegativeAggregates(documentExplanation) {
   //   {
   //       "cluster": "Cluster 1",
   //       ...
-  for (let cluster in documentExplanation){
-    let positive = 0
-    let negative = 0
-    for(let key in documentExplanation[cluster]){
-      if(key == "cluster"){
-        continue
+  for (let cluster in documentExplanation) {
+    let positive = 0;
+    let negative = 0;
+    for (let key in documentExplanation[cluster]) {
+      if (key == "cluster") {
+        continue;
       }
-      value = documentExplanation[cluster][key]
-      if(value>0){
-        positive += value
+      value = documentExplanation[cluster][key];
+      if (value > 0) {
+        positive += value;
+      } else {
+        negative += value;
       }
-      else{
-        negative += value
-      }
-
     }
-    if(maxPositiveWithinDocument < positive){
-      maxPositiveWithinDocument = positive
+    if (maxPositiveWithinDocument < positive) {
+      maxPositiveWithinDocument = positive;
     }
-    if(minNegativeWithinDocument> negative){
-      minNegativeWithinDocument = negative
+    if (minNegativeWithinDocument > negative) {
+      minNegativeWithinDocument = negative;
     }
   }
-  return {maxPositiveWithinDocument,minNegativeWithinDocument}
-  
+  return { maxPositiveWithinDocument, minNegativeWithinDocument };
 }
-function calculateYScale(explanation_details){
+function calculateYScale(explanation_details) {
   let maxPositiveAcrossDocument = 0;
   let minNegativeAcrossDocument = 0;
-  for (let i in explanation_details){
+  for (let i in explanation_details) {
     let tempDoc_data = explanation_details[i];
-    tempDoc_data = transformData_relative_value(tempDoc_data, 10)
-    const { maxPositiveWithinDocument, minNegativeWithinDocument } = findMaxPositiveMinNegativeAggregates(tempDoc_data);
-    if (maxPositiveWithinDocument > maxPositiveAcrossDocument){
+    tempDoc_data = transformData_relative_value(tempDoc_data, 10);
+    const { maxPositiveWithinDocument, minNegativeWithinDocument } =
+      findMaxPositiveMinNegativeAggregates(tempDoc_data);
+    if (maxPositiveWithinDocument > maxPositiveAcrossDocument) {
       maxPositiveAcrossDocument = maxPositiveWithinDocument;
     }
-    if (minNegativeWithinDocument < minNegativeAcrossDocument){
+    if (minNegativeWithinDocument < minNegativeAcrossDocument) {
       minNegativeAcrossDocument = minNegativeWithinDocument;
     }
   }
-  return {maxPositiveAcrossDocument, minNegativeAcrossDocument};
+  return { maxPositiveAcrossDocument, minNegativeAcrossDocument };
 }
 function getTopFeatures(doc_data, numberOfFeatures) {
   // Create an object to hold the sum of each feature's contributions across clusters
@@ -5582,7 +5560,6 @@ function getTopFeatures(doc_data, numberOfFeatures) {
   return sortedFeatures.slice(0, numberOfFeatures).map((f) => f.feature);
 }
 function createTermClusterChart() {
-  // Assuming the container div 'panel9' has been rendered and has width and height
   var panel9 = document.getElementById("panel9");
   console.log(document.getElementById("panel9"));
   console.log(panel9);
@@ -5607,27 +5584,30 @@ function createTermClusterChart() {
   // var documentExplanation = {
   //   "Michael Fincke": [0.269, 0.268, 0.304, 0.290], feature: cluster 1, cluster 2, cluster 3, cluster 4
   //   "Astronaut": [0.217, 0.272, 0.278, 0.313],feature: cluster 1, cluster 2, cluster 3, cluster 4
-      
+
   // };
   //loop through explanation_details and find out the heighest aggregate value possible:
 
   var scalingFactor = 10; // Choose a suitable scaling factor
-  var doc_data = transformData_relative_value(documentExplanation, scalingFactor);
-//   doc_data = [
-//     {
-//         "cluster": "Cluster 0",
-//         "Iraq": 5.0265,
-//         "United Arab Emirates": 2.9354999999999998,
-//         "Arab world": -1.051525
-//     },
-//     {
-//         "cluster": "Cluster 1",
-//         "Iraq": 1.5460000000000003,
-//         "United Arab Emirates": 2.9354999999999998,
-//        ...
-//     },
-//     ...
-// ]
+  var doc_data = transformData_relative_value(
+    documentExplanation,
+    scalingFactor
+  );
+  //   doc_data = [
+  //     {
+  //         "cluster": "Cluster 0",
+  //         "Iraq": 5.0265,
+  //         "United Arab Emirates": 2.9354999999999998,
+  //         "Arab world": -1.051525
+  //     },
+  //     {
+  //         "cluster": "Cluster 1",
+  //         "Iraq": 1.5460000000000003,
+  //         "United Arab Emirates": 2.9354999999999998,
+  //        ...
+  //     },
+  //     ...
+  // ]
 
   var width = width - margin.left - margin.right,
     height = height - margin.top - margin.bottom;
@@ -5641,7 +5621,7 @@ function createTermClusterChart() {
     svg.remove();
   }
   var svg = d3
-    .select("#chart")//<div id="chart"></div>
+    .select("#chart") //<div id="chart"></div>
     .append("svg") //<div id="chart"><svg></svg></div>
     .attr("width", width + margin.left + margin.right) //<div id="chart"><svg width="1000"></svg></div>
     .attr("height", height + margin.top + margin.bottom) //<div id="chart"><svg width="1000" height="500"></svg></div>
@@ -5651,28 +5631,53 @@ function createTermClusterChart() {
   console.log("doc_data", doc_data);
   var x = d3.scale
     .ordinal()
-    .rangeRoundBands([0, width ], 0.3)
+    .rangeRoundBands([0, width], 0.3)
     .domain(
       doc_data.map(function (d) {
         return d.cluster;
       })
     );
 
-    let topFeatures = getTopFeatures(doc_data, 5);
-console.log(topFeatures);
+  let topFeatures = getTopFeatures(doc_data, 5);
+  console.log(topFeatures);
 
-// Update the domain of your color scale to use only the top features
-
+  // Update the domain of your color scale to use only the top features
 
   var color = d3.scale
     .ordinal()
-    .range(["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5"])
+    .range([
+      "#8dd3c7",
+      "#ffffb3",
+      "#bebada",
+      "#fb8072",
+      "#80b1d3",
+      "#fdb462",
+      "#b3de69",
+      "#fccde5",
+    ])
     .domain(topFeatures);
-    if (!maxPositiveAcrossDocument) {
-      ({ maxPositiveAcrossDocument, minNegativeAcrossDocument } = calculateYScale(explanation_details));
-    }
-    
-    var y = d3.scale
+  if (!maxPositiveAcrossDocument) {
+    ({ maxPositiveAcrossDocument, minNegativeAcrossDocument } =
+      calculateYScale(explanation_details));
+  }
+  var aggregateValues = doc_data.map(function (d) {
+    return {
+      cluster: d.cluster,
+      aggregateValue: d3.sum(
+        color.domain().map(function (name) {
+          return d[name];
+        })
+      ),
+    };
+  });
+  var highestAggregateCluster = aggregateValues.reduce(function (
+    prev,
+    current
+  ) {
+    return prev.aggregateValue > current.aggregateValue ? prev : current;
+  }).cluster;
+
+  var y = d3.scale
     .linear()
     .rangeRound([height, 0])
     .domain([minNegativeAcrossDocument, maxPositiveAcrossDocument]);
@@ -5697,35 +5702,37 @@ console.log(topFeatures);
     .style("text-anchor", "end")
     .text("Document Belongingness to cluster");
 
-    // #draw horizontal line at y=0
-    
-    var cluster = svg.selectAll(".cluster")
+  // #draw horizontal line at y=0
+
+  var cluster = svg
+    .selectAll(".cluster")
     .data(doc_data)
     .enter()
     .append("g")
     .attr("class", "g")
-    .attr("transform", function(d) { return "translate(" + x(d.cluster) + ",0)"; });
+    .attr("transform", function (d) {
+      return "translate(" + x(d.cluster) + ",0)";
+    });
 
-    
-    var maxContribution = 0;
+  var maxContribution = 0;
 
-    cluster
+  cluster
     .selectAll("rect")
     .data(function (d) {
       var posAccumulator = 0; // Accumulator for positive values
-    var negAccumulator = 0; // Accumulator for negative values
-    return color.domain().map(function(name) {
-      var value = d[name];
-      var y0, y1;
-      if (value >= 0) {
-        y0 = posAccumulator;
-        y1 = posAccumulator += value; // Add positive value to the accumulator
-      } else {
-        y0 = negAccumulator;
-        y1 = negAccumulator += value; // Subtract negative value from the accumulator
-      }
-      return { name: name, y0: y0, y1: y1, cluster: d.cluster };
-    });
+      var negAccumulator = 0; // Accumulator for negative values
+      return color.domain().map(function (name) {
+        var value = d[name];
+        var y0, y1;
+        if (value >= 0) {
+          y0 = posAccumulator;
+          y1 = posAccumulator += value; // Add positive value to the accumulator
+        } else {
+          y0 = negAccumulator;
+          y1 = negAccumulator += value; // Subtract negative value from the accumulator
+        }
+        return { name: name, y0: y0, y1: y1, cluster: d.cluster };
+      });
     })
     .enter()
     .append("rect")
@@ -5743,145 +5750,179 @@ console.log(topFeatures);
     .style("fill", function (d) {
       return color(d.name);
     })
-    .each(function(d) {
-      // Calculate the total contribution for the current bar
-      var totalContribution = d3.sum(color.domain().map(function(name) {
-        return Math.abs(d[name]); // Use absolute value in case of negative contributions
-      }));
-  
-      // Check if the current total contribution is the maximum
-      if (totalContribution > maxContribution) {
-        maxContribution = totalContribution;
-        maxCluster = d.cluster; // Save the cluster name or index
+    .style("stroke", function (d) {
+      // Apply a special stroke to the cluster with the highest aggregate value
+      if (d.cluster === highestAggregateCluster) {
+        return "black"; // Example: gold border for emphasis
       }
+      return null; // No special stroke for other clusters
     })
+    .style("stroke-width", function (d) {
+      // Apply a stroke width if this is the highest aggregate cluster
+      return d.cluster === highestAggregateCluster ? 2 : 0;
+    })
+    // .each(function(d) {
+    //   // Calculate the total contribution for the current bar
+    //   var totalContribution = d3.sum(color.domain().map(function(name) {
+    //     return Math.abs(d[name]); // Use absolute value in case of negative contributions
+    //   }));
+
+    //   // Check if the current total contribution is the maximum
+    //   if (totalContribution > maxContribution) {
+    //     maxContribution = totalContribution;
+    //     maxCluster = d.cluster; // Save the cluster name or index
+    //   }
+    // })
     .each(function (d) {
       var bar = d3.select(this);
-  var barHeight = Math.abs(y(d.y0) - y(d.y1));
-  
-  if (barHeight > 20) {  // Only add text if the bar is tall enough
-    var barWidth = x.rangeBand();
-    var barX = x(d.cluster) + barWidth / 2;  // Center of the bar
-    var barY;
+      var barHeight = Math.abs(y(d.y0) - y(d.y1));
 
-    if (d.y1 > 0) {
-      // Positive value: place the annotation inside the bar, near the top
-      barY = y(d.y1) + barHeight / 2; 
-    } else {
-      // Negative value: place the annotation inside the bar, near the bottom
-      barY = y(d.y0) + barHeight / 2;  // Change from minus to plus
-    }
+      if (barHeight > 20) {
+        // Only add text if the bar is tall enough
+        var barWidth = x.rangeBand();
+        var barX = x(d.cluster) + barWidth / 2; // Center of the bar
+        var barY;
 
-    svg
-      .append("text")
-      .attr("x", barX)
-      .attr("y", barY)
-      .attr("dy", ".35em")
-      .attr("text-anchor", "middle")
-      .text(d3.format(".2f")(Math.abs(d.y1 - d.y0)))
-      .style("fill", "black")  // Consider changing the text color to white for better contrast
-      .style("font-size", "10px"); // Adjust font size based on the bar height
-  }
+        if (d.y1 > 0) {
+          // Positive value: place the annotation inside the bar, near the top
+          barY = y(d.y1) + barHeight / 2;
+        } else {
+          // Negative value: place the annotation inside the bar, near the bottom
+          barY = y(d.y0) + barHeight / 2; // Change from minus to plus
+        }
+
+        svg
+          .append("text")
+          .attr("x", barX)
+          .attr("y", barY)
+          .attr("dy", ".35em")
+          .attr("text-anchor", "middle")
+          .text(d3.format(".2f")(Math.abs(d.y1 - d.y0)))
+          .style("fill", "black") // Consider changing the text color to white for better contrast
+          .style("font-size", "10px"); // Adjust font size based on the bar height
+      }
     });
 
-    var aggregateValues = doc_data.map(function(d) {
-      return {
-        cluster: d.cluster,
-        aggregateValue: d3.sum(color.domain().map(function(name) { return d[name]; }))
-      };
-    });
-    var line = d3.svg.line()
-      .x(function(d) { return x(d.cluster) + x.rangeBand() / 2; }) // Center the line in the middle of the band
-      .y(function(d) { return y(d.aggregateValue); })
-      .interpolate("monotone"); // Smooth line
-    
-    svg.append("path")
-      .datum(aggregateValues)
-      .attr("class", "aggregate-line")
-      .attr("d", line)
-      .style("fill", "none")
-      .style("stroke", "steelblue")
-      .style("stroke-width", "2px");
+  var line = d3.svg
+    .line()
+    .x(function (d) {
+      return x(d.cluster) + x.rangeBand() / 2;
+    }) // Center the line in the middle of the band
+    .y(function (d) {
+      return y(d.aggregateValue);
+    })
+    .interpolate("monotone"); // Smooth line
 
-    // Assuming 'aggregateValues' contains your aggregated data points
-    svg.selectAll(".point")
+  svg
+    .append("path")
+    .datum(aggregateValues)
+    .attr("class", "aggregate-line")
+    .attr("d", line)
+    .style("fill", "none")
+    .style("stroke", "steelblue")
+    .style("stroke-width", "2px");
+
+  // Assuming 'aggregateValues' contains your aggregated data points
+  svg
+    .selectAll(".point")
     .data(aggregateValues)
-    .enter().append("circle") // Appends a new circle for each data point in 'aggregateValues'
+    .enter()
+    .append("circle") // Appends a new circle for each data point in 'aggregateValues'
     .attr("class", "point")
-    .attr("cx", function(d) { return x(d.cluster) + x.rangeBand() / 2; }) // Centers the circle in the middle of the band
-    .attr("cy", function(d) { return y(d.aggregateValue); }) // Sets the y position based on the aggregated value
+    .attr("cx", function (d) {
+      return x(d.cluster) + x.rangeBand() / 2;
+    }) // Centers the circle in the middle of the band
+    .attr("cy", function (d) {
+      return y(d.aggregateValue);
+    }) // Sets the y position based on the aggregated value
     .attr("r", 5) // Sets the radius of the circle
     .style("fill", "black") // Sets the fill color of the circle, change as needed
     .style("stroke", "black") // Sets the stroke color of the circle, change as needed
     .style("stroke-width", "1px"); // Sets the stroke width of the circle, change as needed
 
-// Updated Legend Configuration
-var legendPadding = 20; // Padding around the text, if you want padding inside the legend item
-var legendSpacing = 0; // Space between legend items, adjust as needed
-var legendRectSize = 18; // The size of the legend color boxes
-var legendRectX = 0; // X position of the legend color boxes
-var font = "13px sans-serif"; // This should be the actual font size and style you're using in your legend
-var font2 = "29px ariel"
-var legendTextX = legendRectSize + 4;
+  // Updated Legend Configuration
+  var legendPadding = 20; // Padding around the text, if you want padding inside the legend item
+  var legendSpacing = 0; // Space between legend items, adjust as needed
+  var legendRectSize = 18; // The size of the legend color boxes
+  var legendRectX = 0; // X position of the legend color boxes
+  var font = "13px sans-serif"; // This should be the actual font size and style you're using in your legend
+  var font2 = "29px ariel";
+  var legendTextX = legendRectSize + 4;
 
-// Updated getTextWidth function
-function getTextWidth(text, font) {
-  var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
-  var context = canvas.getContext("2d");
-  context.font = font; // Ensure this matches the font size and style of the legend text
-  var metrics = context.measureText(text);
-  return metrics.width; // Only return the width of the text itself
-}
-
-// Calculate the width of each legend item with the correct font
-var legendItemWidths = color.domain().map(function(d) {
-  return getTextWidth(d, font) + legendRectSize + (2 * legendPadding);
-});
- // Set the font here to match what is used in getTextWidth
-// Calculate the legend item offsets by accumulating widths and wrapping to new lines
-var legendItemOffsets = [];
-var accumWidth = 0; // Accumulator for the widths
-var lineHeight = 20; // Height of the legend line, adjust as needed
-var currentLine = 0; // Keep track of current line (y offset)
-
-
-    
-color.domain().slice().reverse().forEach(function(d, i) {
-  if (accumWidth + legendItemWidths[i] > width) { // Check if adding the next legend item would exceed the chart width
-    currentLine++; // Move to the next line
-    accumWidth = 0; // Reset the width accumulator for the new line
+  // Updated getTextWidth function
+  function getTextWidth(text, font) {
+    var canvas =
+      getTextWidth.canvas ||
+      (getTextWidth.canvas = document.createElement("canvas"));
+    var context = canvas.getContext("2d");
+    context.font = font; // Ensure this matches the font size and style of the legend text
+    var metrics = context.measureText(text);
+    return metrics.width; // Only return the width of the text itself
   }
-  legendItemOffsets.push({ x: accumWidth, y: currentLine * lineHeight }); // Push the position for the legend item
-  accumWidth += legendItemWidths[i]; // Add the current item width to the accumulator
-});
 
-// Bind the legend data in the same order as it was calculated
-var legend = svg.selectAll(".legend")
-  .data(color.domain())
-  .enter().append("g")
-  .attr("class", "legend")
-  .attr("transform", function(d, i) {
-    var pos = legendItemOffsets[i];
-    return "translate(" + pos.x + "," + (height + margin.bottom - currentLine * lineHeight - 20 + pos.y) + ")";
+  // Calculate the width of each legend item with the correct font
+  var legendItemWidths = color.domain().map(function (d) {
+    return getTextWidth(d, font) + legendRectSize + 2 * legendPadding;
   });
+  // Set the font here to match what is used in getTextWidth
+  // Calculate the legend item offsets by accumulating widths and wrapping to new lines
+  var legendItemOffsets = [];
+  var accumWidth = 0; // Accumulator for the widths
+  var lineHeight = 20; // Height of the legend line, adjust as needed
+  var currentLine = 0; // Keep track of current line (y offset)
 
-  legend.append("rect")
-  .attr("x", legendRectX)
-  .attr("width", legendRectSize)
-  .attr("height", legendRectSize)
-  .style("fill", color);
+  color
+    .domain()
+    .slice()
+    .reverse()
+    .forEach(function (d, i) {
+      if (accumWidth + legendItemWidths[i] > width) {
+        // Check if adding the next legend item would exceed the chart width
+        currentLine++; // Move to the next line
+        accumWidth = 0; // Reset the width accumulator for the new line
+      }
+      legendItemOffsets.push({ x: accumWidth, y: currentLine * lineHeight }); // Push the position for the legend item
+      accumWidth += legendItemWidths[i]; // Add the current item width to the accumulator
+    });
 
-  legend.append("text")
-  .attr("x", legendRectSize + legendSpacing)
-  .attr("y", legendRectSize / 2)
-  .attr("dy", ".35em")
-  .style("text-anchor", "start")
-  .style("font", font)
-  .text(function(d) { return d.replace(/\s+/g, ' '); });
+  // Bind the legend data in the same order as it was calculated
+  var legend = svg
+    .selectAll(".legend")
+    .data(color.domain())
+    .enter()
+    .append("g")
+    .attr("class", "legend")
+    .attr("transform", function (d, i) {
+      var pos = legendItemOffsets[i];
+      return (
+        "translate(" +
+        pos.x +
+        "," +
+        (height + margin.bottom - currentLine * lineHeight - 20 + pos.y) +
+        ")"
+      );
+    });
 
-  
-    
-    svg.append("line")
+  legend
+    .append("rect")
+    .attr("x", legendRectX)
+    .attr("width", legendRectSize)
+    .attr("height", legendRectSize)
+    .style("fill", color);
+
+  legend
+    .append("text")
+    .attr("x", legendRectSize + legendSpacing)
+    .attr("y", legendRectSize / 2)
+    .attr("dy", ".35em")
+    .style("text-anchor", "start")
+    .style("font", font)
+    .text(function (d) {
+      return d.replace(/\s+/g, " ");
+    });
+
+  svg
+    .append("line")
     .attr("x1", 0)
     .attr("x2", width)
     .attr("y1", y(0))
@@ -5890,7 +5931,65 @@ var legend = svg.selectAll(".legend")
     .style("stroke-width", "1px")
     .style("stroke-dasharray", "5,5")
     .style("fill", "none");
-    
-    
+
+  // Assuming the container div 'panel9' has been rendered and has width and height
+  // #get the content of the document content
+  doc = document.getElementById("doc_content").innerHTML.replace(/\n$/, "");
+  // write ajax request to call getSupport.py passing in the document content
+  // get the response and store it in a variable
+  $.ajax({
+    type: "POST",
+    url: "./cgi-bin/getSupport.py",
+    data: {
+        doc: JSON.stringify(doc),
+    },
+    success: function (msg) {
+      queryResults = msg["response"]
+      buildText(queryResults);
+      applyHighlighting(queryResults,topFeatures);
+        
+    },
+    error: function (msg) {
+        alert("Error in getting Support!");
+    },
+});
+
+
 }
 
+function buildText(queryResults) {
+  const textElt = $("#doc_content");
+  textElt.empty();
+  const elementsToAdd = [];
+  const spaces = queryResults.spaces;
+  const words = queryResults.words;
+
+  spaces.forEach((spaceText, index) => {
+    const spaceSpan = $("<span/>", { "class": "space", "id": `s${index}` }).text(spaceText);
+    // spaceSpan.click(() => onSpanClick(index, true));
+    elementsToAdd.push(spaceSpan);
+
+    if (index < words.length) {
+      const wordSpan = $("<span/>", { "class": "word", "id": `w${index}` }).text(words[index]);
+      // wordSpan.click(() => onSpanClick(index, false));
+      elementsToAdd.push(wordSpan, $("<wbr/>"));
+    }
+  });
+
+  textElt.append(elementsToAdd);
+}
+
+// Function to apply highlighting based on annotations
+function applyHighlighting(queryResults,topFeatures) {
+  const annotations = queryResults.annotations;
+  annotations.forEach(ann => {
+    if (topFeatures.includes(ann.title)) {
+      ann.support.forEach(support => {
+        for (let index = support.wFrom; index <= support.wTo; index++) {
+          $(`#w${index}`).addClass("underlined");
+          if (index < support.wTo) $(`#s${index + 1}`).addClass("underlined");
+        }
+      });
+    }
+  });
+}

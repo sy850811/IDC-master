@@ -1024,7 +1024,7 @@
   stroke: black;
   shape-rendering: crispEdges;
 }
-
+.underlined { text-decoration: underline; }
 .axis text {
   font-family: sans-serif;
   font-size: 11px;

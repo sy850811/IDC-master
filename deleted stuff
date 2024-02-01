@@ -1684,3 +1684,52 @@ function appendTerm(term) {
 //   }
 //   return { positiveValues, negativeValues };
 // }
+
+
+// success: function (msg) {
+//   let concept_support = msg["concept_support"];
+//   let docElement = document.getElementById("doc_content");
+
+//   // Sort entities by start index to avoid conflicts during replacements
+//   let entities = Object.keys(concept_support).sort((a, b) => {
+//       return concept_support[a]["largestRangeFrom"] - concept_support[b]["largestRangeFrom"];
+//   });
+
+//   // Convert HTML string into a DOM Node
+//   let parser = new DOMParser();
+//   let docContent = parser.parseFromString(docElement.innerHTML, "text/html").body;
+
+//   // Offset to keep track of modifications
+//   let offset = 0;
+
+//   entities.forEach(entity => {
+//       let currentColor = color(entity);
+//       let start = concept_support[entity]["largestRangeFrom"] + offset;
+//       let end = concept_support[entity]["largestRangeTo"] + offset;
+//       let range = document.createRange();
+      
+//       try {
+//           // Set the start and end positions of the range
+//           range.setStart(docContent.firstChild, start);
+//           range.setEnd(docContent.firstChild, end);
+          
+//           // Create a new span element for highlighting
+//           let newNode = document.createElement("span");
+//           newNode.style.backgroundColor = currentColor;
+//           newNode.style.color = "white";
+//           newNode.style.fontWeight = "bold";
+//           newNode.appendChild(range.extractContents());  // Move the selected text into the span
+          
+//           // Insert the new span element into the content
+//           range.insertNode(newNode);
+
+//           // Adjust the offset by adding the length of the new HTML markup
+//           offset += newNode.outerHTML.length - (end - start);
+//       } catch(e) {
+//           console.error("Error setting range for highlighting:", e);
+//       }
+//   });
+
+//   // Update the innerHTML of the original document element
+//   docElement.innerHTML = docContent.firstChild.innerHTML;
+// },
