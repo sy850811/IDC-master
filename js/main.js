@@ -2,11 +2,18 @@
  * Author: Ehsan Sherkat  *
  * Copyright: 2015        *
  **************************/
+// {
+//   "subset0": ["lovish", "John"],
+//   "subset1": ["wajahat", "lakshita"],
+//   "subset2": ["baqia", "aalim"],
+//   "subset3": ["harshit", "Anmol"]
+// }
 const BASELINE_LOCAL = 0;
 const BASELINE_GLOBAL = 1;
-const BASELINE_BOTH = 2;
-const PROPOSED_BOTH = 3;
+const BASELINE_BOTH = 2; //baqia
+const PROPOSED_BOTH = 3; //harshit
 var maxPositiveAcrossDocument;
+var clusterNames = [];
 var minNegativeAcrossDocument;
 var clusterWords = ""; //the name and the key terms of clusters
 var clusterKeyTerms = ""; //the key terms of clusters are here
@@ -14,6 +21,7 @@ var clusterDocuments = ""; //the list of documents of cluster
 var clusterCloud = ""; //the cloud terms of cluster
 var termClusterData = ""; //the term cluster data
 var termClusterDataString = ""; //the string of the term cluster data (for changing it later)
+var termProbabilitiesString = ""; //the string of the term cluster data (for changing it later)
 var documentClusterData = ""; //the document cluster data
 var documentClusterDataString = ""; //the string of the document cluster data (for changing it later)
 var allWords = ""; //all words
@@ -54,6 +62,7 @@ var userSubsetDetails = null;
 var currentSubset = null;
 var currentDocumentName = "";
 var numberOfDocumnetsVariable = 20;
+var termProbabilities = [];
 /**
  * Load the system and clusters
  */
@@ -112,8 +121,8 @@ function pageLoad() {
   // else
   {
     // var input = prompt("Please enter your userId", "");
-    var input = "baqia";
-    // var input = "harshit";
+    // var input = "baqia";
+    var input = "harshit";
     var loadSessionConfirmed = false;
 
     if (input != null && input.trim() != "") {
@@ -390,12 +399,21 @@ function callServer() {
 
         termClusterData = d3.csv.parse(asyncRequest.responseText);
         termClusterDataString = asyncRequest.responseText;
+        console.log("termClusterData",termClusterData);
+        clusterNames =  termClusterDataString.substring(
+          0,
+          termClusterDataString.indexOf("\n")
+        ).split(",").slice(1)
 
         //for the cloud terms of cluster
         clusterCloud = getClusterCloud();
 
         //for list of clusters key terms
         clusterKeyTerms = getClusterKeyTerms();
+
+        termProbabilities = getTermProbabilities();
+
+
 
         // //for list of all terms of the collocation
         // asyncRequest.open(
@@ -512,7 +530,7 @@ function callServer() {
         var n3 = date3.getTime();
 
         //load General View
-        generalViewLoader(0.7);
+        // generalViewLoader(0.7);
 
         var date4 = new Date();
         var n4 = date4.getTime();
@@ -719,7 +737,7 @@ function getValueOfTerm(index, term) {
   var data = 0;
   termClusterData.filter(function (d) {
     if (d.name == term) {
-      data = d[index];
+      data = (d[index] > 0)?d[index]*10:0;//////////////////////////////////////
     }
   });
 
@@ -742,7 +760,7 @@ function getClusterWords() {
     for (var j = 0; j < temp.length; j++) {
       tempClusterWords += '{"word":"' + temp[j] + '"}';
 
-      if (j + 1 < temp.length) {
+      if (j + 1 < temp.length ) {
         //only top 5
         tempClusterWords += ",";
       }
@@ -817,7 +835,7 @@ function clusterClicked(elementID) {
 
     //change the background color of the cluster view pannel to
     //color of the cluster
-    $("#panel2title").css("background-color", clusterColor);
+    // $("#panel2title").css("background-color", clusterColor);
     $("#panel3title").css("background-color", clusterColor);
     $("#panel4title").css("background-color", clusterColor);
     // $("#panel5title").css("background-color", clusterColor);
@@ -827,8 +845,10 @@ function clusterClicked(elementID) {
 
     //load list of documnets of each cluster
     // docListLoad(elementID);
+    if (document.getElementById("doc_content").innerHTML == "") {
     showNewDocument();
     createTermClusterChart();
+    }
 
     //load list of key terms of each cluster
     listLoad(elementID, $("#" + elementID + " p").css("background-color"));
@@ -869,22 +889,22 @@ function paralelCordinator(allData, panelName, ID, divName, color) {
     }
   });
   // #if panel7 then apply softmax across values to the data except name key
-  if (panelName == "#panel7") {
-    for (var i = 0; i < data.length; i++) {
-      var sum = 0;
-      for (var j = 0; j < Object.keys(data[i]).length; j++) {
-        if (Object.keys(data[i])[j] != "name") {
-          sum += parseFloat(data[i][Object.keys(data[i])[j]]);
-        }
-      }
-      for (var j = 0; j < Object.keys(data[i]).length; j++) {
-        if (Object.keys(data[i])[j] != "name") {
-          data[i][Object.keys(data[i])[j]] =
-            (parseFloat(data[i][Object.keys(data[i])[j]]) / sum) * 100;
-        }
-      }
-    }
-  }
+  // if (panelName == "#panel7") {
+  //   for (var i = 0; i < data.length; i++) {
+  //     var sum = 0;
+  //     for (var j = 0; j < Object.keys(data[i]).length; j++) {
+  //       if (Object.keys(data[i])[j] != "name") {
+  //         sum += parseFloat(data[i][Object.keys(data[i])[j]]);
+  //       }
+  //     }
+  //     for (var j = 0; j < Object.keys(data[i]).length; j++) {
+  //       if (Object.keys(data[i])[j] != "name") {
+  //         data[i][Object.keys(data[i])[j]] =
+  //           (parseFloat(data[i][Object.keys(data[i])[j]]) / sum) * 100;
+  //       }
+  //     }
+  //   }
+  // }
 
   var number_of_clusters = d3.keys(data[0]).length - 1;
 
@@ -1041,7 +1061,6 @@ function wordCloud(
   cloudSize,
   divisionName,
   parentDivisionName,
-  color,
   title
 ) {
   saveLog("wordCloud");
@@ -1052,28 +1071,23 @@ function wordCloud(
     division = divisionName;
     parentDivision = parentDivisionName;
 
-    //determine the color
-    if (color) {
-      fill = d3.scale.category20(); // for colorful word cloud
-    } else {
-      fill = d3.scale
-        .linear()
-        .domain([0, 1, 2, 3, 4, 5, 6, 10, 15, 20, 100])
-        .range([
-          "#222",
-          "#333",
-          "#444",
-          "#555",
-          "#666",
-          "#777",
-          "#888",
-          "#999",
-          "#aaa",
-          "#bbb",
-          "#ccc",
-          "#ddd",
-        ]);
-    }
+    fill = d3.scale
+      .linear()
+      .domain([0, 1, 2, 3, 4, 5, 6, 10, 15, 20, 100])
+      .range([
+        "#222",
+        "#333",
+        "#444",
+        "#555",
+        "#666",
+        "#777",
+        "#888",
+        "#999",
+        "#aaa",
+        "#bbb",
+        "#ccc",
+        "#ddd",
+      ]);
 
     //reset words
     var parrentHight = $("#" + parentDivision).height();
@@ -1081,13 +1095,14 @@ function wordCloud(
     var widthSVG = $("#" + parentDivision).width();
     d3.layout.cloud().size([widthSVG, heightSVG]).words();
     document.getElementById(division).innerHTML = "";
-
+    scalingFactor = (currentSubset == PROPOSED_BOTH) ? 5 : 28;
+    console.log("scalingFactor",scalingFactor);
     d3.layout
       .cloud()
       .size([widthSVG, heightSVG])
       .words(
         cloudWords.map(function (d) {
-          return { text: d, size: Math.log(cloudSize[d]) * 15 }; //20 + Math.random() * 30)};
+          return { text: d, size: Math.log(cloudSize[d]) * scalingFactor }; //20 + Math.random() * 30)};
         })
       )
       .padding(0)
@@ -1251,7 +1266,8 @@ function listLoad(clusterID, color) {
           words[0] = part3Data[i].word;
           colors[part3Data[i].word] = "#767676";
           paralelCordinator(
-            termClusterData,
+            // termClusterData,
+            termProbabilities,
             "#panel7",
             words,
             "#TermClusterView",
@@ -1302,6 +1318,24 @@ function listLoad(clusterID, color) {
         .style("fill", "none");
 
       //the left bars
+      // part3Data =       [
+    //     {
+    //         "word": "delta air lines",
+    //         "v1": 0.26991
+    //     },
+    //     {
+    //         "word": "petroleum",
+    //         "v1": -0.24218
+    //     },
+    //     ...BASELINE_BOTH.toExponential.apply.
+    // ]
+    // if item(dict) of part3Data has value v1 change the vi value to 0
+
+    for (var i = 0; i < part3Data.length; i++) {///////////////////////////////////hope nothing breaks///// donte for error : Error: <rect> attribute width: A negative value is not valid. ("-0.30797217000000005")
+      if (part3Data[i].v1 < 0) {
+        part3Data[i].v1 = 0;
+      }
+    }
       picture1
         .selectAll("rect.v1")
         .data(part3Data)
@@ -1435,37 +1469,37 @@ $(function () {
         );
       }
 
-      if (key == "AddTerm") {
-        addTermToCluster(clusterName);
-      }
+      // if (key == "AddTerm") {
+      //   addTermToCluster(clusterName);
+      // }
 
       if (key == "Rename") {
         clusterRename(clusterName);
       }
 
-      if (key == "Delete") {
-        clusterDelete(clusterName);
-      }
+      // if (key == "Delete") {
+      //   clusterDelete(clusterName);
+      // }
 
-      if (key == "showNodes") {
+      // if (key == "showNodes") {
         // showClusterNodes(clusterName);
-      }
+      // }
 
-      if (key == "Download") {
-        downloadCluster(clusterName);
-      }
+      // if (key == "Download") {
+      //   downloadCluster(clusterName);
+      // }
 
-      if (key == "ChangeColor") {
-        clusterColorChange(clusterName);
-      }
+      // if (key == "ChangeColor") {
+      //   clusterColorChange(clusterName);
+      // }
     },
     items: {
-      AddTerm: { name: "AddTerm", icon: "edit" },
-      showNodes: { name: "showNodes", icon: "edit" },
+      // AddTerm: { name: "AddTerm", icon: "edit" },
+      // showNodes: { name: "showNodes", icon: "edit" },
       Rename: { name: "Rename", icon: "paste" },
-      Delete: { name: "Delete", icon: "delete" },
-      Download: { name: "Download", icon: "edit" },
-      ChangeColor: { name: "ChangeColor", icon: "edit" },
+      // Delete: { name: "Delete", icon: "delete" },
+      // Download: { name: "Download", icon: "edit" },
+      // ChangeColor: { name: "ChangeColor", icon: "edit" },
     },
   });
 });
@@ -1909,7 +1943,7 @@ function removeClusterInGraph(clusterName) {
     //load General View
     var threshold = $("#slider1").slider("value") / 100;
 
-    generalViewLoader(threshold);
+    // generalViewLoader(threshold);
   }
 }
 
@@ -1965,12 +1999,21 @@ function clusterRename(oldName) {
         renameClusterNameInJson(clusterWords, oldName, clusterName);
         renameClusterNameInJson(clusterDocuments, oldName, clusterName);
 
+        const index = clusterNames.indexOf(oldName);
+        // Check if the oldName exists in the array
+        if (index !== -1) {
+            // Replace the old name with the new name
+            clusterNames[index] = clusterName;
+        }
+
         //rename the cluster in csv data files
         renameClusterNameInCSV("data2", oldName, clusterName);
         renameClusterNameInCSV("data1", oldName, clusterName);
+        renameClusterNameInCSV("data3", oldName, clusterName);
 
         //rename the name of cluster in tree view
         refreshTreeView();
+        createTermClusterChart();
 
         //rename the name of cluster in paralel cordinator views
         if (getSelectedClusterID() != "") {
@@ -2007,7 +2050,8 @@ function clusterRename(oldName) {
 
             //load the parallecordinator view of the term
             paralelCordinator(
-              termClusterData,
+              // termClusterData,
+              termProbabilities,
               "#panel7",
               words,
               "#TermClusterView",
@@ -2017,10 +2061,10 @@ function clusterRename(oldName) {
         }
 
         //rename the name of the cluster in its tooltip
-        clusterToolTip(clusterName);
+        // clusterToolTip(clusterName);
 
         //rename the name of cluster in general view graph
-        renameClusterNameInGraph(oldName, clusterName);
+        // renameClusterNameInGraph(oldName, clusterName);
       } else {
         //if name exsits
         alert("This name has already been assigned to a cluster!");
@@ -2040,113 +2084,113 @@ function clusterRename(oldName) {
  * @param oldName = old name of cluster
  * @param oldName = new name of cluster
  */
-function renameClusterNameInGraph(oldName, newName) {
-  var names = $(".clusterNameInGraph");
+// function renameClusterNameInGraph(oldName, newName) {
+//   var names = $(".clusterNameInGraph");
 
-  //rename the cluster name in tooltip of node
-  node.attr("data-hasqtip", function (d) {
-    $(this).qtip({
-      content: {
-        text:
-          '<strong>Document name:</strong><br><u class="hyperLink" onclick="showDocumentPDF($(this).text())">' +
-          d.na +
-          "</u><br><br><strong>List of clusters name:</strong><br>" +
-          createListOfDocumentClustersName(
-            renameCLusterNameInToolTip(d.cl, oldName, newName),
-            d.na
-          ),
-      },
-      hide: {
-        fixed: true,
-        delay: 700,
-      },
-      show: {
-        delay: 700,
-      },
-      style: {
-        classes: "qtip-rounded qtip-shadow",
-      },
-      position: {
-        my: "center right",
-        at: "center left",
-      },
-    });
-  });
+//   //rename the cluster name in tooltip of node
+//   node.attr("data-hasqtip", function (d) {
+//     $(this).qtip({
+//       content: {
+//         text:
+//           '<strong>Document name:</strong><br><u class="hyperLink" onclick="showDocumentPDF($(this).text())">' +
+//           d.na +
+//           "</u><br><br><strong>List of clusters name:</strong><br>" +
+//           createListOfDocumentClustersName(
+//             renameCLusterNameInToolTip(d.cl, oldName, newName),
+//             d.na
+//           ),
+//       },
+//       hide: {
+//         fixed: true,
+//         delay: 700,
+//       },
+//       show: {
+//         delay: 700,
+//       },
+//       style: {
+//         classes: "qtip-rounded qtip-shadow",
+//       },
+//       position: {
+//         my: "center right",
+//         at: "center left",
+//       },
+//     });
+//   });
 
-  node2.attr("data-hasqtip", function (d) {
-    $(this).qtip({
-      content: {
-        text:
-          '<strong>Document name:</strong><br><u class="hyperLink" onclick="showDocumentPDF($(this).text())">' +
-          d.na +
-          "</u><br><br><strong>List of clusters name:</strong><br>" +
-          createListOfDocumentClustersName(
-            renameCLusterNameInToolTip(d.cl, oldName, newName),
-            d.na
-          ),
-      },
-      hide: {
-        fixed: true,
-        delay: 700,
-      },
-      show: {
-        delay: 700,
-      },
-      style: {
-        classes: "qtip-rounded qtip-shadow",
-      },
-      position: {
-        my: "center right",
-        at: "center left",
-      },
-    });
-  });
+//   node2.attr("data-hasqtip", function (d) {
+//     $(this).qtip({
+//       content: {
+//         text:
+//           '<strong>Document name:</strong><br><u class="hyperLink" onclick="showDocumentPDF($(this).text())">' +
+//           d.na +
+//           "</u><br><br><strong>List of clusters name:</strong><br>" +
+//           createListOfDocumentClustersName(
+//             renameCLusterNameInToolTip(d.cl, oldName, newName),
+//             d.na
+//           ),
+//       },
+//       hide: {
+//         fixed: true,
+//         delay: 700,
+//       },
+//       show: {
+//         delay: 700,
+//       },
+//       style: {
+//         classes: "qtip-rounded qtip-shadow",
+//       },
+//       position: {
+//         my: "center right",
+//         at: "center left",
+//       },
+//     });
+//   });
 
-  //rename the cluster name in generalViewGraph
-  for (var i = 0; i < generalViewGraph.nodes.length; i++) {
-    var newClusters = "";
-    var clusters = generalViewGraph.nodes[i].cl.split(",");
+//   //rename the cluster name in generalViewGraph
+//   for (var i = 0; i < generalViewGraph.nodes.length; i++) {
+//     var newClusters = "";
+//     var clusters = generalViewGraph.nodes[i].cl.split(",");
 
-    for (var j = 0; j < clusters.length; j++) {
-      var temp = "";
-      if (clusters[j] == oldName) {
-        temp = newName;
-      } else {
-        temp = clusters[j];
-      }
+//     for (var j = 0; j < clusters.length; j++) {
+//       var temp = "";
+//       if (clusters[j] == oldName) {
+//         temp = newName;
+//       } else {
+//         temp = clusters[j];
+//       }
 
-      if (newClusters == "") {
-        newClusters = temp;
-      } else {
-        newClusters += "," + temp;
-      }
-    }
+//       if (newClusters == "") {
+//         newClusters = temp;
+//       } else {
+//         newClusters += "," + temp;
+//       }
+//     }
 
-    generalViewGraph.nodes[i].cl = newClusters;
-  }
+//     generalViewGraph.nodes[i].cl = newClusters;
+//   }
 
-  for (var i = 0; i < generalViewGraph2.nodes.length; i++) {
-    var newClusters = "";
-    var clusters = generalViewGraph2.nodes[i].cl.split(",");
+//   for (var i = 0; i < generalViewGraph2.nodes.length; i++) {
+//     var newClusters = "";
+//     var clusters = generalViewGraph2.nodes[i].cl.split(",");
 
-    for (var j = 0; j < clusters.length; j++) {
-      var temp = "";
-      if (clusters[j] == oldName) {
-        temp = newName;
-      } else {
-        temp = clusters[j];
-      }
+//     for (var j = 0; j < clusters.length; j++) {
+//       var temp = "";
+//       if (clusters[j] == oldName) {
+//         temp = newName;
+//       } else {
+//         temp = clusters[j];
+//       }
 
-      if (newClusters == "") {
-        newClusters = temp;
-      } else {
-        newClusters += "," + temp;
-      }
-    }
+//       if (newClusters == "") {
+//         newClusters = temp;
+//       } else {
+//         newClusters += "," + temp;
+//       }
+//     }
 
-    generalViewGraph2.nodes[i].cl = newClusters;
-  }
-}
+//     generalViewGraph2.nodes[i].cl = newClusters;
+//   }
+// }
 
 /**
  * rename the name of cluster in tooltip of nodes in general view
@@ -2246,6 +2290,21 @@ function renameClusterNameInCSV(data, oldName, newName) {
     // alert(csvFileString);
     termClusterData = d3.csv.parse(termClusterDataString);
   }
+  else if(data == "data3"){
+    //data3 is the data for the term probabilities
+    var header = termProbabilitiesString.substring(
+      0,
+      termProbabilitiesString.indexOf("\n")
+    );
+    var tail = termProbabilitiesString.substring(
+      termProbabilitiesString.indexOf("\n") + 1
+    );
+    header = header.replace("," + oldName, "," + newName);
+
+    termProbabilitiesString = header + "\n" + tail;
+
+    termProbabilities = d3.csv.parse(termProbabilitiesString);
+}
 }
 
 /**
@@ -2409,7 +2468,7 @@ function createCluster(clusterName) {
   });
 
   //for cluster tooltip
-  clusterToolTip(clusterName);
+  // clusterToolTip(clusterName);
   if (currentSubset == BASELINE_LOCAL) {
     // panel5 cluster tree view directory
     let panel5 = document.getElementById("panel5");
@@ -2466,26 +2525,26 @@ function createCluster(clusterName) {
  * For cluster tooltip
  * @param clusterName = cluster ID
  */
-function clusterToolTip(clusterName) {
-  $("#" + clusterName).qtip({
-    // Content
-    content: {
-      title: "Cluster Name: " + clusterName,
-      text: "Number of Documents: " + numberOfDocumnets(clusterName),
-    },
+// function clusterToolTip(clusterName) {
+//   $("#" + clusterName).qtip({
+//     // Content
+//     content: {
+//       title: "Cluster Name: " + clusterName,
+//       text: "Number of Documents: " + numberOfDocumnets(clusterName),
+//     },
 
-    // Positioning
-    position: {
-      at: "bottom center",
-      my: "top center",
-    },
+//     // Positioning
+//     position: {
+//       at: "bottom center",
+//       my: "top center",
+//     },
 
-    // Styles
-    style: {
-      classes: "qtip-rounded qtip-shadow",
-    },
-  });
-}
+//     // Styles
+//     style: {
+//       classes: "qtip-rounded qtip-shadow",
+//     },
+//   });
+// }
 
 /**
  * Get the number of documents of the cluster
@@ -2853,42 +2912,42 @@ $(function () {
     callback: function (key, options) {
       saveLog("clusterRightClick");
 
-      if (key == "AddTerm") {
-        addTermToCluster($(this).closest("div").attr("id"));
-      }
+      // if (key == "AddTerm") {
+      //   addTermToCluster($(this).closest("div").attr("id"));
+      // }
 
       if (key == "RenameCluster") {
         clusterRename($(this).closest("div").attr("id"));
       }
 
-      if (key == "DeleteCluster") {
-        clusterDelete($(this).closest("div").attr("id"));
-      }
+      // if (key == "DeleteCluster") {
+      //   clusterDelete($(this).closest("div").attr("id"));
+      // }
 
-      if (key == "ClearTerms") {
-        clearTerms($(this).closest("div").attr("id"));
-      }
+      // if (key == "ClearTerms") {
+      //   clearTerms($(this).closest("div").attr("id"));
+      // }
 
-      if (key == "showNodes") {
-        showClusterNodes($(this).closest("div").attr("id"));
-      }
+      // if (key == "showNodes") {
+      //   showClusterNodes($(this).closest("div").attr("id"));
+      // }
 
-      if (key == "Download") {
-        downloadCluster($(this).closest("div").attr("id"));
-      }
+      // if (key == "Download") {
+      //   downloadCluster($(this).closest("div").attr("id"));
+      // }
 
-      if (key == "ChangeColor") {
-        clusterColorChange($(this).closest("div").attr("id"));
-      }
+      // if (key == "ChangeColor") {
+      //   clusterColorChange($(this).closest("div").attr("id"));
+      // }
     },
     items: {
-      AddTerm: { name: "AddTerm", icon: "edit" },
-      showNodes: { name: "showNodes", icon: "edit" },
+      // AddTerm: { name: "AddTerm", icon: "edit" },
+      // showNodes: { name: "showNodes", icon: "edit" },
       RenameCluster: { name: "RenameCluster", icon: "paste" },
-      DeleteCluster: { name: "DeleteCluster", icon: "delete" },
-      ClearTerms: { name: "ClearTerms", icon: "delete" },
-      Download: { name: "Download", icon: "edit" },
-      ChangeColor: { name: "ChangeColor", icon: "edit" },
+      // DeleteCluster: { name: "DeleteCluster", icon: "delete" },
+      // ClearTerms: { name: "ClearTerms", icon: "delete" },
+      // Download: { name: "Download", icon: "edit" },
+      // ChangeColor: { name: "ChangeColor", icon: "edit" },
     },
   });
 });
@@ -3069,7 +3128,8 @@ function termClick(event) {
   //load the paralelcordinator view of the term
   if (selectedTerms.length > 0) {
     paralelCordinator(
-      termClusterData,
+      // termClusterData,
+      termProbabilities,
       "#panel7",
       words,
       "#TermClusterView",
@@ -3109,7 +3169,8 @@ function termClick(event) {
       //load the parallecordinator view of the term
       if (selectedTerms.length > 0) {
         paralelCordinator(
-          termClusterData,
+          // termClusterData,
+          termProbabilities,
           "#panel7",
           words,
           "#TermClusterView",
@@ -3123,7 +3184,7 @@ function termClick(event) {
   $(".termListSpan").removeAttr("style");
 
   //highlight documents that have this term, inside general view graph
-  highlightDocuments(words);
+  // highlightDocuments(words);
 }
 
 /**
@@ -3131,61 +3192,61 @@ function termClick(event) {
  * @param words = the selected words
  */
 var docsHighlight = new Array(); //Highlighted docs
-function highlightDocuments(words) {
-  saveLog("highlightDocuments");
+// function highlightDocuments(words) {
+//   saveLog("highlightDocuments");
 
-  docsHighlight = new Array();
+//   docsHighlight = new Array();
 
-  for (var i = 0; i < words.length; i++) {
-    for (var j = 0; j < termDocumentSimilarity.length; j++) {
-      var docScore = 0.0;
-      docScore = termDocumentSimilarity[j][allWords.indexOf(words[i])];
-      if (docScore > 0) {
-        docsHighlight[documentsName[j]] = true;
-      }
-    }
-  }
+//   for (var i = 0; i < words.length; i++) {
+//     for (var j = 0; j < termDocumentSimilarity.length; j++) {
+//       var docScore = 0.0;
+//       docScore = termDocumentSimilarity[j][allWords.indexOf(words[i])];
+//       if (docScore > 0) {
+//         docsHighlight[documentsName[j]] = true;
+//       }
+//     }
+//   }
 
-  //change the stroke of corresponding nodes (docs) in general view graph
-  // node.style("stroke", function(o) {
-  //   if(o.na == $(doc_select).val())
-  //   {
-  //     return "red";
-  //   }
-  //   else if(docsHighlight[o.na]) {
-  //     return "blue";
-  //   }
-  //   else {
-  //     return "#ccc";
-  //   }
-  // })
+//   //change the stroke of corresponding nodes (docs) in general view graph
+//   // node.style("stroke", function(o) {
+//   //   if(o.na == $(doc_select).val())
+//   //   {
+//   //     return "red";
+//   //   }
+//   //   else if(docsHighlight[o.na]) {
+//   //     return "blue";
+//   //   }
+//   //   else {
+//   //     return "#ccc";
+//   //   }
+//   // })
 
-  // node.style("stroke-width", function(o) {
-  //   if(docsHighlight[o.na] || o.na == $(doc_select).val()) {
-  //     return "2px";
-  //   }
-  //   else {
-  //     return "0.5px";
-  //   }
-  // })
+//   // node.style("stroke-width", function(o) {
+//   //   if(docsHighlight[o.na] || o.na == $(doc_select).val()) {
+//   //     return "2px";
+//   //   }
+//   //   else {
+//   //     return "0.5px";
+//   //   }
+//   // })
 
-  //change the opacity of corresponding nodes (docs) and links in general view graph
-  node.style("opacity", function (o) {
-    return docsHighlight[o.na] ? 1 : highlight_trans;
-  });
+//   //change the opacity of corresponding nodes (docs) and links in general view graph
+//   node.style("opacity", function (o) {
+//     return docsHighlight[o.na] ? 1 : highlight_trans;
+//   });
 
-  link.style("opacity", function (o) {
-    return docsHighlight[o.source.na] && docsHighlight[o.target.na] ? 1 : 0;
-  });
+//   link.style("opacity", function (o) {
+//     return docsHighlight[o.source.na] && docsHighlight[o.target.na] ? 1 : 0;
+//   });
 
-  node2.style("opacity", function (o) {
-    return docsHighlight[o.na] ? 1 : highlight_trans;
-  });
+//   node2.style("opacity", function (o) {
+//     return docsHighlight[o.na] ? 1 : highlight_trans;
+//   });
 
-  link2.style("opacity", function (o) {
-    return docsHighlight[o.source.na] && docsHighlight[o.target.na] ? 1 : 0;
-  });
-}
+//   link2.style("opacity", function (o) {
+//     return docsHighlight[o.source.na] && docsHighlight[o.target.na] ? 1 : 0;
+//   });
+// }
 
 /**
  * Set the background color of term
@@ -3367,7 +3428,6 @@ function loadTermCloud(elementID) {
         sizeOfText(words),
         "panel8_2",
         "panel8",
-        x.checked,
         title
       );
     }
@@ -3577,7 +3637,7 @@ function termInsideClusterClicked(term) {
       words[0] = term;
       colors[words[0]] = "#767676";
       paralelCordinator(
-        termClusterData,
+        termProbabilities,
         "#panel7",
         words,
         "#TermClusterView",
@@ -3585,7 +3645,7 @@ function termInsideClusterClicked(term) {
       );
 
       //highlight documents that have this term, inside general view graph
-      highlightDocuments(words);
+      // highlightDocuments(words);
     }
   }
 }
@@ -3761,7 +3821,6 @@ function showMyCloud() {
         sizeOfText(words),
         "panel8_2",
         "panel8",
-        x.checked,
         title
       );
     }
@@ -4223,7 +4282,7 @@ function loadSession(sessionName) {
         // generalViewGraph = getGeneralViewGraph(0.97);
 
         //load General View
-        generalViewLoader(cosineDistance);
+        // generalViewLoader(cosineDistance);
 
         //set the sliders value
         $("#slider1").slider("value", parseInt(cosineDistance * 100));
@@ -4288,384 +4347,6 @@ var gravity = 0.3;
 var linkDistance = 20;
 var highlight_trans = 0.25;
 
-/*
- * load general view
- * @parm threshold = threshold for cosine distance
- */
-function generalViewLoader(threshold) {
-  //load T-SNE layout
-  // loadT_SNE(threshold);
-  //load Force layout
-  // load_Force(threshold);
-}
-
-/*
- * load force layout
- * @parm threshold = threshold for cosine distance
- */
-function load_Force(threshold) {
-  $("#general_view2").html(""); //clear the screen
-  linkedByIndex2 = new Array();
-
-  var margin = { top: 5, right: 5, bottom: 5, left: 5 },
-    width = $("#general_view1").width() - margin.left - margin.right,
-    height = $("#general_view1").height() - margin.top - margin.bottom;
-
-  var nominal_base_node_size = 8;
-  var focus_node = null,
-    highlight_node = null;
-  var highlight_color = "black";
-  var outline = false;
-  var default_link_color = "#a6a6a6";
-  var nominal_stroke = 0.5;
-  var max_stroke = 4.5;
-  var max_base_node_size = 36;
-  var min_zoom = 0.1;
-  var max_zoom = 8;
-  var zoom = d3.behavior.zoom().scaleExtent([min_zoom, max_zoom]);
-  var towhite = "stroke";
-  if (outline) {
-    tocolor = "stroke";
-    towhite = "fill";
-  }
-  var size = d3.scale.pow().exponent(1).domain([1, 100]).range([8, 24]);
-
-  svg2 = d3
-    .select("#general_view2")
-    .append("svg")
-    .attr("class", "svg")
-    .attr("width", "100%")
-    .attr("height", "100%");
-
-  g2 = svg2.append("g");
-
-  force2 = d3.layout
-    .force()
-    .size([width, height])
-    .gravity(gravity)
-    .distance(linkDistance)
-    .charge(-50)
-    .on("tick", tick);
-
-  var drag = force2.drag().on("dragstart", dragstart);
-
-  node2 = force2.nodes();
-  link2 = force2.links();
-
-  (link2 = g2.append("g").selectAll(".link2")),
-    (node2 = g2.append("g").selectAll(".node2"));
-
-  // d3.json("data/json5.json", function(error, json) {
-  //  if (error) throw error;
-
-  //filter links by threshold
-  var linkData = generalViewGraph2.links.filter(function (n) {
-    if (n.v <= threshold) {
-      return n;
-    }
-  });
-
-  linkData.forEach(function (d) {
-    linkedByIndex2[d.source + "," + d.target] = true;
-  });
-
-  //update #documents and # links statistics
-  $("#span2").text(generalViewGraph2.nodes.length);
-  $("#span4").text(linkData.length / 2);
-
-  force2.nodes(generalViewGraph2.nodes).links(linkData).start();
-
-  link2 = link2.data(linkData).enter().append("line").attr("class", "link2");
-
-  node2 = node2
-    .data(generalViewGraph2.nodes)
-    .enter()
-    .append("circle")
-    .attr("class", "node2")
-    .style("fill", function (d) {
-      return d.co;
-    })
-    .attr("r", r)
-    .on("dblclick", dblclick)
-    .call(drag)
-    .attr("data-hasqtip", function (d) {
-      $(this).qtip({
-        content: {
-          text:
-            '<strong>Document name:</strong><br><u class="hyperLink" onclick="showDocumentPDF($(this).text())">' +
-            d.na +
-            "</u><br><br><strong>List of clusters name:</strong><br>" +
-            createListOfDocumentClustersName(d.cl, d.na) +
-            "</u><br><strong>List of top 5 terms:</strong><br>" +
-            getListOfTermsOfDocument(d.na),
-        },
-        hide: {
-          fixed: true,
-          delay: 700,
-        },
-        show: {
-          delay: 1500,
-        },
-        style: {
-          classes: "qtip-rounded qtip-shadow",
-        },
-        position: {
-          my: "center right",
-          at: "center left",
-        },
-      });
-    });
-
-  node2
-    .on("mouseover", function (d) {
-      saveLog("forceLayoutNodeMouseOver");
-      force2.stop();
-      set_highlight(d);
-    })
-    .on("click", function (d) {
-      force2.stop();
-      d3.event.stopPropagation();
-      focus_node = d;
-      set_focus(d);
-      set_highlight(d);
-      saveLog("forceLayoutNodeClick");
-    })
-    .on("mousedown", function (d) {
-      force2.stop();
-      d3.event.stopPropagation();
-    })
-    .on("mouseout", function (d) {
-      force2.stop();
-      exit_highlight();
-    })
-    .on("contextmenu", function (d, i) {
-      saveLog("forceLayoutNodeShowCloud");
-      force2.stop();
-      d3.event.preventDefault();
-      // react on right-clicking
-    });
-
-  svg2
-    .on("click", function () {
-      force2.stop();
-      if (focus_node != null) {
-        focus_node = null;
-        if (highlight_trans < 1) {
-          node2.style("opacity", 1);
-          link2.style("opacity", 1);
-
-          node.style("opacity", 1);
-          link.style("opacity", 1);
-        }
-      } else {
-        node2.style("opacity", 1);
-        link2.style("opacity", 1);
-
-        node.style("opacity", 1);
-        link.style("opacity", 1);
-      }
-      if (highlight_node == null) exit_highlight();
-    })
-    .on("contextmenu", function (d, i) {
-      d3.event.preventDefault();
-      // react on right-clicking
-    });
-
-  // node.on("dblclick.zoom", function(d) { d3.event.stopPropagation();
-  //   var dcx = (window.innerWidth/2-d.x*zoom.scale());
-  //   var dcy = (window.innerHeight/2-d.y*zoom.scale());
-  //   zoom.translate([dcx,dcy]);
-  //   g.attr("transform", "translate("+ dcx + "," + dcy  + ")scale(" + zoom.scale() + ")");
-  // });
-
-  // });
-
-  function tick() {
-    link2
-      .attr("x1", function (d) {
-        return d.source.x;
-      })
-      .attr("y1", function (d) {
-        return d.source.y;
-      })
-      .attr("x2", function (d) {
-        return d.target.x;
-      })
-      .attr("y2", function (d) {
-        return d.target.y;
-      });
-
-    node2
-      .attr("cx", function (d) {
-        return d.x;
-      })
-      .attr("cy", function (d) {
-        return d.y;
-      });
-  }
-
-  function dblclick(d) {
-    d3.select(this).classed("fixed", (d.fixed = false));
-  }
-
-  function dragstart(d) {
-    d3.select(this).classed("fixed", (d.fixed = true));
-  }
-
-  function isConnected(a, b) {
-    return (
-      linkedByIndex2[a.index + "," + b.index] ||
-      linkedByIndex2[b.index + "," + a.index] ||
-      a.index == b.index
-    );
-  }
-
-  function isNumber(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
-  }
-
-  function set_highlight(d) {
-    svg2.style("cursor", "pointer");
-    svg.style("cursor", "pointer");
-    if (focus_node != null) d = focus_node;
-    highlight_node = d;
-
-    if (highlight_color != "#a6a6a6") {
-      node2.style(towhite, function (o) {
-        if (o.na == $(doc_select).val()) {
-          return "red";
-        }
-        // else if(docsHighlight[o.na])
-        // {
-        //   return "blue";
-        // }
-        else if (isConnected(d, o)) {
-          return highlight_color;
-        } else {
-          return "#a6a6a6";
-        }
-      });
-
-      link2.style("stroke", function (o) {
-        return o.source.index == d.index || o.target.index == d.index
-          ? highlight_color
-          : isNumber(o.score) && o.score >= 0
-          ? color(o.score)
-          : default_link_color;
-      });
-
-      //set node stroke
-      node2.style("stroke-width", function (o) {
-        if (
-          (docsHighlight[o.na] && isConnected(d, o)) ||
-          o.na == $(doc_select).val()
-        ) {
-          return "2px";
-        } else {
-          return "0.5px";
-        }
-      });
-
-      node.style(towhite, function (o) {
-        if (o.na == $(doc_select).val()) {
-          return "red";
-        }
-        // else if(docsHighlight[o.na])
-        // {
-        //   return "blue";
-        // }
-        else if (isConnected(d, o)) {
-          return highlight_color;
-        } else {
-          return "#a6a6a6";
-        }
-      });
-
-      link.style("stroke", function (o) {
-        return o.source.index == d.index || o.target.index == d.index
-          ? highlight_color
-          : isNumber(o.score) && o.score >= 0
-          ? color(o.score)
-          : default_link_color;
-      });
-
-      //set node stroke
-      node.style("stroke-width", function (o) {
-        if (
-          (docsHighlight[o.na] && isConnected(d, o)) ||
-          o.na == $(doc_select).val()
-        ) {
-          return "2px";
-        } else {
-          return "0.5px";
-        }
-      });
-    }
-  }
-
-  function exit_highlight() {
-    highlight_node = null;
-    if (focus_node == null) {
-      svg2.style("cursor", "move");
-      if (highlight_color != "#a6a6a6") {
-        node2.style(towhite, function (o) {
-          if (o.na == $(doc_select).val()) {
-            return "red";
-          }
-          // else if(docsHighlight[o.na])
-          // {
-          //   return "blue";
-          // }
-          else {
-            return "#a6a6a6";
-          }
-        });
-        link2.style("stroke", function (o) {
-          return isNumber(o.score) && o.score >= 0
-            ? color(o.score)
-            : default_link_color;
-        });
-
-        //set node stroke
-        node2.style("stroke-width", function (o) {
-          if (o.na == $(doc_select).val()) {
-            return "2px";
-          } else {
-            return "0.5px";
-          }
-        });
-      }
-    }
-  }
-
-  zoom.on("zoom", function () {
-    var stroke = nominal_stroke;
-
-    if (nominal_stroke * zoom.scale() > max_stroke) {
-      stroke = max_stroke / zoom.scale();
-    }
-
-    link2.style("stroke-width", stroke);
-    // node.style("stroke-width",stroke);
-
-    node2.style("stroke-width", function (o) {
-      if (o.na == $(doc_select).val()) {
-        return stroke * 3;
-      } else {
-        return stroke;
-      }
-    });
-
-    var base_radius = nominal_base_node_size;
-
-    g2.attr(
-      "transform",
-      "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"
-    );
-  });
-
-  svg2.call(zoom);
-} //************************* End of force layout load
 
 /*
  * Focus on the selected nodes
@@ -4999,165 +4680,6 @@ function getDocumentClustersName(documentName) {
   return clusterList;
 }
 
-/*
- * Change Cosine distance of general view graph
- * @param value = value
- */
-function graphCosineDistanceChange(value) {
-  $("#forceSilhouette_label").html("");
-
-  saveLog("graphCosineDistanceChange");
-
-  if (userID != "") {
-    value = value / 100;
-
-    //exit highligted node
-    node.style("stroke", function (o) {
-      if (o.na == $(doc_select).val()) {
-        return "red";
-      }
-      // else if(docsHighlight[o.na])
-      // {
-      //   return "blue";
-      // }
-      else {
-        return "#a6a6a6";
-      }
-    });
-    node.style("opacity", 1);
-    link.style("opacity", 1);
-    link.style("stroke", "#a6a6a6");
-
-    node2.style("stroke", function (o) {
-      if (o.na == $(doc_select).val()) {
-        return "red";
-      }
-      // else if(docsHighlight[o.na])
-      // {
-      //   return "blue";
-      // }
-      else {
-        return "#a6a6a6";
-      }
-    });
-    node2.style("opacity", 1);
-    link2.style("opacity", 1);
-    link2.style("stroke", "#a6a6a6");
-
-    var newLinks = generalViewGraph.links.filter(function (n) {
-      if (n.v <= value) {
-        return n;
-      }
-    });
-
-    var newLinks2 = generalViewGraph2.links.filter(function (n) {
-      if (n.v <= value) {
-        return n;
-      }
-    });
-
-    //for links
-    force.links(newLinks).resume();
-    link = link.data(newLinks);
-    link.exit().remove();
-    link.enter().append("line").attr("class", "link");
-    force.start();
-
-    force2.links(newLinks2).resume();
-    link2 = link2.data(newLinks2);
-    link2.exit().remove();
-    link2.enter().append("line").attr("class", "link");
-    force2.start();
-
-    linkedByIndex = new Array();
-    newLinks.forEach(function (d) {
-      linkedByIndex[d.source.index + "," + d.target.index] = true;
-    });
-
-    linkedByIndex2 = new Array();
-    newLinks2.forEach(function (d) {
-      linkedByIndex2[d.source.index + "," + d.target.index] = true;
-    });
-
-    //update # links statistics
-    $("#span4").text(newLinks.length / 2);
-  }
-}
-/*
- * Change link distance of general view graph
- * @param value = value
- */
-function graphLinkDistanceChange(value) {
-  saveLog("graphLinkDistanceChange");
-  $("#forceSilhouette_label").html("");
-
-  if (userID != "") {
-    linkDistance = value;
-    force2.linkDistance(linkDistance);
-    force2.start();
-  }
-}
-/*
- * Change Gravity of general view graph
- * @param value = value
- */
-function graphGravityChange(value) {
-  saveLog("graphGravityChange");
-  $("#forceSilhouette_label").html("");
-
-  if (userID != "") {
-    gravity = value / 100;
-    force2.gravity(gravity);
-
-    force2.start();
-  }
-}
-/*
-/**
- * Show the term cload of the document
- * @param documentName = docuemnt name
- */
-function showDocumentCloud(documentName) {
-  saveLog("showDocumentCloud");
-
-  if ($("#doc_content").text().length <= 1) {
-    return null;
-  }
-
-  //get sorted list of top terms of the document
-  var terms = getDocumentTermsSorted(documentName);
-
-  //get top 30 terms
-  var wordsTemp = "";
-  for (var i = 0; i < terms.length; i++) {
-    if (i == 0) {
-      wordsTemp += terms[i][0] + "|" + Math.floor(terms[i][1] * 15);
-    } else {
-      wordsTemp += "|" + terms[i][0] + "|" + Math.floor(terms[i][1] * 15);
-    }
-
-    if (i >= 29) {
-      break;
-    }
-  }
-
-  //clear the cloud
-  $("#panel8_2").html("");
-
-  if (wordsTemp != "") {
-    var words = wordsTemp.split("|");
-    var x = document.getElementById("cloudColor");
-    var title = "Term Cloud (Selected Document)";
-    wordCloud(
-      wordText(words),
-      sizeOfText(words),
-      "panel8_2",
-      "panel8",
-      x.checked,
-      title
-    );
-  }
-}
 /**
  * For right click in general view graph
  */
@@ -5265,7 +4787,6 @@ function showSelectedDocumentsCloud() {
       sizeOfText(words),
       "panel8_2",
       "panel8",
-      x.checked,
       title
     );
   }
@@ -5384,65 +4905,65 @@ function saveLog(command) {
 /**
  * Get Silhouette of force layout.
  */
-function forceSilhouette() {
-  saveLog("forceSilhouette");
+// function forceSilhouette() {
+//   saveLog("forceSilhouette");
 
-  force2.stop();
+//   force2.stop();
 
-  $("#forceSilhouette_label").html("");
+//   $("#forceSilhouette_label").html("");
 
-  var nodes = $(".node2");
+//   var nodes = $(".node2");
 
-  var forceResult = new Array();
-  var forceLables = new Array();
+//   var forceResult = new Array();
+//   var forceLables = new Array();
 
-  for (var i = 0; i < nodes.length; i++) {
-    forceResult[i] = new Array();
-    forceResult[i][0] = parseFloat($(nodes[i]).attr("cx"));
-    forceResult[i][1] = parseFloat($(nodes[i]).attr("cy"));
+//   for (var i = 0; i < nodes.length; i++) {
+//     forceResult[i] = new Array();
+//     forceResult[i][0] = parseFloat($(nodes[i]).attr("cx"));
+//     forceResult[i][1] = parseFloat($(nodes[i]).attr("cy"));
 
-    forceLables[i] = $(nodes[i]).css("fill");
-  }
+//     forceLables[i] = $(nodes[i]).css("fill");
+//   }
 
-  getForceSilhouette(forceResult, forceLables);
-}
+//   // getForceSilhouette(forceResult, forceLables);
+// }
 /*
  * Get  force Silhouette
  * @param forceResult =  x and y dimensions
  * @param forceLables = labels of documents
  */
-function getForceSilhouette(forceResult, forceLables) {
-  $.ajax({
-    type: "POST",
-    url: "./cgi-bin/tsneSilhouette.py",
-    data: {
-      tsneResult: JSON.stringify(forceResult),
-      tsneLables: JSON.stringify(forceLables),
-    },
-    success: function (msg) {
-      var status = msg["status"];
+// function getForceSilhouette(forceResult, forceLables) {
+//   $.ajax({
+//     type: "POST",
+//     url: "./cgi-bin/tsneSilhouette.py",
+//     data: {
+//       tsneResult: JSON.stringify(forceResult),
+//       tsneLables: JSON.stringify(forceLables),
+//     },
+//     success: function (msg) {
+//       var status = msg["status"];
 
-      if (status == "yes") {
-        var forceSilhouette = eval(msg["TsneSilhouette"]);
-        forceSilhouette = forceSilhouette.toFixed(4);
+//       if (status == "yes") {
+//         var forceSilhouette = eval(msg["TsneSilhouette"]);
+//         forceSilhouette = forceSilhouette.toFixed(4);
 
-        //show the tsne Silhouette
-        $("#forceSilhouette_label").html(
-          "Force layout Silhouette: " + forceSilhouette
-        );
-      }
-      if (status == "no") {
-        alert("Error1 in getting Force Silhouette!");
-      }
-      if (status == "error") {
-        alert("Error2 in getting Force Silhouette!");
-      }
-    },
-    error: function (msg) {
-      alert("Error3 in getting Force Silhouette!");
-    },
-  });
-}
+//         //show the tsne Silhouette
+//         $("#forceSilhouette_label").html(
+//           "Force layout Silhouette: " + forceSilhouette
+//         );
+//       }
+//       if (status == "no") {
+//         alert("Error1 in getting Force Silhouette!");
+//       }
+//       if (status == "error") {
+//         alert("Error2 in getting Force Silhouette!");
+//       }
+//     },
+//     error: function (msg) {
+//       alert("Error3 in getting Force Silhouette!");
+//     },
+//   });
+// }
 //write a function to make ajax request to explanation.py
 function getExplanation() {
   $.ajax({
@@ -5473,7 +4994,7 @@ function transformData_relative_value(data, scalingFactor) {
 
   // Calculate scaled relative differences
   for (var i = 0; i < numClusters; i++) {
-    var clusterData = { cluster: "Cluster " + i };
+    var clusterData = { cluster: clusterNames[i] };
     clusters.forEach(function (key) {
       var relativeDifference = data[key][i] - featureAverages[key];
       clusterData[key] = relativeDifference * scalingFactor;
@@ -5575,7 +5096,8 @@ function createTermClusterChart() {
   // Calculate the actual width and height of the SVG canvas
   var width = panelWidth - margin.left - margin.right;
   var height = panelHeight - margin.top - margin.bottom;
-  doc = document.getElementById("doc_content").innerHTML.replace(/\n$/, "");
+  doc = getDocumentContent(currentDocumentName).replace(/\n$/, "");
+  // doc = document.getElementById("doc_content").innerHTML.replace(/\n$/, "");
   // remove extra spaces within the document
   doc = doc.replace(/\s+/g, " ");
   console.log(doc);
@@ -5634,9 +5156,11 @@ function createTermClusterChart() {
     .rangeRoundBands([0, width], 0.3)
     .domain(
       doc_data.map(function (d) {
-        return d.cluster;
-      })
+      return d.cluster;
+    })
+      
     );
+    
 
   let topFeatures = getTopFeatures(doc_data, 5);
   console.log(topFeatures);
@@ -5714,7 +5238,6 @@ function createTermClusterChart() {
       return "translate(" + x(d.cluster) + ",0)";
     });
 
-  var maxContribution = 0;
 
   cluster
     .selectAll("rect")
@@ -5934,9 +5457,10 @@ function createTermClusterChart() {
 
   // Assuming the container div 'panel9' has been rendered and has width and height
   // #get the content of the document content
-  doc = document.getElementById("doc_content").innerHTML.replace(/\n$/, "");
+  // doc = document.getElementById("doc_content").innerHTML.replace(/\n$/, "");
   // write ajax request to call getSupport.py passing in the document content
   // get the response and store it in a variable
+  console.log("color", color);
   $.ajax({
     type: "POST",
     url: "./cgi-bin/getSupport.py",
@@ -5946,7 +5470,7 @@ function createTermClusterChart() {
     success: function (msg) {
       queryResults = msg["response"]
       buildText(queryResults);
-      applyHighlighting(queryResults,topFeatures);
+      applyHighlighting(queryResults,topFeatures,color);
         
     },
     error: function (msg) {
@@ -5980,16 +5504,34 @@ function buildText(queryResults) {
 }
 
 // Function to apply highlighting based on annotations
-function applyHighlighting(queryResults,topFeatures) {
+function applyHighlighting(queryResults, topFeatures, color) {
   const annotations = queryResults.annotations;
   annotations.forEach(ann => {
     if (topFeatures.includes(ann.title)) {
+      const featureColor = color(ann.title); // Get color for the feature
       ann.support.forEach(support => {
         for (let index = support.wFrom; index <= support.wTo; index++) {
-          $(`#w${index}`).addClass("underlined");
-          if (index < support.wTo) $(`#s${index + 1}`).addClass("underlined");
+          $(`#w${index}`).css('background-color', featureColor).addClass("highlighted");
+          if (index < support.wTo) $(`#s${index + 1}`).css('background-color', featureColor).addClass("highlighted");
         }
       });
     }
   });
+}
+
+
+function getTermProbabilities(){
+  var asyncRequest = new XMLHttpRequest();
+  asyncRequest.open("POST", "./cgi-bin/FetchTermMembsProbabilities_baseline.py", false);
+        asyncRequest.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        asyncRequest.send("userID=" + encodeURIComponent(userID));
+        termProbabilitiesString = asyncRequest.responseText;
+
+        termProbabilites = d3.csv.parse(asyncRequest.responseText);
+        console.log("termProbabilites",termProbabilites);
+        return termProbabilites;
+
 }
