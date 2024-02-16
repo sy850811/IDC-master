@@ -121,8 +121,8 @@ function pageLoad() {
   // else
   {
     // var input = prompt("Please enter your userId", "");
-    // var input = "baqia";
-    var input = "harshit";
+    var input = "baqia";
+    // var input = "harshit";
     var loadSessionConfirmed = false;
 
     if (input != null && input.trim() != "") {
@@ -241,6 +241,7 @@ function pageLoad() {
       alert("Your userID is not valid!");
     }
   }
+
 }
 function panelVisibility(currentSubset) {
   // #check if we need the three lines below
@@ -350,24 +351,9 @@ function callServer() {
         );
         document.body.style.cursor = "auto";
       } else {
-        //get the cluster info from the server
+
         //for cluster names and words (top 5)
         clusterWords = getClusterWords();
-
-        // create request object
-        // var asyncRequest = new XMLHttpRequest();
-
-        // //for documet cluster data
-        // asyncRequest.open(
-        //   "POST",
-        //   "../users/" + userID + "/documentMembers",
-        //   false
-        // );
-        // asyncRequest.send(); // send the request
-        // documentClusterData = d3.csvParse(asyncRequest.responseText);
-        // documentClusterDataString = asyncRequest.responseText;
-
-        ////////////////////////////////////
 
         // Modified to use the CGI script for fetching document cluster data
         var asyncRequest = new XMLHttpRequest();
@@ -385,11 +371,6 @@ function callServer() {
         clusterDocuments = getClusterDocuments();
 
         // for term cluster data/
-        // asyncRequest.open("POST", "./" + userID + "/termMembs", false);
-        // asyncRequest.send(); // send the request
-        // termClusterData = d3.csvParse(asyncRequest.responseText);
-        // termClusterDataString = asyncRequest.responseText;
-
         asyncRequest.open("POST", "./cgi-bin/fetchTermMembs.py", false);
         asyncRequest.setRequestHeader(
           "Content-Type",
@@ -415,14 +396,7 @@ function callServer() {
 
 
 
-        // //for list of all terms of the collocation
-        // asyncRequest.open(
-        //   "POST",
-        //   "./" + userID + "/" + "out" + userID + ".Terms",
-        //   false
-        // );
-        // asyncRequest.send(); // send the request
-        // // allWords = d3.csv.parse(asyncRequest.responseText);
+        //for list of all terms of the collocation
         // allWords = asyncRequest.responseText.split("\n"); // .split("\r\n")
 
         asyncRequest.open("POST", "./cgi-bin/fetchTerms.py", false);
@@ -452,9 +426,6 @@ function callServer() {
         }
 
         //get the list of documents name
-        // asyncRequest.open("POST", "./" + userID + "/fileList", false);
-        // asyncRequest.send(); // send the request
-        // documentsNameString = asyncRequest.responseText;
         // documentsName = documentsNameString.split("\n"); // .split("\r\n")
 
         asyncRequest.open("POST", "./cgi-bin/fetchFileList.py", false);
@@ -468,9 +439,6 @@ function callServer() {
         documentsName = documentsNameString.split("\n"); // .split("\r\n")
 
         //get document-document similarity matrix
-        // asyncRequest.open("POST", "./" + userID + "/documentDistance", false);
-        // asyncRequest.send(); // send the request
-        // documentDocumentSimilarityString = asyncRequest.responseText;
         // var temp = documentDocumentSimilarityString.split("\n"); // .split("\r\n")
 
         asyncRequest.open("POST", "./cgi-bin/fetchDocumentDistance.py", false);
@@ -490,13 +458,6 @@ function callServer() {
         }
 
         //get term-document matrix
-        // asyncRequest.open(
-        //   "POST",
-        //   "./" + userID + "/" + "out" + userID + ".Matrix",
-        //   false
-        // );
-        // asyncRequest.send(); // send the request
-        // termDocumentSimilarityString = asyncRequest.responseText;
         // var temp = termDocumentSimilarityString.split("\n"); // .split("\r\n")
 
         asyncRequest.open("POST", "./cgi-bin/fetchMatrix.py", false);
@@ -1779,55 +1740,55 @@ function checkFileExists(fileName) {
  * Download the selected cluster
  * @param clusterName = cluster name
  */
-function downloadCluster(clusterName) {
-  saveLog("downloadCluster");
+// function downloadCluster(clusterName) {
+//   saveLog("downloadCluster");
 
-  //change the mouse icon
-  $("body").css("cursor", "wait");
+//   //change the mouse icon
+//   $("body").css("cursor", "wait");
 
-  //get the original cluster name
-  var originalName = "Cluster" + (parseInt($("#" + clusterName).index()) + 1);
+//   //get the original cluster name
+//   var originalName = "Cluster" + (parseInt($("#" + clusterName).index()) + 1);
 
-  //check if the zip file exists
-  if (checkFileExists(originalName)) {
-    $("body").css("cursor", "auto");
-    window.open("./" + userID + "/" + originalName + ".zip");
-  } else if (checkFileExists("Cluster1")) {
-    $("body").css("cursor", "auto");
-    alert(
-      "This is a new cluster, you need to push 'Cluster' button first then you can download this cluster."
-    );
-  } else {
-    //create the zip file of cluster
-    alert("Please be patient while the ZIP file is creating!");
-    $.ajax({
-      url: "./cgi-bin/documentClusters.py",
-      type: "POST",
-      async: false,
-      cache: false,
-      traditional: true,
-      data: { userDirectory: userDirectory },
-      success: function (msg) {
-        $("body").css("cursor", "auto");
-      },
-      error: function (msg) {
-        $("body").css("cursor", "auto");
-        alert("Internal Server Error: unsuccessful load data from server");
-        $("body").css("cursor", "auto");
-      },
-    });
+//   //check if the zip file exists
+//   if (checkFileExists(originalName)) {
+//     $("body").css("cursor", "auto");
+//     window.open("./" + userID + "/" + originalName + ".zip");
+//   } else if (checkFileExists("Cluster1")) {
+//     $("body").css("cursor", "auto");
+//     alert(
+//       "This is a new cluster, you need to push 'Cluster' button first then you can download this cluster."
+//     );
+//   } else {
+//     //create the zip file of cluster
+//     alert("Please be patient while the ZIP file is creating!");
+//     $.ajax({
+//       url: "./cgi-bin/documentClusters.py",
+//       type: "POST",
+//       async: false,
+//       cache: false,
+//       traditional: true,
+//       data: { userDirectory: userDirectory },
+//       success: function (msg) {
+//         $("body").css("cursor", "auto");
+//       },
+//       error: function (msg) {
+//         $("body").css("cursor", "auto");
+//         alert("Internal Server Error: unsuccessful load data from server");
+//         $("body").css("cursor", "auto");
+//       },
+//     });
 
-    if (checkFileExists(originalName)) {
-      $("body").css("cursor", "auto");
-      window.open("./" + userID + "/" + originalName + ".zip");
-    } else {
-      $("body").css("cursor", "auto");
-      alert(
-        "This is a new cluster, you need to push 'Cluster' button first then you can download this cluster."
-      );
-    }
-  }
-}
+//     if (checkFileExists(originalName)) {
+//       $("body").css("cursor", "auto");
+//       window.open("./" + userID + "/" + originalName + ".zip");
+//     } else {
+//       $("body").css("cursor", "auto");
+//       alert(
+//         "This is a new cluster, you need to push 'Cluster' button first then you can download this cluster."
+//       );
+//     }
+//   }
+// }
 
 /**
  * @param documentName = name of the document
@@ -2819,12 +2780,9 @@ function hex(x) {
 function setBackGroundColor() {
   //these are the constant colors of the first 28 clusters
   var colors = [
-    "#2CA25F",
-    "#55E8C9",
     "#9E1CDA",
     "#D95F02",
     "#995500",
-    "#A19404",
     "#EEADAA",
     "#002395",
     "#FFA500",
@@ -2833,7 +2791,10 @@ function setBackGroundColor() {
     "#0033FF",
     "#666699",
     "#BBBBBB",
-    "#ED92FD",
+    "#ED92FD",    
+    "#2CA25F",
+    "#55E8C9",
+    "#A19404",
   ];
 
   // var colors = ["#138808", "#1E90FF", "#FFA500", "#FF9999",
@@ -5534,4 +5495,53 @@ function getTermProbabilities(){
         console.log("termProbabilites",termProbabilites);
         return termProbabilites;
 
+}
+
+function submitFeedback() {
+  var feedback = document.getElementById("feedbackText").value;
+  var support = document.querySelector('input[name="support"]:checked').value;
+  var satisfaction = document.querySelector('input[name="satisfaction"]:checked').value;
+
+  // Use AJAX to send all feedback to the Python CGI script
+  $.ajax({
+      type: "POST",
+      url: "/cgi-bin/userFeedback.py", 
+      // pass in the feedback, support, satisfaction, userID, documentname, datetime, etc.
+      data: { 
+          feedback: feedback,
+          support: support,
+          satisfaction: satisfaction,
+          userID: userID,
+          documentname: currentDocumentName,
+          datetime: new Date().toISOString(),
+
+      },
+      success: function(response) {
+          // Handle success
+          console.log("Feedback submitted successfully");
+          // Close the modal and clear the form
+          document.getElementById("feedbackText").value = "";
+          var radios = document.querySelectorAll('input[type="radio"]');
+          radios.forEach(radio => radio.checked = false); // Uncheck all radio buttons
+      },
+      error: function(xhr, status, error) {
+          // Handle error
+          console.log("Error submitting feedback");
+      }
+  });
+  // Unselect all selected radio buttons
+  var supportRadios = document.querySelectorAll('input[name="support"]');
+  supportRadios.forEach(function(radio) {
+      radio.checked = false;
+  });
+
+  var satisfactionRadios = document.querySelectorAll('input[name="satisfaction"]');
+  satisfactionRadios.forEach(function(radio) {
+      radio.checked = false;
+  });
+
+  // Clear the textual response
+  document.getElementById("feedbackText").value = "";
+  
+  showNewDocument();
 }

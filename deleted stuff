@@ -2411,3 +2411,46 @@
 // };
 // </script> -->
 
+// function openFeedbackPopup() {
+//   var popup = window.open('', 'Feedback Form', 'width=600,height=400');
+
+//   popup.document.write('<html><head><title>Feedback Form</title></head><body>');
+//   popup.document.write('<h1>Provide Your Feedback</h1>');
+//   popup.document.write('<p>1) Does the explanation logically support the article\'s categorization?</p>');
+//   popup.document.write('<input type="radio" id="yes" name="support" value="Yes"><label for="yes">Yes</label><br>');
+//   popup.document.write('<input type="radio" id="no" name="support" value="No" ><label for="no">No</label><br>');
+
+//   popup.document.write('<div id="additionalQuestions" style="display:block;">'); // Wrap additional questions
+//   //add a text area for the user to provide feedback if they answered no to the first question
+//   popup.document.write('<textarea id="feedbackText" rows="4" cols="50" placeholder="Please provide feedback here"></textarea>');
+//   popup.document.write('<p>2) Are you satisfied with the depth and detail of the explanation?</p>');
+//   popup.document.write('<form>');
+//   // Add radio buttons for scale 1 to 5
+//   for (var i = 1; i <= 5; i++) {
+//       popup.document.write('<input type="radio" id="scale' + i + '" name="depth" value="' + i + '">');
+//       popup.document.write('<label for="scale' + i + '">' + i + '</label><br>');
+//   }
+//   popup.document.write('</form>');
+//   popup.document.write('<button onclick="window.opener.submitFeedback()">Submit Feedback</button>'); // Moved the button inside the div
+//   popup.document.write('</div>'); // Close the additionalQuestions div
+
+//   popup.document.write('<script>');
+//   popup.document.write('document.getElementById("no").addEventListener("change", function() { document.getElementById("additionalQuestions").style.display = "block"; });');
+//   popup.document.write('document.getElementById("yes");');
+// popup.document.write('function submitAndClose() {');
+// popup.document.write('  window.opener.submitFeedback();'); // Call the function in the parent window to handle the feedback submission
+// popup.document.write('  window.close();'); // Close the popup window
+// popup.document.write('}');
+// popup.document.write('document.getElementById("no").addEventListener("change", function() { document.getElementById("additionalQuestions").style.display = "block"; });');
+// popup.document.write('document.getElementById("yes").addEventListener("change", function() { document.getElementById("additionalQuestions").style.display = "none"; });');
+// popup.document.write('</script>');
+
+//   popup.document.write('</body></html>');
+//   popup.document.close();
+// }
+
+// function submitFeedback(feedbackText) {
+//   // Use AJAX to send feedback to the server
+//   console.log("Feedback text: " + feedbackText);
+//   // Implement AJAX request to send feedbackText to your server
+// }
