@@ -2252,3 +2252,162 @@
 
 //   svg2.call(zoom);
 // } //************************* End of force layout load
+
+// {/* <script>
+        // document.getElementById("doc_select").onchange = function () { */}
+        //   document.getElementById("doc_content").innerHTML = "vuyvuyvkuvuv";
+        //   loadDoc(this.value);
+        // createTermClusterChart(this.value);
+
+        //   //show the paralel cordinator view
+        //   var words = new Array(1);
+        //   var colors = {};
+        //   words[0] = this.value;
+        //   colors[words[0]] = $("#" + getSelectedClusterID() + " p").css(
+        //     "background-color"
+        //   ); //"Blue";
+        //   paralelCordinator(
+        //     documentClusterData,
+        //     "#panel6",
+        //     words,
+        //     "#DocumentClusterView",
+        //     colors
+        //   );
+
+        //   //highlight the document in general view
+        //   // highlightDocGeneralView(this.value);
+        //   createTermClusterChart();
+
+        //   //change the color of selected doc to red
+        //   $(this).css("color", "red");
+        //   var options = this.children;
+        //   for (var i = 0; i < this.childElementCount; i++) {
+        //     if (options[i].value == this.value) options[i].style.color = "red";
+        //     else options[i].style.color = "black";
+        //   }
+        // };
+    //   </script>
+
+//     <select id="doc_select">
+//     <!-- list of documnets are here! -->
+//   </select>
+// <!-- <input
+// id="button15"
+// title="ShowPDF"
+// class="button"
+// type="button"
+// value="ShowPDF"
+// onclick="showDocumentPDF(document.getElementById('doc_select').value)"
+// />
+// <input
+// id="button16"
+// title="ShowCloud"
+// class="button"
+// type="button"
+// value="ShowCloud"
+// onclick="showDocumentCloud(document.getElementById('doc_select').value)"
+// /> -->
+
+// <!-- <input
+// id="button2"
+// title="Upload Document"
+// class="button"
+// type="button"
+// value="Upload Document"
+// onclick="openUploadPage()"
+// /> -->
+// <!-- <input
+// id="button3"
+// title="Save Session"
+// class="button"
+// type="button"
+// value="Save Session"
+// onclick="saveSession()"
+// />
+// <input
+// id="button14"
+// title="Delete Session"
+// class="button"
+// type="button"
+// value="Delete Session"
+// onclick="deleteSession()"
+// /> -->
+// <!-- <input
+// id="button18"
+// title="Add Note"
+// class="button"
+// type="button"
+// value="Note"
+// /> -->
+// <!-- <select id="session_select"> -->
+// <!-- list of sessions are here! -->
+// <!-- <option value="first" disabled selected>Select Session</option>
+// </select>
+// <input type="checkbox" id="auto_save_session" /><span
+// id="auto_save_session_text"
+// >Auto save session</span -->
+// <!-- ><br /> -->
+// <!-- <input
+// id="button4"
+// title="Cluster"
+// class="button"
+// type="button"
+// value="Cluster"
+// onclick="SendData2Server()"
+// />
+
+// <span id="slider0_label">Confidence (%):</span>
+// <input id="slider0_Textbox" type="text" onkeyup="changeSlider0()" />
+// <span id="slider0_min">0</span>
+// <span id="slider0_max">100</span>
+// <div id="slider0"></div>
+
+// <span id="Clustering_algo_text_main">Clustering <br />Method:</span>
+// <select id="Clustering_algo_select_main">
+// <option value="LDC">LDC</option>
+// <option value="iK-means">iK-means</option>
+// </select>
+// <script>
+// document.getElementById("Clustering_algo_select_main").onchange =
+//   function () {
+//     clusteringMethod = $("#Clustering_algo_select_main").val();
+//     if (clusteringMethod == "LDC") {
+//       $("#slider0").slider("disable");
+//       $("#slider0_Textbox").attr("disabled", "disabled");
+//     } else if (clusteringMethod == "iK-means") {
+//       $("#slider0").slider("enable");
+//       $("#slider0_Textbox").removeAttr("disabled");
+//     }
+//   };
+// </script> -->
+
+// <!-- <input
+// id="textbox1"
+// title=""
+// placeholder="Search"
+// onclick="selectText()"
+// class="textbox"
+// autocomplete="on"
+// type="text"
+// width="800px"
+// />
+// <script>
+// document.getElementById("session_select").onchange = function () {
+//   $("body").css("cursor", "wait");
+
+//   var ok = confirm(
+//     "Do you want to load this session? Please save your work before."
+//   );
+
+//   if (!ok) {
+//     $("#session_select option[value='first']").attr("selected", true);
+//     $("body").css("cursor", "auto");
+//     return null;
+//   }
+
+//   var sessionName = this.value;
+
+//   loadSession(sessionName);
+// };
+// </script> -->
+

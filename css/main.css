@@ -43,7 +43,7 @@
   border-width: thin;
   width: 15%;
   float: left;
-  height: 49%;
+  height: 35%;
   margin: 3px;
   background-color: white;
 }
@@ -514,7 +514,7 @@
 #button1 {
   position: absolute;
   top: 25%;
-  left: 0.5%;
+  right: 0.5%;
   width: 5%;
   height: 50%;
 }
@@ -1572,11 +1572,47 @@ div.ui-state-disabled.ui-draggable-disabled {
   font-size: 70%;
 }
 
-#nextbuttondiv {
+.modal {
   position: absolute;
-  bottom: 1%;
-  left: 90%;
-  font-size: 80%;
-  height: 15%;
+  top: 64%;
+  left: 9%;
+  border: thin;
+  border: #ccc;
+  border-style: solid;
+  border-radius: 10px;
+  border-width: thin;
   width: 15%;
+  float: left;
+  height: 35%;
+  margin: 3px;
+  background-color: white;
+}
+
+.modal-content {
+  top: 5%;
+  position: absolute;
+  overflow: scroll;
+  height: 90%;
+  width: 97%;
+  left: 2%;
+  font-size: 82%;
+}
+.submit-button-container {
+  display: flex;
+  justify-content: center; /* Center the button horizontally */
+  padding: 20px 0; /* Add some padding for spacing */
+}
+
+form {
+  display: flex; /* Use flexbox to layout children horizontally */
+  align-items: center; /* Align items vertically in the center */
+  flex-wrap: wrap; /* Allow the items to wrap as needed */
+}
+
+form input[type="radio"] {
+  margin-right: 5px; /* Space between radio button and its label */
+}
+
+form label {
+  margin-right: 20px; /* Space between each radio button-label pair */
 }

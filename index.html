@@ -65,7 +65,13 @@
   </head>
   <body onload="pageLoad()" onbeforeunload="return pageClose()">
     <!----------------------- panel1 -------------------------->
+    
     <div id="panel1">
+      <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+        <p class="mainTitle" style="font-weight: bold; width: 100%; text-align: center; font-size: 2vw; margin: 0;">
+          Explanation for Document Clustering
+        </p>
+      </div>
       <input
         id="button1"
         title="Help"
@@ -74,108 +80,7 @@
         value="Help"
         onclick="openHelpPage()"
       />
-      <input
-        id="button2"
-        title="Upload Document"
-        class="button"
-        type="button"
-        value="Upload Document"
-        onclick="openUploadPage()"
-      />
-      <input
-        id="button3"
-        title="Save Session"
-        class="button"
-        type="button"
-        value="Save Session"
-        onclick="saveSession()"
-      />
-      <input
-        id="button14"
-        title="Delete Session"
-        class="button"
-        type="button"
-        value="Delete Session"
-        onclick="deleteSession()"
-      />
-      <input
-        id="button18"
-        title="Add Note"
-        class="button"
-        type="button"
-        value="Note"
-      />
-      <select id="session_select">
-        <!-- list of sessions are here! -->
-        <option value="first" disabled selected>Select Session</option>
-      </select>
-      <input type="checkbox" id="auto_save_session" /><span
-        id="auto_save_session_text"
-        >Auto save session</span
-      ><br />
-      <!-- <input
-        id="button4"
-        title="Cluster"
-        class="button"
-        type="button"
-        value="Cluster"
-        onclick="SendData2Server()"
-      />
 
-      <span id="slider0_label">Confidence (%):</span>
-      <input id="slider0_Textbox" type="text" onkeyup="changeSlider0()" />
-      <span id="slider0_min">0</span>
-      <span id="slider0_max">100</span>
-      <div id="slider0"></div>
-
-      <span id="Clustering_algo_text_main">Clustering <br />Method:</span>
-      <select id="Clustering_algo_select_main">
-        <option value="LDC">LDC</option>
-        <option value="iK-means">iK-means</option>
-      </select>
-      <script>
-        document.getElementById("Clustering_algo_select_main").onchange =
-          function () {
-            clusteringMethod = $("#Clustering_algo_select_main").val();
-            if (clusteringMethod == "LDC") {
-              $("#slider0").slider("disable");
-              $("#slider0_Textbox").attr("disabled", "disabled");
-            } else if (clusteringMethod == "iK-means") {
-              $("#slider0").slider("enable");
-              $("#slider0_Textbox").removeAttr("disabled");
-            }
-          };
-      </script> -->
-
-      <input
-        id="textbox1"
-        title=""
-        placeholder="Search"
-        onclick="selectText()"
-        class="textbox"
-        autocomplete="on"
-        type="text"
-        width="800px"
-      />
-      <script>
-        document.getElementById("session_select").onchange = function () {
-          $("body").css("cursor", "wait");
-
-          var ok = confirm(
-            "Do you want to load this session? Please save your work before."
-          );
-
-          if (!ok) {
-            $("#session_select option[value='first']").attr("selected", true);
-            $("body").css("cursor", "auto");
-            return null;
-          }
-
-          var sessionName = this.value;
-
-          loadSession(sessionName);
-        };
-      </script>
     </div>
 
     <!----------------------- panel2 (document view) -------------------------->
@@ -183,63 +88,10 @@
       class="resizable"
       id="panel2"
       ondrag="panelDrag(this)"
-      onclick="panelDrag(this)"
-    >
+      onclick="panelDrag(this)">
       <p id="panel2title" class="panelTitle">Document View</p>
-      <select id="doc_select">
-        <!-- list of documnets are here! -->
-      </select>
-      <!-- <input
-        id="button15"
-        title="ShowPDF"
-        class="button"
-        type="button"
-        value="ShowPDF"
-        onclick="showDocumentPDF(document.getElementById('doc_select').value)"
-      />
-      <input
-        id="button16"
-        title="ShowCloud"
-        class="button"
-        type="button"
-        value="ShowCloud"
-        onclick="showDocumentCloud(document.getElementById('doc_select').value)"
-      /> -->
       <p id="doc_content"></p>
-      <script>
-        // document.getElementById("doc_select").onchange = function () {
-        //   document.getElementById("doc_content").innerHTML = "vuyvuyvkuvuv";
-        //   loadDoc(this.value);
-        // createTermClusterChart(this.value);
-
-        //   //show the paralel cordinator view
-        //   var words = new Array(1);
-        //   var colors = {};
-        //   words[0] = this.value;
-        //   colors[words[0]] = $("#" + getSelectedClusterID() + " p").css(
-        //     "background-color"
-        //   ); //"Blue";
-        //   paralelCordinator(
-        //     documentClusterData,
-        //     "#panel6",
-        //     words,
-        //     "#DocumentClusterView",
-        //     colors
-        //   );
-
-        //   //highlight the document in general view
-        //   // highlightDocGeneralView(this.value);
-        //   createTermClusterChart();
-
-        //   //change the color of selected doc to red
-        //   $(this).css("color", "red");
-        //   var options = this.children;
-        //   for (var i = 0; i < this.childElementCount; i++) {
-        //     if (options[i].value == this.value) options[i].style.color = "red";
-        //     else options[i].style.color = "black";
-        //   }
-        // };
-      </script>
+      
     </div>
 
     <!----------------------- panel3 (Cluster Key Terms) -------------------------->
@@ -371,17 +223,41 @@
       </div>
     </div>
     <script type="text/javascript" src="js/palette.js"></script>
-    <!-- ---------------------------------------------------- -->
-    <!-- create a button -->
-    <div id="nextbuttondiv">
-      <input
-        id="button10"
-        title="Next"
-        type="button"
-        class="button"
-        value="Next Document"
-        onclick="showNewDocument()"
-      />
+    <!------------------------panel 10 (Feedback form) -------------------------->
+    
+    <div id="feedbackModal" class="modal resizable" ondrag="panelDrag(this)" onclick="panelDrag(this)">
+      <p id="panel10title" class="panelTitle">Explanation Evaluation</p>
+      <div class="modal-content">
+        <p>1) Does the explanation logically support the document's assignment?</p>
+        <input type="radio" id="yes" name="support" value="Yes">
+        <label for="yes">Yes</label><br>
+        <input type="radio" id="no" name="support" value="No">
+        <label for="no">No</label><br>
+    
+        <div id="textualResponse" style="display:none;">
+          <p>Please provide your feedback:</p>
+          <textarea id="feedbackText"></textarea><br>
+        </div>
+    
+        <p>2) Are you satisfied with the depth and detail of the explanation?</p>
+        <form>
+          <input type="radio" id="scale1" name="satisfaction" value="1">
+          <label for="scale1">1</label>
+          <input type="radio" id="scale2" name="satisfaction" value="2">
+          <label for="scale2">2</label>
+          <input type="radio" id="scale3" name="satisfaction" value="3">
+          <label for="scale3">3</label>
+          <input type="radio" id="scale4" name="satisfaction" value="4">
+          <label for="scale4">4</label>
+          <input type="radio" id="scale5" name="satisfaction" value="5">
+          <label for="scale5">5</label>
+        </form>
+        <div class="submit-button-container">
+          <button onclick="submitFeedback()">Submit Feedback and Continue</button>
+        </div>
+      </div>
     </div>
+    
+</div>
   </body>
 </html>
