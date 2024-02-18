@@ -179,171 +179,171 @@ $(function () {
   });
 });
 
-$(function () {
-  var draggableDiv = $("#panel2").draggable({
-    obstacle: "#panel1",
-    containment: "body",
-    distance: 10,
-    opacity: 0.55,
-    preventCollision: true,
-  });
+// $(function () {
+// var draggableDiv = $("#panel2").draggable({
+//   obstacle: "#panel1",
+//   containment: "body",
+//   distance: 10,
+//   opacity: 0.55,
+//   preventCollision: true,
+// });
 
   // disable the dragable for the text
   // in order to be selectable
-  $("#doc_content", draggableDiv)
-    .mousedown(function (ev) {
-      draggableDiv.draggable("disable");
-    })
-    .mouseup(function (ev) {
-      draggableDiv.draggable("enable");
-    });
-});
+// $("#doc_content", draggableDiv)
+//   .mousedown(function (ev) {
+//     draggableDiv.draggable("disable");
+//   })
+//   .mouseup(function (ev) {
+//     draggableDiv.draggable("enable");
+//   });
+// });
 
-$(function () {
-  var draggableDiv = $("#panel3").draggable({
-    obstacle: "#panel1",
-    containment: "body",
-    distance: 10,
-    opacity: 0.55,
-    preventCollision: true,
-  });
+// $(function () {
+//   var draggableDiv = $("#panel3").draggable({
+//     obstacle: "#panel1",
+//     containment: "body",
+//     distance: 10,
+//     opacity: 0.55,
+//     preventCollision: true,
+//   });
 
-  // disable the dragable for the word list
-  // in order to be selectable
-  $("#word_lists", draggableDiv)
-    .mousedown(function (ev) {
-      draggableDiv.draggable("disable");
-    })
-    .mouseup(function (ev) {
-      draggableDiv.draggable("enable");
-    });
-});
+//   // disable the dragable for the word list
+//   // in order to be selectable
+//   $("#word_lists", draggableDiv)
+//     .mousedown(function (ev) {
+//       draggableDiv.draggable("disable");
+//     })
+//     .mouseup(function (ev) {
+//       draggableDiv.draggable("enable");
+//     });
+// });
 
-$(function () {
-  var draggableDiv = $("#panel4").draggable({
-    obstacle: "#panel1",
-    containment: "body",
-    distance: 10,
-    opacity: 0.55,
-    preventCollision: true,
-  });
+// $(function () {
+//   var draggableDiv = $("#panel4").draggable({
+//     obstacle: "#panel1",
+//     containment: "body",
+//     distance: 10,
+//     opacity: 0.55,
+//     preventCollision: true,
+//   });
 
-  // disable the dragable for the clusters
-  // in order to be selectable
-  $("#panel4_1", draggableDiv)
-    .mousedown(function (ev) {
-      draggableDiv.draggable("disable");
-    })
-    .mouseup(function (ev) {
-      draggableDiv.draggable("enable");
-    });
-});
+//   // disable the dragable for the clusters
+//   // in order to be selectable
+//   $("#panel4_1", draggableDiv)
+//     .mousedown(function (ev) {
+//       draggableDiv.draggable("disable");
+//     })
+//     .mouseup(function (ev) {
+//       draggableDiv.draggable("enable");
+//     });
+// });
 
-$(function () {
-  var draggableDiv = $("#panel5").draggable({
-    obstacle: "#panel1",
-    containment: "body",
-    distance: 10,
-    opacity: 0.55,
-    preventCollision: true,
-  });
+// $(function () {
+//   var draggableDiv = $("#panel5").draggable({
+//     obstacle: "#panel1",
+//     containment: "body",
+//     distance: 10,
+//     opacity: 0.55,
+//     preventCollision: true,
+//   });
 
-  // disable the dragable for the cluster_tree_view
-  $("#cluster_tree_view", draggableDiv)
-    .mousedown(function (ev) {
-      draggableDiv.draggable("disable");
-    })
-    .mouseup(function (ev) {
-      draggableDiv.draggable("enable");
-    });
-});
+//   // disable the dragable for the cluster_tree_view
+//   $("#cluster_tree_view", draggableDiv)
+//     .mousedown(function (ev) {
+//       draggableDiv.draggable("disable");
+//     })
+//     .mouseup(function (ev) {
+//       draggableDiv.draggable("enable");
+//     });
+// });
 
-$(function () {
-  var draggableDiv = $("#panel6").draggable({
-    obstacle: "#panel1",
-    containment: "body",
-    distance: 10,
-    opacity: 0.55,
-    preventCollision: true,
-  });
+// $(function () {
+//   var draggableDiv = $("#panel6").draggable({
+//     obstacle: "#panel1",
+//     containment: "body",
+//     distance: 10,
+//     opacity: 0.55,
+//     preventCollision: true,
+//   });
 
-  // disable the dragable for svg
-  $("#DocumentClusterView", draggableDiv)
-    .mousedown(function (ev) {
-      draggableDiv.draggable("disable");
-    })
-    .mouseup(function (ev) {
-      draggableDiv.draggable("enable");
-    });
-});
+//   // disable the dragable for svg
+//   $("#DocumentClusterView", draggableDiv)
+//     .mousedown(function (ev) {
+//       draggableDiv.draggable("disable");
+//     })
+//     .mouseup(function (ev) {
+//       draggableDiv.draggable("enable");
+//     });
+// });
 
-$(function () {
-  var draggableDiv = $("#panel7").draggable({
-    obstacle: "#panel1",
-    containment: "body",
-    distance: 10,
-    opacity: 0.55,
-    preventCollision: true,
-  });
+// $(function () {
+//   var draggableDiv = $("#panel7").draggable({
+//     obstacle: "#panel1",
+//     containment: "body",
+//     distance: 10,
+//     opacity: 0.55,
+//     preventCollision: true,
+//   });
 
-  // disable the dragable for svg
-  $("#TermClusterView", draggableDiv)
-    .mousedown(function (ev) {
-      draggableDiv.draggable("disable");
-    })
-    .mouseup(function (ev) {
-      draggableDiv.draggable("enable");
-    });
-});
+//   // disable the dragable for svg
+//   $("#TermClusterView", draggableDiv)
+//     .mousedown(function (ev) {
+//       draggableDiv.draggable("disable");
+//     })
+//     .mouseup(function (ev) {
+//       draggableDiv.draggable("enable");
+//     });
+// });
 
-$(function () {
-  var draggableDiv = $("#panel8").draggable({
-    obstacle: "#panel1",
-    containment: "body",
-    opacity: 0.55,
-    distance: 10,
-    preventCollision: true,
-  });
+// $(function () {
+//   var draggableDiv = $("#panel8").draggable({
+//     obstacle: "#panel1",
+//     containment: "body",
+//     opacity: 0.55,
+//     distance: 10,
+//     preventCollision: true,
+//   });
 
-  // disable the dragable for term cloud svg
-  $("#panel8_2", draggableDiv)
-    .mousedown(function (ev) {
-      draggableDiv.draggable("disable");
-    })
-    .mouseup(function (ev) {
-      draggableDiv.draggable("enable");
-    });
-});
+//   // disable the dragable for term cloud svg
+//   $("#panel8_2", draggableDiv)
+//     .mousedown(function (ev) {
+//       draggableDiv.draggable("disable");
+//     })
+//     .mouseup(function (ev) {
+//       draggableDiv.draggable("enable");
+//     });
+// });
 
-$(function () {
-  var draggableDiv = $("#panel9").draggable({
-    obstacle: "#panel1",
-    containment: "body",
-    distance: 10,
-    opacity: 0.55,
-    preventCollision: true,
-  });
+// $(function () {
+//   var draggableDiv = $("#panel9").draggable({
+//     obstacle: "#panel1",
+//     containment: "body",
+//     distance: 10,
+//     opacity: 0.55,
+//     preventCollision: true,
+//   });
 
-  // disable the dragable for the general view (T-SNE)
-  // in order to be selectable
-  $("#general_view1", draggableDiv)
-    .mousedown(function (ev) {
-      draggableDiv.draggable("disable");
-    })
-    .mouseup(function (ev) {
-      draggableDiv.draggable("enable");
-    });
+//   // disable the dragable for the general view (T-SNE)
+//   // in order to be selectable
+//   $("#general_view1", draggableDiv)
+//     .mousedown(function (ev) {
+//       draggableDiv.draggable("disable");
+//     })
+//     .mouseup(function (ev) {
+//       draggableDiv.draggable("enable");
+//     });
 
-  // disable the dragable for the general view 2 (force layout)
-  // in order to be selectable
-  $("#general_view2", draggableDiv)
-    .mousedown(function (ev) {
-      draggableDiv.draggable("disable");
-    })
-    .mouseup(function (ev) {
-      draggableDiv.draggable("enable");
-    });
-});
+//   // disable the dragable for the general view 2 (force layout)
+//   // in order to be selectable
+//   $("#general_view2", draggableDiv)
+//     .mousedown(function (ev) {
+//       draggableDiv.draggable("disable");
+//     })
+//     .mouseup(function (ev) {
+//       draggableDiv.draggable("enable");
+//     });
+// });
 
 //for tabs in general view
 $(function () {
