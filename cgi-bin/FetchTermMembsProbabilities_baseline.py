@@ -1,8 +1,8 @@
 #!/Applications/miniconda3/envs/IDC/bin/python
 import cgi, cgitb
 from dotenv import load_dotenv
-import os
 
+import utility
 # Load environment variables from .env file
 load_dotenv()
 cgitb.enable()
@@ -16,7 +16,7 @@ user_id = form.getvalue('userID')
 # Implement your logic here to retrieve data
 # For example, reading from a file:
 
-file_path = f"../users/{user_id}/{os.getenv('MODE')}termMembersProbabilities"
+file_path = f"../users/{user_id}/{utility.getMode(user_id)}termMembersProbabilities"
 fin = open(file_path, "r")
 data = fin.read()
 fin.close()

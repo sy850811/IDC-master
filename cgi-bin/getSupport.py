@@ -6,6 +6,7 @@ import cgi, cgitb
 cgitb.enable()
 form = cgi.FieldStorage()
 text = eval(form.getvalue('doc'))
+# document.replace("\n"," ").replace("\t"," ")
 # print("Content-type:application/json\r\n\r\n")
 # print(json.dumps({'text': text}))
 

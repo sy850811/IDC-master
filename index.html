@@ -155,6 +155,7 @@
         </ul>
       </div>
     </div>
+    <div id="docText" class="popup" style="display: none;"></div>
 
     <!----------------------- panel7 (Term-Cluster View) -------------------------->
     <div
@@ -237,37 +238,73 @@
     
     <div id="feedbackModal" class="modal resizable" ondrag="panelDrag(this)" onclick="panelDrag(this)">
       <p id="panel10title" class="panelTitle">Explanation Evaluation</p>
-      <div class="modal-content">
-        <p>1) Does the explanation logically support the document's assignment?</p>
+      <!-- set display style to none -->
+      <div class="modal-content" style="display: none;" id="feedbackFormContent">
+        <p id="question1">1) Does the local explanation logically support the document's assignment to </p>
         <input type="radio" id="yes" name="support" value="Yes">
-        <label for="yes">Yes</label><br>
+        <label for="yes">Yes</label>
         <input type="radio" id="no" name="support" value="No">
         <label for="no">No</label><br>
     
         <div id="textualResponse" style="display:none;">
-          <p>Please provide your feedback:</p>
-          <textarea id="feedbackText"></textarea><br>
+          <br>
+          <textarea id="feedbackText" placeholder="Enter your feedback here..."></textarea><br>
         </div>
     
         <p>2) Are you satisfied with the depth and detail of the explanation?</p>
         <form>
-          <input type="radio" id="scale1" name="satisfaction" value="1">
-          <label for="scale1">1</label>
-          <input type="radio" id="scale2" name="satisfaction" value="2">
-          <label for="scale2">2</label>
-          <input type="radio" id="scale3" name="satisfaction" value="3">
-          <label for="scale3">3</label>
-          <input type="radio" id="scale4" name="satisfaction" value="4">
-          <label for="scale4">4</label>
-          <input type="radio" id="scale5" name="satisfaction" value="5">
-          <label for="scale5">5</label>
+          <div id="satisfactionScaleRadioButton">
+            <input type="radio" id="scale1" name="satisfaction" value="1">
+            <label for="scale1">Strongly Agree</label>
+          </div>
+          <div id="satisfactionScaleRadioButton">
+            <input type="radio" id="scale2" name="satisfaction" value="2">
+            <label for="scale2">Agree</label>
+          </div>
+          <div id="satisfactionScaleRadioButton">
+            <input type="radio" id="scale3" name="satisfaction" value="3">
+            <label for="scale3">Neutral</label>
+          </div>
+          <div id="satisfactionScaleRadioButton">
+            <input type="radio" id="scale4" name="satisfaction" value="4">
+            <label for="scale4">Disagree</label>
+          </div>
+          <div id="satisfactionScaleRadioButton">
+            <input type="radio" id="scale5" name="satisfaction" value="5">
+            <label for="scale5">Strongly Disagree</label>
+          </div>
         </form>
         <div class="submit-button-container">
           <button onclick="submitFeedback()">Submit Feedback and Continue</button>
         </div>
       </div>
     </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+    // Select the radio buttons for the "support" question
+    var yesButton = document.getElementById('yes');
+    var noButton = document.getElementById('no');
+
+    // Function to toggle the visibility of the feedback textarea
+    function toggleFeedbackTextArea() {
+        var feedbackTextArea = document.getElementById('textualResponse');
+        if(noButton.checked) {
+            // If "No" is selected, show the textarea
+            feedbackTextArea.style.display = 'block';
+        } else {
+            // Otherwise, hide it
+            feedbackTextArea.style.display = 'none';
+        }
+    }
+
+    // Add click event listeners to both radio buttons
+    yesButton.addEventListener('click', toggleFeedbackTextArea);
+    noButton.addEventListener('click', toggleFeedbackTextArea);
+});
+
+    </script>
     
 </div>
+<div id="fullpage" style="display: none;"></div>
   </body>
 </html>

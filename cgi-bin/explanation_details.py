@@ -1,14 +1,17 @@
 #!/Applications/miniconda3/envs/IDC/bin/python
 
-import cgi, cgitb, json, os
+import cgi, cgitb, json
 cgitb.enable()
 from dotenv import load_dotenv
+
+import utility
+
 load_dotenv()
 form = cgi.FieldStorage()
 
 user_id = eval(form.getvalue('userID'))
 
-fileName =f"../users/{user_id}/{os.getenv('MODE')}explaination_details.json"
+fileName =f"../users/{user_id}/{utility.getMode(user_id)}explaination_details.json"
 
 
 with open(fileName) as json_file:

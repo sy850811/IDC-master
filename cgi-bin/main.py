@@ -202,7 +202,7 @@ try:
     # termClustersFile.close()
 
     termClustersArray = []
-    file_path = f"../users/{userID}/{os.getenv('MODE')}termClusters"
+    file_path = f"../users/{userID}/{utility.getMode(userID)}termClusters"
     with open(file_path, "r") as file:
         for line in file:
             line = line.strip()

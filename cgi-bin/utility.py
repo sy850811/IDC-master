@@ -62,3 +62,22 @@ def read_single_column_data(path):
             hashMap[line] = index
             index += 1
     return array, hashMap
+
+import json
+def getMode(userID):
+    currentSubset = None
+    with open('../users/userSubset.json') as json_fil:
+        userSubsetDetails = json.load(json_fil)
+
+    for key in userSubsetDetails:
+        if userID in userSubsetDetails[key]:
+            # Select the last character of the key string
+            currentSubset = int(key[-1])  # Convert last character to integer
+            print(f"For user: {str(userID)}, subset is: {str(currentSubset)}")
+
+    if currentSubset == 3:
+        return "proposed_"
+    elif currentSubset == 2 or currentSubset == 1 or currentSubset == 0:
+        return "baseline_"
+    else:
+        return "error_"
