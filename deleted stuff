@@ -2446,7 +2446,7 @@
 // popup.document.write('</script>');
 
 //   popup.document.write('</body></html>');
-//   popup.document.close();
+//   popup.document.close(); dcds
 // }
 
 // function submitFeedback(feedbackText) {
