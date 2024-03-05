@@ -2511,7 +2511,7 @@
 
 // documentClusterDataString.py
 
-// #!/Applications/miniconda3/envs/IDC/bin/python
+// #!/usr/bin/env python3.10
 
 // # Author: Ehsan Sherkat - 2017
 // import sys

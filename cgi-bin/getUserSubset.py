@@ -1,4 +1,4 @@
-#!/Applications/miniconda3/envs/IDC/bin/python
+#!/usr/bin/env python3.10
 import cgi
 import cgitb
 import json
