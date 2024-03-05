@@ -46,9 +46,6 @@ var tsneResult = new Array();
 var clusterKeytermsOriginal;
 var clusterDocs;
 var fileName = "";
-var termsFileName = "";
-var specFileName = "";
-var fileListName = "";
 var userDirectory = "";
 var userID = "";
 var userU = -1; //if it is the first time that the algorithm is running -1:first +1:interaction
@@ -134,11 +131,8 @@ function pageLoad() {
     if (input != null && input.trim() != "") {
       userID = input;
 
-      fileName = "../users/" + input + "/out" + input + ".Matrix"; /////////////
-      termsFileName = "../users/" + input + "/out" + input + ".Terms"; //////////////
-      specFileName = "../users/" + input + "/out" + input + ".Spec"; /////////////
-      fileListName = "../users/" + input + "/fileList"; /////////////
-      userDirectory = "../users/" + input + "/"; /////////////
+      fileName = "../../users/" + input + "/out" + input + ".Matrix"; /////////////
+      userDirectory = "../../users/" + input + "/"; /////////////
 
       $("#userName").html("Welcome " + userID + "!");
 
@@ -329,12 +323,8 @@ function callServer() {
     type: "POST",
     cache: false,
     traditional: true,
-    data: {
+    data: { 
       clusterNumber: clusterNumber,
-      fileName: fileName,
-      specFileName: specFileName,
-      fileListName: fileListName,
-      termsFileName: termsFileName,
       userU: userU,
       userID: JSON.stringify(userID),
       userDirectory: userDirectory,

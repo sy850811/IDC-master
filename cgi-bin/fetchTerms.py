@@ -1,12 +1,14 @@
 #!/usr/bin/env python3.10
-import cgi, cgitb, sys, json
+import cgi, cgitb, sys, json, os
 
 cgitb.enable()
 form = cgi.FieldStorage()
 
 user_id = form.getvalue('userID')
 
-file_path = f"../users/{user_id}/out{user_id}.Terms"
+script_dir = os.path.dirname(os.path.realpath(__file__))
+project_root = os.path.join(script_dir, "..") 
+file_path = project_root + f"/../users/{user_id}/out{user_id}.Terms"
 fin = open(file_path, "r")
 data = fin.read()
 fin.close()

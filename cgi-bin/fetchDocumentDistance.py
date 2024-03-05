@@ -1,5 +1,5 @@
 #!/usr/bin/env python3.10
-import cgi, cgitb
+import cgi, cgitb, os
 
 cgitb.enable()
 
@@ -12,7 +12,9 @@ user_id = form.getvalue('userID')
 # Fetch documentMembs data based on userID
 # Implement your logic here to retrieve data
 # For example, reading from a file:
-file_path = f"../users/{user_id}/documentDistance"
+script_dir = os.path.dirname(os.path.realpath(__file__))
+project_root = os.path.join(script_dir, "..") 
+file_path = project_root + f"/../users/{user_id}/documentDistance"
 fin = open(file_path, "r")
 data = fin.read()
 fin.close()

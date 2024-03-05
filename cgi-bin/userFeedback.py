@@ -1,4 +1,5 @@
 #!/usr/bin/env python3.10
+import os
 import cgi
 import cgitb
 import pandas as pd
@@ -27,14 +28,17 @@ df = pd.DataFrame({
 
 # Save the DataFrame to a CSV file
 # Check if the file exists to append or create a new one
-filename = f"../users/{userID}/{userID}_feedback.csv"
+script_dir = os.path.dirname(os.path.realpath(__file__))
+project_root = os.path.join(script_dir, "..") 
+file_path = project_root + f"/../users/{userID}/{userID}_feedback.csv"
+# filename = f"../users/{userID}/{userID}_feedback.csv"
 try:
-    df_existing = pd.read_csv(filename)
+    df_existing = pd.read_csv(file_path)
     df = pd.concat([df_existing, df], ignore_index=True)
 except FileNotFoundError:
     pass  # File does not exist, will create a new one
 
-df.to_csv(filename, index=False)
+df.to_csv(file_path, index=False)
 
 # Send a response back to the client
 print("Content-type:application/json\r\n\r\n")

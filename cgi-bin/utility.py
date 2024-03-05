@@ -1,7 +1,7 @@
 # Author: Ehsan Sherkat - 2016
 
     
-
+import os
 def read_term_document_matrix(path, type="tf"):
     """
     read document-term matrix (comma separate)
@@ -66,7 +66,10 @@ def read_single_column_data(path):
 import json
 def getMode(userID):
     currentSubset = None
-    with open('../users/userSubset.json') as json_fil:
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    project_root = os.path.join(script_dir, "..") 
+    file_path = project_root + f"/../users/userSubset.json"
+    with open(file_path) as json_fil:
         userSubsetDetails = json.load(json_fil)
 
     for key in userSubsetDetails:

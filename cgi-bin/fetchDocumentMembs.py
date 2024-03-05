@@ -2,7 +2,7 @@
 import cgi, cgitb
 from dotenv import load_dotenv
 
-import utility
+import utility, os
 # Load environment variables from .env file
 load_dotenv()
 cgitb.enable()
@@ -15,7 +15,10 @@ user_id = form.getvalue('userID')
 # Fetch documentMembs data based on userID
 # Implement your logic here to retrieve data
 # For example, reading from a file:
-file_path = f"../users/{user_id}/{utility.getMode(user_id)}documentMembers"
+
+script_dir = os.path.dirname(os.path.realpath(__file__))
+project_root = os.path.join(script_dir, "..") 
+file_path = project_root + f"/../users/{user_id}/{utility.getMode(user_id)}documentMembers"
 fin = open(file_path, "r")
 data = fin.read()
 fin.close()

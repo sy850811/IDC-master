@@ -1,7 +1,10 @@
 import numpy as np
 from numpy import genfromtxt
 
-file_path = f"../users/baqia/documentDistance"
+import os
+script_dir = os.path.dirname(os.path.realpath(__file__))
+project_root = os.path.join(script_dir, "..") 
+file_path = project_root + f"/../users/baqia/documentDistance"
 data = genfromtxt(file_path, delimiter=',')[:,:100]
 # Convert list to string
 

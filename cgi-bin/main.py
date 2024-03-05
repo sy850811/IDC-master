@@ -4,6 +4,7 @@
 import bestCmeans
 import utility
 import cgi, cgitb
+import os
 import json
 from scipy.spatial.distance import cosine
 import numpy as np
@@ -202,7 +203,9 @@ try:
     # termClustersFile.close()
 
     termClustersArray = []
-    file_path = f"../users/{userID}/{utility.getMode(userID)}termClusters"
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    project_root = os.path.join(script_dir, "..") 
+    file_path = project_root + f"/../users/{userID}/{utility.getMode(userID)}termClusters"
     with open(file_path, "r") as file:
         for line in file:
             line = line.strip()
