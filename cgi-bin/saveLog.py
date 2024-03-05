@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.10
+#!/home/ubuntu/IDC/bin/python
 
 import cgi, cgitb 
 import sys

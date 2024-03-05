@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.10
+#!/home/ubuntu/IDC/bin/python
 
 from argparse import ArgumentParser, FileType
 from os.path import abspath, dirname, isfile, join as path_join

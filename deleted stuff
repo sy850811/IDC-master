@@ -2511,7 +2511,7 @@
 
 // documentClusterDataString.py
 
-// #!/usr/bin/env python3.10
+// #!/home/ubuntu/IDC/bin/python
 
 // # Author: Ehsan Sherkat - 2017
 // import sys
