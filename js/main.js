@@ -90,7 +90,7 @@ function showNewDocument() {
     if (parseInt(currentDocumentNumber) + 1 +18 >= numberOfDocumnetsVariable) { // remove 18 from here
       //call questionnaires
       $("#fullpage").html(`
-    <iframe scrolling="no" frameborder="0"
+    <iframe scrolling="yes" frameborder="0"
     src="https://surveys.dal.ca/opinio/s?s=76083"
     style="width: 100%; height: 100%; border: none;">
     </iframe>`);
@@ -132,7 +132,7 @@ function pageLoad() {
       userID = input;
 
       fileName = "../../users/" + input + "/out" + input + ".Matrix"; /////////////
-      userDirectory = "../../users/" + input + "/"; /////////////
+      // userDirectory = "../../users/" + input + "/"; /////////////
 
       $("#userName").html("Welcome " + userID + "!");
 
@@ -140,7 +140,7 @@ function pageLoad() {
         type: "POST",
         url: "./cgi-bin/pp.py",
         data: {
-          userDirectory: JSON.stringify(userDirectory),
+          user_id: JSON.stringify(input),
           status: JSON.stringify("0"),
         },
         success: function (msg) {
@@ -184,7 +184,7 @@ function pageLoad() {
               "Your username does not exist, please enter a valid username! or contact the administrator."
             );
           } else if (status == "no") {
-            getListOfSessions("first");
+            // getListOfSessions("first");
             if (sessions.length > 0) {
               loadSessionConfirmed = confirm(
                 "You have saved sessions. Do you want to load the latest one?"
@@ -205,8 +205,8 @@ function pageLoad() {
                 var date = sessionName.substring(0, sessionName.indexOf(" @ "));
                 var sessionValue = name + " @ " + date;
 
-                loadSession(sessionName);
-                getListOfSessions(sessionValue);
+                // loadSession(sessionName);
+                // getListOfSessions(sessionValue);
               }
             }
             if (!loadSessionConfirmed) {
@@ -289,21 +289,7 @@ function IsNumeric(data) {
   return parseFloat(data) == data;
 }
 
-/**
- * Remove all zip files in the user directory
- */
-function removeZip() {
-  $.ajax({
-    type: "POST",
-    url: "./cgi-bin/deleteZip.py",
-    data: { userDirectory: JSON.stringify(userDirectory) },
-    async: false,
-    success: function (msg) {},
-    error: function (msg) {
-      alert("Error1 in removing zip files!");
-    },
-  });
-}
+
 
 /*
  * Run the clustering algorithm and get the results
@@ -313,7 +299,7 @@ function callServer() {
 
   $("body").css("cursor", "wait");
   //remove zip files
-  removeZip();
+  // removeZip();
 
   var date01 = new Date();
   var n01 = date01.getTime();
@@ -327,7 +313,6 @@ function callServer() {
       clusterNumber: clusterNumber,
       userU: userU,
       userID: JSON.stringify(userID),
-      userDirectory: userDirectory,
       serverData: JSON.stringify(serverData),
       serverClusetrName: JSON.stringify(serverClusetrName),
     },
@@ -520,7 +505,7 @@ function callServer() {
         $("#slider3_Textbox").removeAttr("disabled");
 
         //selecte the first session (empty one)
-        getListOfSessions("first");
+        // getListOfSessions("first");
 
         //change the mouse icon
         document.body.style.cursor = "auto";
@@ -1721,36 +1706,7 @@ function selectTheColor(element) {
   selectedColorInPalette = rgb2hex($(element).css("background-color"));
 }
 
-/**
- * Checks if the file exists in the user directory
- * @param fileName = file name
- * @return true if exists
- */
-function checkFileExists(fileName) {
-  var result = false;
 
-  $.ajax({
-    type: "POST",
-    url: "./cgi-bin/downloadCheck.py",
-    data: {
-      userDirectory: JSON.stringify(userDirectory),
-      fileName: JSON.stringify(fileName),
-    },
-    async: false,
-    success: function (msg) {
-      var status = msg["status"];
-
-      if (status == "yes") {
-        result = true;
-      }
-    },
-    error: function (msg) {
-      alert("Error1 in downloading the cluster!");
-    },
-  });
-
-  return result;
-}
 
 
 
@@ -3833,101 +3789,7 @@ function sessionNameValidity(name) {
   return valid;
 }
 
-/*
- * @param name = name of the session
- * Save the current session of the user.
- */
-function callSaveSession(sessionName) {
-  saveLog("callSaveSession");
 
-  //get note of the sessions
-  if (
-    sessionDescription !=
-    "This session was saved automatically before reclustering."
-  ) {
-    sessionDescription = $("#sessionNote").val();
-  }
-
-  //for no comment case
-  if (sessionDescription == null) {
-    sessionDescription = "";
-  }
-
-  //clear notes
-  $("#sessionNote").val("");
-
-  var tempRemovedDocuments = JSON.stringify(removedDocuments);
-
-  var currentdate = new Date();
-  currentdate =
-    twoDigitNumber(currentdate.getDate()) +
-    " " +
-    twoDigitNumber(currentdate.getMonth() + 1) +
-    " " +
-    currentdate.getFullYear() +
-    " " +
-    twoDigitNumber(currentdate.getHours()) +
-    "_" +
-    twoDigitNumber(currentdate.getMinutes()) +
-    "_" +
-    twoDigitNumber(currentdate.getSeconds());
-
-  var fileName = userID + "#$" + currentdate + " @ " + sessionName;
-  var sessionValue = sessionName + " @ " + currentdate;
-
-  //get the new list of cluster words
-  clusterWords = getNewClusterWords();
-
-  $.ajax({
-    type: "POST",
-    url: "./cgi-bin/SessionSave.py",
-    async: true,
-    data: {
-      fileName: JSON.stringify(fileName),
-      userDirectory: JSON.stringify(userDirectory),
-      clusterWords: JSON.stringify(clusterWords),
-      clusterKeyTerms: JSON.stringify(clusterKeyTerms),
-      clusterDocuments: JSON.stringify(clusterDocuments),
-      clusterCloud: JSON.stringify(clusterCloud),
-      termClusterData: JSON.stringify(termClusterData),
-      termClusterDataString: JSON.stringify(termClusterDataString),
-      documentClusterData: JSON.stringify(documentClusterData),
-      removedDocuments: JSON.stringify(tempRemovedDocuments),
-      gravity: JSON.stringify(gravity),
-      linkDistance: JSON.stringify(linkDistance),
-      cosineDistance: JSON.stringify($("#slider1").slider("value") / 100),
-      documentsName: JSON.stringify(documentsNameString),
-      documentDocumentSimilarity: JSON.stringify(
-        documentDocumentSimilarityString
-      ),
-      termDocumentSimilarity: JSON.stringify(termDocumentSimilarityString),
-      sessionDescription: JSON.stringify(sessionDescription),
-      silhouette: JSON.stringify(silhouette),
-      documentClusterDataString: JSON.stringify(documentClusterDataString),
-    },
-    success: function (msg) {
-      var status = msg["status"];
-
-      if (status == "yes") {
-        sessionDescription = "";
-        alert("Session saved successfully.");
-
-        //select the latest session
-        sessionValue = sessionValue.replace("_", ":").replace("_", ":");
-        getListOfSessions("first");
-      }
-      if (status == "no") {
-        alert("Error1 in saving the session!");
-      }
-      if (status == "error") {
-        alert("Error3 in saving the session!");
-      }
-    },
-    error: function (msg) {
-      alert("Error2 in saving the session!");
-    },
-  });
-}
 
 /*
  * Save the current session of the user.
@@ -3947,7 +3809,7 @@ function saveSession() {
         sessionName = prompt("Please enter name of the session:", "");
       }
 
-      callSaveSession(sessionName);
+      // callSaveSession(sessionName);
     } else {
       alert("Nothing to be saved!");
     }
@@ -3992,58 +3854,7 @@ function getNewClusterWords() {
   return JSON.parse(tempClusterWords);
 }
 
-/*
- * Delete the selected session.
- */
-function deleteSession() {
-  saveLog("deleteSession");
 
-  if (userID != "") {
-    var sessionName = $("#session_select").val();
-
-    if (sessionName != null) {
-      var confirmed = confirm("Are you sure about deleting this session?");
-
-      if (confirmed) {
-        var date = sessionName
-          .substring(sessionName.indexOf(" @ ") + 3)
-          .replace("_", ":")
-          .replace("_", ":");
-        var name = sessionName.substring(0, sessionName.indexOf(" @ "));
-        sessionName = userID + "#$" + date + " @ " + name + ".session";
-        sessionName = sessionName.replace(":", "_").replace(":", "_");
-
-        $.ajax({
-          type: "POST",
-          url: "./cgi-bin/SessionRemove.py",
-          data: {
-            userDirectory: JSON.stringify(userDirectory),
-            sessionName: JSON.stringify(sessionName),
-          },
-          success: function (msg) {
-            var status = msg["status"];
-
-            if (status == "yes") {
-              alert("Session deleted successfully.");
-
-              getListOfSessions("first");
-            }
-            if (status == "no") {
-              alert("There was no session to be deleted!");
-            }
-          },
-          error: function (msg) {
-            alert("Error in deleting the session!");
-          },
-        });
-      }
-    } else {
-      alert("Please select a session!");
-    }
-  } else {
-    alert("Nothing to be deleted!");
-  }
-}
 
 /*
  * On page close.
@@ -4052,40 +3863,7 @@ function pageClose() {
   return "Did you saved your session?";
 }
 
-/*
- * Get the list of sessions (the name of the sessions).
- * @param sessionIndex = index of session that should be selected
- * @return the lis of sessions
- */
-function getListOfSessions(sessionIndex) {
-  sessions = [];
-  sessionsDescription = [];
 
-  $.ajax({
-    type: "POST",
-    url: "./cgi-bin/SessionList.py",
-    data: { userDirectory: JSON.stringify(userDirectory) },
-    async: false,
-    success: function (msg) {
-      var status = msg["status"];
-
-      if (status == "yes") {
-        sessions = msg["sessions"];
-        sessionsDescription = msg["sessionDescription"];
-        refreshSessionListBox(sessionIndex);
-      }
-      if (status == "no") {
-        refreshSessionListBox();
-      }
-      if (status == "error") {
-        alert("Error1 in finding the list of sessions!");
-      }
-    },
-    error: function (msg) {
-      alert("Error2 in finding the list of sessions!");
-    },
-  });
-}
 
 /*
  * Refresh list of sessions in listBox
@@ -4133,165 +3911,7 @@ function refreshSessionListBox(sessionIndex) {
   );
 }
 
-/*
- * load session
- * @param sessionName = the name of session to be loaded
- */
-function loadSession(sessionName) {
-  saveLog("loadSession");
 
-  //change cursor
-  $("body").css("cursor", "wait");
-
-  //clear screen
-  clearScreen();
-
-  //remove zip files
-  removeZip();
-
-  sessionName = sessionName.replace(":", "_").replace(":", "_");
-
-  sessionName = userID + "#$" + sessionName + ".session";
-
-  $.ajax({
-    type: "POST",
-    url: "./cgi-bin/SessionLoad.py",
-    cache: false,
-    traditional: true,
-    data: {
-      userDirectory: JSON.stringify(userDirectory),
-      sessionName: JSON.stringify(sessionName),
-    },
-    success: function (msg) {
-      $("body").css("cursor", "auto");
-
-      var status = msg["status"];
-
-      if (status == "no") {
-        alert("Such session does not exists!");
-      } else if (status == "error") {
-        alert("Error in retrieving the session!");
-      } else if (status == "yes") {
-        clearScreen();
-
-        //load session data;
-        var data = JSON.parse(msg["data"]);
-
-        clusterWords = data.clusterWords; //the name and the key terms of clusters
-        clusterKeyTerms = data.clusterKeyTerms; //the key terms of clusters are here
-        clusterDocuments = data.clusterDocuments; //the list of documents of cluster
-        clusterCloud = data.clusterCloud; //the cloud terms of cluster
-        termClusterData = data.termClusterData; //the term cluster data
-        termClusterDataString = data.termClusterDataString; //the string of the term cluster data (for changing it later)
-        documentClusterData = data.documentClusterData; //the document cluster data
-        documentClusterDataString = data.documentClusterDataString; //the string of the documnet cluster data (for changing it later)
-        silhouette = data.silhouette; //silhouette
-        gravity = data.gravity;
-        linkDistance = data.linkDistance;
-        var cosineDistance = data.cosineDistance;
-        json2arrayRemovedDocuments(data.removedDocuments);
-
-        //load note of user
-        $("#sessionNote").val(data.sessionDescription);
-
-        //for list of all terms of the collection
-        // create request object
-        var asyncRequest = new XMLHttpRequest();
-        // asyncRequest.open(
-        //   "POST",
-        //   "./" + userID + "/" + "out" + userID + ".Terms",
-        //   false
-        // );
-        // asyncRequest.send(); // send the request
-
-        asyncRequest.open("POST", "./cgi-bin/Terms.py", false);
-        asyncRequest.setRequestHeader(
-          "Content-Type",
-          "application/x-www-form-urlencoded"
-        );
-        asyncRequest.send("userID=" + encodeURIComponent(userID));
-
-        // allWords = d3.csv.parse(asyncRequest.responseText);
-        allWords = asyncRequest.responseText.split("\n"); // .split("\r\n")
-
-        //load clusters
-        for (var i = 0; i < clusterWords.length; i++) {
-          //create cluster
-          createCluster(clusterWords[i].cluster);
-
-          //add terms to the cluster
-          for (var j = 0; j < clusterWords[i].words.length; j++) {
-            x = document.getElementById(clusterWords[i].cluster);
-
-            $(x.getElementsByClassName("sortable")).append(
-              "<li class='ui-state-default ui-sortable-handle' onmousedown=\"wordMouseDown(event)\"><span class='terms'>" +
-                clusterWords[i].words[j].word +
-                "</span></li>"
-            );
-          }
-        }
-
-        //get the list of documents name
-        documentsNameString = data.documentsName;
-        documentsName = documentsNameString.split("\n"); // .split("\r\n")
-
-        //get document-document similarity matrix
-        documentDocumentSimilarityString = data.documentDocumentSimilarity;
-        var temp = documentDocumentSimilarityString.split("\n"); // .split("\r\n")
-        for (var i = 0; i < temp.length; i++) {
-          if (temp[i].length > 0) {
-            documentDocumentSimilarity[i] = temp[i].split(",");
-          }
-        }
-
-        //get term-document matrix
-        termDocumentSimilarityString = data.termDocumentSimilarity;
-        var temp = termDocumentSimilarityString.split("\n"); // .split("\r\n")
-        for (var i = 0; i < temp.length; i++) {
-          if (temp[i].length > 0) {
-            termDocumentSimilarity[i] = temp[i].split(",");
-          }
-        }
-
-        //get general view graph
-        // generalViewGraph = getGeneralViewGraph(0.97);
-
-        //load General View
-        // generalViewLoader(cosineDistance);
-
-        //set the sliders value
-        $("#slider1").slider("value", parseInt(cosineDistance * 100));
-        $("#slider2").slider("value", parseInt(linkDistance));
-        $("#slider3").slider("value", parseInt(gravity * 100));
-        $("#slider1_Textbox").val(parseInt(cosineDistance * 100));
-        $("#slider2_Textbox").val(parseInt(linkDistance));
-        $("#slider3_Textbox").val(parseInt(gravity * 100));
-
-        //refresh tree view
-        refreshTreeView();
-
-        //select the first cloud
-        clusterClicked(clusterWords[0].cluster);
-
-        $("#slider1").slider("enable");
-        $("#slider2").slider("enable");
-        $("#slider3").slider("enable");
-        $("#slider1_Textbox").removeAttr("disabled");
-        $("#slider2_Textbox").removeAttr("disabled");
-        $("#slider3_Textbox").removeAttr("disabled");
-
-        //show silhouette
-        // $("#silhouette").append("Silhouette: " + silhouette);
-
-        $("body").css("cursor", "auto");
-      }
-    },
-    error: function (msg) {
-      $("body").css("cursor", "auto");
-      alert("Error in retrieving the session!");
-    },
-  });
-}
 
 function json2arrayRemovedDocuments(data) {
   data = data.replace("[", "").replace("]", "");
@@ -4872,7 +4492,7 @@ function saveLog(command) {
     cache: false,
     traditional: true,
     data: {
-      userDirectory: JSON.stringify(userID),
+      userID: JSON.stringify(userID),
       command: JSON.stringify(command),
     },
   });

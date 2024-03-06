@@ -4,7 +4,6 @@
 import bestCmeans
 import utility
 import cgi, cgitb
-import os
 import json
 from scipy.spatial.distance import cosine
 import numpy as np
@@ -22,11 +21,14 @@ try:
     cgitb.enable()
      
 
-    userDirectory = form.getvalue('userDirectory')
+    # userDirectory = form.getvalue('userDirectory')
     userID = eval(form.getvalue('userID'))
     firstTime = eval(form.getvalue('userU'))#if it is the first time that the algorithm is running -1:first +1:interaction
     numberOfClusters = eval(form.getvalue('clusterNumber'))# number of clusters
     confidenceUser = 50 #///////////// not sent from javascript but expected here # faulty code
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    project_root = os.path.join(script_dir, "..")
+    userDirectory = os.path.join(project_root, f"../users/{userID}/")
 
     # for testing:
     # label_file = open("/home/ehsan/Desktop/newsgroup5/fileList", 'r')

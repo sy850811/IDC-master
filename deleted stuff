@@ -2559,3 +2559,649 @@
 //     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
 //     print("Content-type:application/json\r\n\r\n")
 //     print(json.dumps({'status':'error', 'except':json.dumps(str(e) + " Error line:" + str(exc_tb.tb_lineno) + " Error type:" + str(exc_type) + " File name:" + fname)}))
+
+/*
+ * Delete the selected session.
+ */
+// function deleteSession() {
+//   saveLog("deleteSession");
+
+//   if (userID != "") {
+//     var sessionName = $("#session_select").val();
+
+//     if (sessionName != null) {
+//       var confirmed = confirm("Are you sure about deleting this session?");
+
+//       if (confirmed) {
+//         var date = sessionName
+//           .substring(sessionName.indexOf(" @ ") + 3)
+//           .replace("_", ":")
+//           .replace("_", ":");
+//         var name = sessionName.substring(0, sessionName.indexOf(" @ "));
+//         sessionName = userID + "#$" + date + " @ " + name + ".session";
+//         sessionName = sessionName.replace(":", "_").replace(":", "_");
+
+//         $.ajax({
+//           type: "POST",
+//           url: "./cgi-bin/SessionRemove.py",
+//           data: {
+//             userDirectory: JSON.stringify(userDirectory),
+//             sessionName: JSON.stringify(sessionName),
+//           },
+//           success: function (msg) {
+//             var status = msg["status"];
+
+//             if (status == "yes") {
+//               alert("Session deleted successfully.");
+
+//               getListOfSessions("first");
+//             }
+//             if (status == "no") {
+//               alert("There was no session to be deleted!");
+//             }
+//           },
+//           error: function (msg) {
+//             alert("Error in deleting the session!");
+//           },
+//         });
+//       }
+//     } else {
+//       alert("Please select a session!");
+//     }
+//   } else {
+//     alert("Nothing to be deleted!");
+//   }
+// }
+
+/**
+ * Remove all zip files in the user directory
+ */
+// function removeZip() {
+//     $.ajax({
+//       type: "POST",
+//       url: "./cgi-bin/deleteZip.py",
+//       data: { userDirectory: JSON.stringify(userDirectory) },
+//       async: false,
+//       success: function (msg) {},
+//       error: function (msg) {
+//         alert("Error1 in removing zip files!");
+//       },
+//     });
+//   }
+
+/**
+ * Checks if the file exists in the user directory
+ * @param fileName = file name
+ * @return true if exists
+ */
+// function checkFileExists(fileName) {
+//     var result = false;
+  
+//     $.ajax({
+//       type: "POST",
+//       url: "./cgi-bin/downloadCheck.py",
+//       data: {
+//         userDirectory: JSON.stringify(userDirectory),
+//         fileName: JSON.stringify(fileName),
+//       },
+//       async: false,
+//       success: function (msg) {
+//         var status = msg["status"];
+  
+//         if (status == "yes") {
+//           result = true;
+//         }
+//       },
+//       error: function (msg) {
+//         alert("Error1 in downloading the cluster!");
+//       },
+//     });
+  
+//     return result;
+//   }
+
+/*
+ * @param name = name of the session
+ * Save the current session of the user.
+ */
+// function callSaveSession(sessionName) {
+//     saveLog("callSaveSession");
+  
+//     //get note of the sessions
+//     if (
+//       sessionDescription !=
+//       "This session was saved automatically before reclustering."
+//     ) {
+//       sessionDescription = $("#sessionNote").val();
+//     }
+  
+//     //for no comment case
+//     if (sessionDescription == null) {
+//       sessionDescription = "";
+//     }
+  
+//     //clear notes
+//     $("#sessionNote").val("");
+  
+//     var tempRemovedDocuments = JSON.stringify(removedDocuments);
+  
+//     var currentdate = new Date();
+//     currentdate =
+//       twoDigitNumber(currentdate.getDate()) +
+//       " " +
+//       twoDigitNumber(currentdate.getMonth() + 1) +
+//       " " +
+//       currentdate.getFullYear() +
+//       " " +
+//       twoDigitNumber(currentdate.getHours()) +
+//       "_" +
+//       twoDigitNumber(currentdate.getMinutes()) +
+//       "_" +
+//       twoDigitNumber(currentdate.getSeconds());
+  
+//     var fileName = userID + "#$" + currentdate + " @ " + sessionName;
+//     var sessionValue = sessionName + " @ " + currentdate;
+  
+//     //get the new list of cluster words
+//     clusterWords = getNewClusterWords();
+  
+//     $.ajax({
+//       type: "POST",
+//       url: "./cgi-bin/SessionSave.py",
+//       async: true,
+//       data: {
+//         fileName: JSON.stringify(fileName),
+//         userDirectory: JSON.stringify(userDirectory),
+//         clusterWords: JSON.stringify(clusterWords),
+//         clusterKeyTerms: JSON.stringify(clusterKeyTerms),
+//         clusterDocuments: JSON.stringify(clusterDocuments),
+//         clusterCloud: JSON.stringify(clusterCloud),
+//         termClusterData: JSON.stringify(termClusterData),
+//         termClusterDataString: JSON.stringify(termClusterDataString),
+//         documentClusterData: JSON.stringify(documentClusterData),
+//         removedDocuments: JSON.stringify(tempRemovedDocuments),
+//         gravity: JSON.stringify(gravity),
+//         linkDistance: JSON.stringify(linkDistance),
+//         cosineDistance: JSON.stringify($("#slider1").slider("value") / 100),
+//         documentsName: JSON.stringify(documentsNameString),
+//         documentDocumentSimilarity: JSON.stringify(
+//           documentDocumentSimilarityString
+//         ),
+//         termDocumentSimilarity: JSON.stringify(termDocumentSimilarityString),
+//         sessionDescription: JSON.stringify(sessionDescription),
+//         silhouette: JSON.stringify(silhouette),
+//         documentClusterDataString: JSON.stringify(documentClusterDataString),
+//       },
+//       success: function (msg) {
+//         var status = msg["status"];
+  
+//         if (status == "yes") {
+//           sessionDescription = "";
+//           alert("Session saved successfully.");
+  
+//           //select the latest session
+//           sessionValue = sessionValue.replace("_", ":").replace("_", ":");
+//           getListOfSessions("first");
+//         }
+//         if (status == "no") {
+//           alert("Error1 in saving the session!");
+//         }
+//         if (status == "error") {
+//           alert("Error3 in saving the session!");
+//         }
+//       },
+//       error: function (msg) {
+//         alert("Error2 in saving the session!");
+//       },
+//     });
+//   }
+
+/*
+ * Delete the selected session.
+ */
+// function deleteSession() {
+//     saveLog("deleteSession");
+  
+//     if (userID != "") {
+//       var sessionName = $("#session_select").val();
+  
+//       if (sessionName != null) {
+//         var confirmed = confirm("Are you sure about deleting this session?");
+  
+//         if (confirmed) {
+//           var date = sessionName
+//             .substring(sessionName.indexOf(" @ ") + 3)
+//             .replace("_", ":")
+//             .replace("_", ":");
+//           var name = sessionName.substring(0, sessionName.indexOf(" @ "));
+//           sessionName = userID + "#$" + date + " @ " + name + ".session";
+//           sessionName = sessionName.replace(":", "_").replace(":", "_");
+  
+//           $.ajax({
+//             type: "POST",
+//             url: "./cgi-bin/SessionRemove.py",
+//             data: {
+//               userDirectory: JSON.stringify(userDirectory),
+//               sessionName: JSON.stringify(sessionName),
+//             },
+//             success: function (msg) {
+//               var status = msg["status"];
+  
+//               if (status == "yes") {
+//                 alert("Session deleted successfully.");
+  
+//                 getListOfSessions("first");
+//               }
+//               if (status == "no") {
+//                 alert("There was no session to be deleted!");
+//               }
+//             },
+//             error: function (msg) {
+//               alert("Error in deleting the session!");
+//             },
+//           });
+//         }
+//       } else {
+//         alert("Please select a session!");
+//       }
+//     } else {
+//       alert("Nothing to be deleted!");
+//     }
+//   }
+
+/*
+ * Get the list of sessions (the name of the sessions).
+ * @param sessionIndex = index of session that should be selected
+ * @return the lis of sessions
+ */
+// function getListOfSessions(sessionIndex) {
+//     sessions = [];
+//     sessionsDescription = [];
+  
+//     $.ajax({
+//       type: "POST",
+//       url: "./cgi-bin/SessionList.py",
+//       data: { userDirectory: JSON.stringify(userDirectory) },
+//       async: false,
+//       success: function (msg) {
+//         var status = msg["status"];
+  
+//         if (status == "yes") {
+//           sessions = msg["sessions"];
+//           sessionsDescription = msg["sessionDescription"];
+//           refreshSessionListBox(sessionIndex);
+//         }
+//         if (status == "no") {
+//           refreshSessionListBox();
+//         }
+//         if (status == "error") {
+//           alert("Error1 in finding the list of sessions!");
+//         }
+//       },
+//       error: function (msg) {
+//         alert("Error2 in finding the list of sessions!");
+//       },
+//     });
+//   }
+
+/*
+ * load session
+ * @param sessionName = the name of session to be loaded
+ */
+// function loadSession(sessionName) {
+//   saveLog("loadSession");
+
+//   //change cursor
+//   $("body").css("cursor", "wait");
+
+//   //clear screen
+//   clearScreen();
+
+//   //remove zip files
+//   // removeZip();
+
+//   sessionName = sessionName.replace(":", "_").replace(":", "_");
+
+//   sessionName = userID + "#$" + sessionName + ".session";
+
+//   $.ajax({
+//     type: "POST",
+//     url: "./cgi-bin/SessionLoad.py",
+//     cache: false,
+//     traditional: true,
+//     data: {
+//       userDirectory: JSON.stringify(userDirectory),
+//       sessionName: JSON.stringify(sessionName),
+//     },
+//     success: function (msg) {
+//       $("body").css("cursor", "auto");
+
+//       var status = msg["status"];
+
+//       if (status == "no") {
+//         alert("Such session does not exists!");
+//       } else if (status == "error") {
+//         alert("Error in retrieving the session!");
+//       } else if (status == "yes") {
+//         clearScreen();
+
+//         //load session data;
+//         var data = JSON.parse(msg["data"]);
+
+//         clusterWords = data.clusterWords; //the name and the key terms of clusters
+//         clusterKeyTerms = data.clusterKeyTerms; //the key terms of clusters are here
+//         clusterDocuments = data.clusterDocuments; //the list of documents of cluster
+//         clusterCloud = data.clusterCloud; //the cloud terms of cluster
+//         termClusterData = data.termClusterData; //the term cluster data
+//         termClusterDataString = data.termClusterDataString; //the string of the term cluster data (for changing it later)
+//         documentClusterData = data.documentClusterData; //the document cluster data
+//         documentClusterDataString = data.documentClusterDataString; //the string of the documnet cluster data (for changing it later)
+//         silhouette = data.silhouette; //silhouette
+//         gravity = data.gravity;
+//         linkDistance = data.linkDistance;
+//         var cosineDistance = data.cosineDistance;
+//         json2arrayRemovedDocuments(data.removedDocuments);
+
+//         //load note of user
+//         $("#sessionNote").val(data.sessionDescription);
+
+//         //for list of all terms of the collection
+//         // create request object
+//         var asyncRequest = new XMLHttpRequest();
+//         // asyncRequest.open(
+//         //   "POST",
+//         //   "./" + userID + "/" + "out" + userID + ".Terms",
+//         //   false
+//         // );
+//         // asyncRequest.send(); // send the request
+
+//         asyncRequest.open("POST", "./cgi-bin/Terms.py", false);
+//         asyncRequest.setRequestHeader(
+//           "Content-Type",
+//           "application/x-www-form-urlencoded"
+//         );
+//         asyncRequest.send("userID=" + encodeURIComponent(userID));
+
+//         // allWords = d3.csv.parse(asyncRequest.responseText);
+//         allWords = asyncRequest.responseText.split("\n"); // .split("\r\n")
+
+//         //load clusters
+//         for (var i = 0; i < clusterWords.length; i++) {
+//           //create cluster
+//           createCluster(clusterWords[i].cluster);
+
+//           //add terms to the cluster
+//           for (var j = 0; j < clusterWords[i].words.length; j++) {
+//             x = document.getElementById(clusterWords[i].cluster);
+
+//             $(x.getElementsByClassName("sortable")).append(
+//               "<li class='ui-state-default ui-sortable-handle' onmousedown=\"wordMouseDown(event)\"><span class='terms'>" +
+//                 clusterWords[i].words[j].word +
+//                 "</span></li>"
+//             );
+//           }
+//         }
+
+//         //get the list of documents name
+//         documentsNameString = data.documentsName;
+//         documentsName = documentsNameString.split("\n"); // .split("\r\n")
+
+//         //get document-document similarity matrix
+//         documentDocumentSimilarityString = data.documentDocumentSimilarity;
+//         var temp = documentDocumentSimilarityString.split("\n"); // .split("\r\n")
+//         for (var i = 0; i < temp.length; i++) {
+//           if (temp[i].length > 0) {
+//             documentDocumentSimilarity[i] = temp[i].split(",");
+//           }
+//         }
+
+//         //get term-document matrix
+//         termDocumentSimilarityString = data.termDocumentSimilarity;
+//         var temp = termDocumentSimilarityString.split("\n"); // .split("\r\n")
+//         for (var i = 0; i < temp.length; i++) {
+//           if (temp[i].length > 0) {
+//             termDocumentSimilarity[i] = temp[i].split(",");
+//           }
+//         }
+
+//         //get general view graph
+//         // generalViewGraph = getGeneralViewGraph(0.97);
+
+//         //load General View
+//         // generalViewLoader(cosineDistance);
+
+//         //set the sliders value
+//         $("#slider1").slider("value", parseInt(cosineDistance * 100));
+//         $("#slider2").slider("value", parseInt(linkDistance));
+//         $("#slider3").slider("value", parseInt(gravity * 100));
+//         $("#slider1_Textbox").val(parseInt(cosineDistance * 100));
+//         $("#slider2_Textbox").val(parseInt(linkDistance));
+//         $("#slider3_Textbox").val(parseInt(gravity * 100));
+
+//         //refresh tree view
+//         refreshTreeView();
+
+//         //select the first cloud
+//         clusterClicked(clusterWords[0].cluster);
+
+//         $("#slider1").slider("enable");
+//         $("#slider2").slider("enable");
+//         $("#slider3").slider("enable");
+//         $("#slider1_Textbox").removeAttr("disabled");
+//         $("#slider2_Textbox").removeAttr("disabled");
+//         $("#slider3_Textbox").removeAttr("disabled");
+
+//         //show silhouette
+//         // $("#silhouette").append("Silhouette: " + silhouette);
+
+//         $("body").css("cursor", "auto");
+//       }
+//     },
+//     error: function (msg) {
+//       $("body").css("cursor", "auto");
+//       alert("Error in retrieving the session!");
+//     },
+//   });
+// }
+
+// ################################################################################
+// # Peach - Computational Intelligence for Python
+// # Jose Alexandre Nalon
+// #
+// # This file: fuzzy/cmeans.py
+// # Fuzzy C-Means algorithm
+// ################################################################################
+
+// # Doc string, reStructuredText formatted:
+// __doc__ = """
+// Fuzzy C-Means
+
+// Fuzzy C-Means is a clustering algorithm based on fuzzy logic.
+
+// This package implements the fuzzy c-means algorithm for clustering and
+// classification. This algorithm is very simple, yet very efficient. From a
+// training set and an initial condition which gives the membership values of each
+// example in the training set to the clusters, it converges very fastly to crisper
+// sets.
+
+// The initial conditions, ie, the starting membership, must follow some rules.
+// Please, refer to any bibliography about the subject to see why. Those rules are:
+// no example might have membership 1 in every class, and the sum of the membership
+// of every component must be equal to 1. This means that the initial condition is
+// a fuzzy partition of the universe.
+// """
+
+
+// ################################################################################
+// import numpy
+// import numbers
+// from numpy import dot, array, sum, zeros, outer, any
+// from scipy.spatial.distance import cdist
+
+// ################################################################################
+// # Fuzzy C-Means class
+// ################################################################################
+// class FuzzyCMeans(object):
+    
+    
+//     def __init__(self, training_set, k, m=2.0, distance='euclidean', userU = -1, imax = 25, emax = 0.01):
+        
+//         self.__x = training_set
+//         self.__k = k
+//         self.m = m
+//         self.dist = distance
+//         self.userU = userU
+//         self.imax = imax
+//         self.emax = emax
+       
+        
+//         if (isinstance(userU, numbers.Number)):
+//             self.__mu = self.initializeFCM()
+//         else:
+//             _, N = userU.shape
+//             index = numpy.where(userU > 0);
+//             for j in range(index[1].size):
+//                 userU[:, index[1][j]] = userU[:, index[1][j]]/sum(userU[:, index[1][j]])
+//             self.__mu = userU
+            
+//         self.__obj = 0
+        
+// 	#self.__c, self.__obj = self.centers()
+
+
+//     def __getc(self):
+//         return self.__c
+    
+//     def __setc(self, c):
+//         self.__c = array(c).reshape(self.__c.shape)
+        
+//     c = property(__getc, __setc)
+    
+
+//     def __getmu(self):
+//         return self.__mu
+    
+//     mu = property(__getmu, None)
+    
+
+//     def __getx(self):
+//         return self.__x
+    
+//     x = property(__getx, None)
+    
+//     def initializeFCM(self):
+        
+//         x = self.__x
+        
+//         N, _ = x.shape
+        
+//         U = numpy.random.random((self.__k, N))
+        
+//         for j in range(N):
+//             U[:,j] = U[:,j]/sum(U[:,j])
+            
+//         return U
+    
+//     def centers(self):
+        
+//         x = self.__x
+        
+//         _, M = x.shape
+        
+//         mm = self.__mu ** self.m
+        
+//         tempRep = numpy.dot(numpy.ones((M,1)), numpy.asanyarray([numpy.sum(mm, axis=1)]))
+        
+        
+//         c = dot(mm, self.__x) / tempRep.T
+        
+        
+//         self.__c = c
+        
+        
+        
+//         tempDist = cdist(c, x, self.dist) #self.dist 'cosine'
+//         dist = tempDist**2.0
+//         obj = numpy.sum((dist**2.0)*mm)
+//         self.__obj = obj
+        
+//         return self.__c, self.__obj
+
+//     def membership(self):
+        
+//         x = self.__x
+//         c = self.__c
+//         N, _ = x.shape
+//         k = self.__k
+//         r = numpy.zeros((k, N))      # r will become mu
+// 	    tempDist = cdist(c, x, self.dist) #self.dist 'cosine'
+//         dist = tempDist**2.0
+//         temp = dist**(-2.0/(self.m-1))
+//         tempSum = numpy.asanyarray([numpy.sum(temp, axis=0)])
+//         r = temp/(numpy.dot(numpy.ones((k,1)), tempSum))
+        
+//         self.__mu = r
+//         return self.__mu
+
+//     def step(self):
+//         '''
+//         This method runs one step of the algorithm. It might be useful to track
+//         the changes in the parameters.
+
+//         :Returns:
+//           The norm of the change in the membership values of the examples. It
+//           can be used to track convergence and as an estimate of the error.
+//         '''
+//         #old = self.__mu
+//         old = self.__obj
+//         self.centers()
+//         self.membership()
+//         return numpy.abs(self.__obj - old)
+//         #return sum(self.__mu - old)**2.
+
+//     def __call__(self):
+//         '''
+//         The ``__call__`` interface is used to run the algorithm until
+//         convergence is found.
+
+//         :Parameters:
+//           emax
+//             Specifies the maximum error admitted in the execution of the
+//             algorithm. It defaults to 1.e-10. The error is tracked according to
+//             the norm returned by the ``step()`` method.
+//           imax
+//             Specifies the maximum number of iterations admitted in the execution
+//             of the algorithm. It defaults to 20.
+
+//         :Returns:
+//           An array containing, at each line, the vectors representing the
+//           centers of the clustered regions.
+//         '''
+// 	error = 1.0
+// 	emax = self.emax
+// 	imax = self.imax
+
+//         i = 0
+//         while error > emax and i < imax:
+//             error = self.step()
+            
+//             if not(isinstance(self.userU, numbers.Number)):
+//                 mu = self.__mu
+//                 k, N = mu.shape
+//                 index = numpy.where(self.userU > 0);
+//                 for j in range(index[1].size):
+//                     mu[:,index[1][j]] = 0
+//                 for j in range(index[1].size):
+//                     mu[index[0][j],index[1][j]] = self.userU[index[0][j],index[1][j]]
+//                 for j in range(index[1].size):
+//                     mu[:, index[1][j]] = mu[:, index[1][j]]/sum(mu[:, index[1][j]])
+//                 self.__mu = mu
+//             #print "obj: ", self.__obj
+//             i = i + 1
+//         return self.c
+
+
+// ################################################################################
+// # Test.
+// if __name__ == "__main__":
+//     pass
