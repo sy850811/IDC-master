@@ -76,7 +76,6 @@ def getMode(userID):
         if userID in userSubsetDetails[key]:
             # Select the last character of the key string
             currentSubset = int(key[-1])  # Convert last character to integer
-            print(f"For user: {str(userID)}, subset is: {str(currentSubset)}")
 
     if currentSubset == 3:
         return "proposed_"

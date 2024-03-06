@@ -27,4 +27,4 @@ try:
 	
 except Exception as e:
 	print("Content-type:application/json\r\n\r\n")
-	print(json.dumps({'status':'error', 'except':json.dumps(file_content)}))
+	print(json.dumps({'status':'error', 'except':json.dumps(file_name)}))
