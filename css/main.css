@@ -1661,6 +1661,27 @@ form label {
   z-index: 1000; /* Make sure it's on top */
   background: white; /* Optional: background color */
 }
+.introjs-skipbutton {
+  display: none !important;
+}
+.introjs-tooltip-header {
+  display: none !important;
+}
+.introjs-tooltip {
+  max-width: 600px; /* Set to desired maximum width */
+  width: auto; /* This will allow the tooltip to resize based on content, up to the max-width */
+}
+.wideTooltip {
+  max-width: 600px !important;
+  width: auto !important;
+}
+.introjs-tooltip.wideTooltip {
+  max-width: 600px !important; /* Adjust this value as needed */
+  white-space: normal !important; /* Ensure text wraps and does not overflow */
+}
 
-
+/* Additionally, if the tooltip header's width is not adjusting, target it specifically */
+.introjs-tooltip.wideTooltip .introjs-tooltip-header {
+  width: auto !important;
+}
 

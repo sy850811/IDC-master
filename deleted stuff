@@ -2511,7 +2511,7 @@
 
 // documentClusterDataString.py
 
-// #!/home/ubuntu/IDC/bin/python
+// #!/Applications/miniconda3/envs/IDC/bin/python
 
 // # Author: Ehsan Sherkat - 2017
 // import sys
@@ -3205,3 +3205,401 @@
 // # Test.
 // if __name__ == "__main__":
 //     pass
+
+
+// /*
+//  * clear the screen.
+//  */
+// function clearScreen() {
+//   //clear previous data
+//   tsneResult = new Array();
+
+//   $("#forceSilhouette_label").html("");
+
+//   clusterWords = ""; //the name and the key terms of clusters
+//   clusterKeyTerms = ""; //the key terms of clusters are here
+//   clusterDocuments = ""; //the list of documents of cluster
+//   clusterCloud = ""; //the cloud terms of cluster
+//   termClusterData = ""; //the term cluster data
+//   termClusterDataString = ""; //the string of the term cluster data (for changing it later)
+//   documentClusterData = ""; //the document cluster data
+//   documentClusterDataString = ""; //the string of the documnet cluster data (for changing it later)
+//   allWords = ""; //all words
+
+//   $("#panel4_1").html("");
+//   $("#doc_content").html("");
+//   $("#doc_select").html("");
+//   $("#DocumentClusterView").html("");
+//   $("#barcharts").html("");
+//   $("#selectable").html("");
+//   $("#TermClusterView").html("");
+//   $("#panel8_2").html("");
+//   $("#general_view1").html("");
+//   $("#general_view2").html("");
+//   $("#TsneSilhouette_label").html("");
+
+//   $("#slider1").slider("disable");
+//   $("#slider2").slider("disable");
+//   $("#slider3").slider("disable");
+//   $("#slider1_Textbox").attr("disabled", "disabled");
+//   $("#slider2_Textbox").attr("disabled", "disabled");
+//   $("#slider3_Textbox").attr("disabled", "disabled");
+
+//   $.jstree.destroy(); //clear tree view
+
+//   // $("#silhouette").html("");
+// }
+
+/*
+ * Send the desired terms of the users to the server in order to reclustering.
+ */
+// function SendData2Server() { ///////////////
+//   //save session before
+//   sessionDescription =
+//     "This session was saved automatically before reclustering.";
+//   callSaveSession("AutoSave");
+
+//   clusterNumber = document.getElementsByClassName("cluster").length;
+
+//   if (clusterNumber < 2) {
+//     userU = -1;
+//     alert("Your desired number of clusters should be at least 2!");
+//   } else {
+//     userU = +1;
+//     serverData = new Array();
+
+//     var confirmed = confirm(
+//       "Your desired number of clusters is " + clusterNumber
+//     );
+//     if (confirmed) {
+//       var clusters = document.getElementsByClassName("cluster");
+
+//       for (var i = 0; i < clusters.length; i++) {
+//         var clusterName = $(clusters[i]).attr("id");
+//         var terms = $(
+//           document
+//             .getElementById(clusterName)
+//             .getElementsByClassName("sortable")
+//         ).children();
+
+//         serverClusetrName[i] = clusterName;
+//         serverData[i] = new Array();
+//         for (var j = 0; j < terms.length; j++) {
+//           serverData[i][j] = $(terms[j]).text();
+//         }
+//       }
+
+//       clearScreen();
+//       callServer();
+//     }
+//   }
+// }
+
+/**
+ * Get Silhouette of force layout.
+ */
+// function forceSilhouette() {
+//   saveLog("forceSilhouette");
+
+//   force2.stop();
+
+//   $("#forceSilhouette_label").html("");
+
+//   var nodes = $(".node2");
+
+//   var forceResult = new Array();
+//   var forceLables = new Array();
+
+//   for (var i = 0; i < nodes.length; i++) {
+//     forceResult[i] = new Array();
+//     forceResult[i][0] = parseFloat($(nodes[i]).attr("cx"));
+//     forceResult[i][1] = parseFloat($(nodes[i]).attr("cy"));
+
+//     forceLables[i] = $(nodes[i]).css("fill");
+//   }
+
+//   // getForceSilhouette(forceResult, forceLables);
+// }
+/*
+ * Get  force Silhouette
+ * @param forceResult =  x and y dimensions
+ * @param forceLables = labels of documents
+ */
+// function getForceSilhouette(forceResult, forceLables) {
+//   $.ajax({
+//     type: "POST",
+//     url: "./cgi-bin/tsneSilhouette.py",
+//     data: {
+//       tsneResult: JSON.stringify(forceResult),
+//       tsneLables: JSON.stringify(forceLables),
+//     },
+//     success: function (msg) {
+//       var status = msg["status"];
+
+//       if (status == "yes") {
+//         var forceSilhouette = eval(msg["TsneSilhouette"]);
+//         forceSilhouette = forceSilhouette.toFixed(4);
+
+//         //show the tsne Silhouette
+//         $("#forceSilhouette_label").html(
+//           "Force layout Silhouette: " + forceSilhouette
+//         );
+//       }
+//       if (status == "no") {
+//         alert("Error1 in getting Force Silhouette!");
+//       }
+//       if (status == "error") {
+//         alert("Error2 in getting Force Silhouette!");
+//       }
+//     },
+//     error: function (msg) {
+//       alert("Error3 in getting Force Silhouette!");
+//     },
+//   });
+// }
+//write a function to make ajax request to explanation.py
+/**
+ * Highlight documents that have selected terms
+ * @param words = the selected words
+ */
+var docsHighlight = new Array(); //Highlighted docs
+// function highlightDocuments(words) {
+//   saveLog("highlightDocuments");
+
+//   docsHighlight = new Array();
+
+//   for (var i = 0; i < words.length; i++) {
+//     for (var j = 0; j < termDocumentSimilarity.length; j++) {
+//       var docScore = 0.0;
+//       docScore = termDocumentSimilarity[j][allWords.indexOf(words[i])];
+//       if (docScore > 0) {
+//         docsHighlight[documentsName[j]] = true;
+//       }
+//     }
+//   }
+
+//   //change the stroke of corresponding nodes (docs) in general view graph
+//   // node.style("stroke", function(o) {
+//   //   if(o.na == $(doc_select).val())
+//   //   {
+//   //     return "red";
+//   //   }
+//   //   else if(docsHighlight[o.na]) {
+//   //     return "blue";
+//   //   }
+//   //   else {
+//   //     return "#ccc";
+//   //   }
+//   // })
+
+//   // node.style("stroke-width", function(o) {
+//   //   if(docsHighlight[o.na] || o.na == $(doc_select).val()) {
+//   //     return "2px";
+//   //   }
+//   //   else {
+//   //     return "0.5px";
+//   //   }
+//   // })
+
+//   //change the opacity of corresponding nodes (docs) and links in general view graph
+//   node.style("opacity", function (o) {
+//     return docsHighlight[o.na] ? 1 : highlight_trans;
+//   });
+
+//   link.style("opacity", function (o) {
+//     return docsHighlight[o.source.na] && docsHighlight[o.target.na] ? 1 : 0;
+//   });
+
+//   node2.style("opacity", function (o) {
+//     return docsHighlight[o.na] ? 1 : highlight_trans;
+//   });
+
+//   link2.style("opacity", function (o) {
+//     return docsHighlight[o.source.na] && docsHighlight[o.target.na] ? 1 : 0;
+//   });
+// }
+
+/**
+ * Show the content of the selected file in the cluster tree view
+ * @param fileName = the name of selected file
+ */
+// function fileClicked(fileName) {
+//   console.log("fileClicked", fileName);
+//   <li 
+//     role="none" 
+//     data-jstree="{&quot;icon&quot;:&quot;img/pdf.gif&quot;}" 
+//     onclick="fileClicked(this)" 
+//     id="j2_3" class="jstree-node context-menu-three box menu-1 jstree-leaf">
+//       <i class="jstree-icon jstree-ocl" role="presentation"></i>
+//       <a class="jstree-anchor jstree-clicked" href="#" tabindex="-1" role="treeitem" aria-selected="true" aria-level="3" id="j2_3_anchor">
+//       <i class="jstree-icon jstree-themeicon jstree-themeicon-custom" role="presentation" style="background-image: url(&quot;img/pdf.gif&quot;); background-position: center center; background-size: auto;">
+//         </i>paper2.txt</a>
+//         </li>
+//   ////////////////////////////////////////////////////////////////////////////////////////  ///////////////////////////
+//   //// /////////// Add a dialog box maybe to show the selected document in the cluster ree //////////////////////////////
+//   ////////////////////////////////////////////////////////////////////////////////////////  ///////////////////////////
+//   // document.getElementById("doc_content").innerHTML = "";
+//   // loadDoc($(fileName).text());
+//   // // highlightDocGeneralView($(fileName).text());
+//   // createTermClusterChart();
+//   // //show the paralel cordinator view
+//   // var words = new Array(1);
+//   // var colors = {};
+//   // words[0] = $(fileName).text();
+//   // colors[words[0]] = $("#" + getSelectedClusterID() + " p").css(
+//   //   "background-color"
+//   // ); //"Blue";
+//   // paralelCordinator(
+//   //   documentClusterData,
+//   //   "#panel6",
+//   //   words,
+//   //   "#DocumentClusterView",
+//   //   colors
+//   // );
+//   // //change the selected list of documents
+//   // var docSelect = document.getElementById("doc_select");
+//   // for (var i = 0; i < docSelect.options.length; i++) {
+//   //   if (docSelect.options[i].innerHTML == $(fileName).text()) {
+//   //     docSelect.selectedIndex = i;
+//   //     break;
+//   //   }
+//   // }
+// }
+
+/**
+ * For cluster tooltip
+ * @param clusterName = cluster ID
+ */
+// function clusterToolTip(clusterName) {
+//   $("#" + clusterName).qtip({
+//     // Content
+//     content: {
+//       title: "Cluster Name: " + clusterName,
+//       text: "Number of Documents: " + numberOfDocumnets(clusterName),
+//     },
+
+//     // Positioning
+//     position: {
+//       at: "bottom center",
+//       my: "top center",
+//     },
+
+//     // Styles
+//     style: {
+//       classes: "qtip-rounded qtip-shadow",
+//     },
+//   });
+// }
+
+/**
+ * Rename Cluster Name in Graph
+ * @param oldName = old name of cluster
+ * @param oldName = new name of cluster
+ */
+// function renameClusterNameInGraph(oldName, newName) {
+//   var names = $(".clusterNameInGraph");
+
+//   //rename the cluster name in tooltip of node
+//   node.attr("data-hasqtip", function (d) {
+//     $(this).qtip({
+//       content: {
+//         text:
+//           '<strong>Document name:</strong><br><u class="hyperLink" onclick="showDocumentPDF($(this).text())">' +
+//           d.na +
+//           "</u><br><br><strong>List of clusters name:</strong><br>" +
+//           createListOfDocumentClustersName(
+//             renameCLusterNameInToolTip(d.cl, oldName, newName),
+//             d.na
+//           ),
+//       },
+//       hide: {
+//         fixed: true,
+//         delay: 700,
+//       },
+//       show: {
+//         delay: 700,
+//       },
+//       style: {
+//         classes: "qtip-rounded qtip-shadow",
+//       },
+//       position: {
+//         my: "center right",
+//         at: "center left",
+//       },
+//     });
+//   });
+
+//   node2.attr("data-hasqtip", function (d) {
+//     $(this).qtip({
+//       content: {
+//         text:
+//           '<strong>Document name:</strong><br><u class="hyperLink" onclick="showDocumentPDF($(this).text())">' +
+//           d.na +
+//           "</u><br><br><strong>List of clusters name:</strong><br>" +
+//           createListOfDocumentClustersName(
+//             renameCLusterNameInToolTip(d.cl, oldName, newName),
+//             d.na
+//           ),
+//       },
+//       hide: {
+//         fixed: true,
+//         delay: 700,
+//       },
+//       show: {
+//         delay: 700,
+//       },
+//       style: {
+//         classes: "qtip-rounded qtip-shadow",
+//       },
+//       position: {
+//         my: "center right",
+//         at: "center left",
+//       },
+//     });
+//   });
+
+//   //rename the cluster name in generalViewGraph
+//   for (var i = 0; i < generalViewGraph.nodes.length; i++) {
+//     var newClusters = "";
+//     var clusters = generalViewGraph.nodes[i].cl.split(",");
+
+//     for (var j = 0; j < clusters.length; j++) {
+//       var temp = "";
+//       if (clusters[j] == oldName) {
+//         temp = newName;
+//       } else {
+//         temp = clusters[j];
+//       }
+
+//       if (newClusters == "") {
+//         newClusters = temp;
+//       } else {
+//         newClusters += "," + temp;
+//       }
+//     }
+
+//     generalViewGraph.nodes[i].cl = newClusters;
+//   }
+
+//   for (var i = 0; i < generalViewGraph2.nodes.length; i++) {
+//     var newClusters = "";
+//     var clusters = generalViewGraph2.nodes[i].cl.split(",");
+
+//     for (var j = 0; j < clusters.length; j++) {
+//       var temp = "";
+//       if (clusters[j] == oldName) {
+//         temp = newName;
+//       } else {
+//         temp = clusters[j];
+//       }
+
+//       if (newClusters == "") {
+//         newClusters = temp;
+//       } else {
+//         newClusters += "," + temp;
+//       }
+//     }
+
+//     generalViewGraph2.nodes[i].cl = newClusters;
+//   }
+// }

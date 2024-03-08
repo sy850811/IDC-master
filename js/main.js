@@ -60,6 +60,7 @@ var currentSubset = null;
 var currentDocumentName = "";
 var numberOfDocumnetsVariable = 20;
 var termProbabilities = [];
+var numberOfDocumentsWithOnlyLocalExplanation = 1;
 /**
  * Load the system and clusters
  */
@@ -75,19 +76,33 @@ function showNewDocument() {
   5. se doc_content to the content of the document
   */
   //if $("#doc_content") is empty, then load the first document named paper0.txt
-  if ($("#doc_content").html() == "") {
-    currentDocumentName = "paper0.txt";
-    $("#doc_content").html(getDocumentContent(currentDocumentName));
+  if (document.getElementById("doc_content").innerHTML == "") {
+  currentDocumentName = "paper0.txt";
+  document.getElementById("doc_content").innerHTML = getDocumentContent(currentDocumentName);
+  // $("#selectable").css('visibility', 'hidden'); 
+  // #panel3
+  $("#panel3").css('visibility', 'hidden');
+  $("#panel4").css('visibility', 'hidden');
+  $("#panel7").css('visibility', 'hidden');
+  $("#panel8").css('visibility', 'hidden');
+}
+else {
+  if (currentDocumentName == "paper"+numberOfDocumentsWithOnlyLocalExplanation+".txt") {
+    $("#panel3").css('visibility', 'visible');
+    $("#panel4").css('visibility', 'visible');
+    $("#panel7").css('visibility', 'visible');
+    $("#panel8").css('visibility', 'visible');
+    document.dispatchEvent(new CustomEvent('startSecondTutorial'));
   }
-  //else, load the next document
-  else {
+
+
     var currentDocumentNumber = currentDocumentName
       .substring(5)
       .replace(".txt", "");
     var nextDocumentName =
       "paper" + (parseInt(currentDocumentNumber) + 1).toString() + ".txt";
     // Extract number from text after paper and before .
-    if (parseInt(currentDocumentNumber) + 1 +18 >= numberOfDocumnetsVariable) { // remove 18 from here
+    if (parseInt(currentDocumentNumber) + 1 +10 >= numberOfDocumnetsVariable) { // remove 18 from here
       //call questionnaires
       $("#fullpage").html(`
     <iframe scrolling="yes" frameborder="0"
@@ -124,8 +139,8 @@ function pageLoad() {
   // else
   {
     // var input = prompt("Please enter your userId", "");
-    var input = "baqia";
-    // var input = "harshit";
+    // var input = "baqia";
+    var input = "harshit";
     var loadSessionConfirmed = false;
 
     if (input != null && input.trim() != "") {
@@ -151,26 +166,16 @@ function pageLoad() {
             data: { userID: JSON.stringify(userID) },
             success: function (msg) {
               userSubsetDetails = msg["userSubset"];
-              // console.log(userSubsetDetails);
-              // loop through each key in the userSubsetDetails object
-              // if userid is found in the value array of any key, then set currentSubset to that key
-              // if userid is not found in any value array, then raise an alert
               var found = false;
               for (var key in userSubsetDetails) {
                 if (userSubsetDetails[key].indexOf(userID) != -1) {
                   //select last character of key string
                   currentSubset = +key.slice(-1);
                   found = true;
-                  // console.log(
-                  //   "For user : " + userID + ",subset is: " + currentSubset
-                  // );
                   break;
                 }
               }
-
               if (found) {
-                panelVisibility(currentSubset);
-                // console.log("-----currentSubset is: " + currentSubset);
               } else {
                 alert(
                   "You are not a member of any subset. Please contact the administrator."
@@ -223,7 +228,6 @@ function pageLoad() {
               ) {
                 clusterNumber = Number(input);
                 callServer();
-                panelVisibility()
               } else if (
                 input != null &&
                 (input.trim() == "" || IsNumeric(input) == false)
@@ -247,37 +251,6 @@ function pageLoad() {
   }
   
 
-}
-function panelVisibility() {
-  // #check if we need the three lines below
-  // $("#doc_select").hide();
-  // $("#button15").hide();
-  // $("#button16").hide();
-  /**
-  select panel div from the html file
-  if currentSubset is 0, keep 1,2,5,9
-  if currentSubset is 1, keep 1,2,3,4,5,7
-  if currentSubset is 2,3, keep 1,2,3,4,5,7,8,9
-  **/
-  //current document name
-  // typecast to number to compare = 
-  // int(currentDocumentName.replace("paper", "").replace(".txt", ""))
-
-  console.log(`int(currentDocumentName.replace("paper", "").replace(".txt", ""))`,currentDocumentName.replace("paper", "").replace(".txt", ""))
-  // console.log(`int(currentDocumentName.replace("paper", "").replace(".txt", ""))`,parseInt(currentDocumentName.replace("paper", "").replace(".txt", "")))
-  console.log(`int(currentDocumentName.replace("paper", "").replace(".txt", ""))`,parseInt(currentDocumentName.replace("paper", "").replace(".txt", "")))
-  if (parseInt(currentDocumentName.replace("paper", "").replace(".txt", "")) <5) {
-    $("#panel3").hide(); //Cluster Key Terms
-    $("#panel4").hide(); //Cluster Documents
-    $("#panel7").hide(); //Term-Cluster View
-    $("#panel8").hide(); //Term Cloud
-  }
-  else{
-    $("#panel3").show(); //Cluster Key Terms
-    $("#panel4").show(); //Cluster Documents
-    $("#panel7").show(); //Term-Cluster View
-    $("#panel8").show(); //Term Cloud
-  }
 }
 
 /**
@@ -375,7 +348,6 @@ function callServer() {
 
         termClusterData = d3.csv.parse(asyncRequest.responseText);
         termClusterDataString = asyncRequest.responseText;
-        console.log("termClusterData",termClusterData);
         clusterNames =  termClusterDataString.substring(
           0,
           termClusterDataString.indexOf("\n")
@@ -872,12 +844,6 @@ function paralelCordinator(allData, panelName, ID, divName, color) {
     height = $(panelName).height() - margin.bottom - $(panelName).height() / 4;
 
   x = d3.scale.ordinal().rangePoints([0, width], 1);
-  console.log("width", width);
-  console.log("margin.left", margin.left);
-  console.log("margin.right", margin.right);
-  console.log("height", height);
-  console.log("margin.top", margin.top);
-  console.log("margin.bottom", margin.bottom);
   var svg_par_cor = d3
     .select(divName)
     .append("svg")
@@ -1057,7 +1023,6 @@ function wordCloud(
     d3.layout.cloud().size([widthSVG, heightSVG]).words();
     document.getElementById(division).innerHTML = "";
     scalingFactor = (currentSubset == PROPOSED_BOTH) ? 3 : 9;
-    // console.log("scalingFactor",scalingFactor);
     d3.layout
       .cloud()
       .size([widthSVG, heightSVG])
@@ -1293,7 +1258,6 @@ function listLoad(clusterID, color) {
     // if item(dict) of part3Data has value v1 change the vi value to 0
 
     for (var i = 0; i < part3Data.length; i++) {///////////////////////////////////hope nothing breaks///// donte for error : Error: <rect> attribute width: A negative value is not valid. ("-0.30797217000000005")
-      console.log(part3Data[i])
       if (part3Data[i].v1 < 0) {
         part3Data[i].v1 = 0;
       }
@@ -1962,119 +1926,6 @@ function clusterRename(oldName) {
 }
 
 /**
- * Rename Cluster Name in Graph
- * @param oldName = old name of cluster
- * @param oldName = new name of cluster
- */
-// function renameClusterNameInGraph(oldName, newName) {
-//   var names = $(".clusterNameInGraph");
-
-//   //rename the cluster name in tooltip of node
-//   node.attr("data-hasqtip", function (d) {
-//     $(this).qtip({
-//       content: {
-//         text:
-//           '<strong>Document name:</strong><br><u class="hyperLink" onclick="showDocumentPDF($(this).text())">' +
-//           d.na +
-//           "</u><br><br><strong>List of clusters name:</strong><br>" +
-//           createListOfDocumentClustersName(
-//             renameCLusterNameInToolTip(d.cl, oldName, newName),
-//             d.na
-//           ),
-//       },
-//       hide: {
-//         fixed: true,
-//         delay: 700,
-//       },
-//       show: {
-//         delay: 700,
-//       },
-//       style: {
-//         classes: "qtip-rounded qtip-shadow",
-//       },
-//       position: {
-//         my: "center right",
-//         at: "center left",
-//       },
-//     });
-//   });
-
-//   node2.attr("data-hasqtip", function (d) {
-//     $(this).qtip({
-//       content: {
-//         text:
-//           '<strong>Document name:</strong><br><u class="hyperLink" onclick="showDocumentPDF($(this).text())">' +
-//           d.na +
-//           "</u><br><br><strong>List of clusters name:</strong><br>" +
-//           createListOfDocumentClustersName(
-//             renameCLusterNameInToolTip(d.cl, oldName, newName),
-//             d.na
-//           ),
-//       },
-//       hide: {
-//         fixed: true,
-//         delay: 700,
-//       },
-//       show: {
-//         delay: 700,
-//       },
-//       style: {
-//         classes: "qtip-rounded qtip-shadow",
-//       },
-//       position: {
-//         my: "center right",
-//         at: "center left",
-//       },
-//     });
-//   });
-
-//   //rename the cluster name in generalViewGraph
-//   for (var i = 0; i < generalViewGraph.nodes.length; i++) {
-//     var newClusters = "";
-//     var clusters = generalViewGraph.nodes[i].cl.split(",");
-
-//     for (var j = 0; j < clusters.length; j++) {
-//       var temp = "";
-//       if (clusters[j] == oldName) {
-//         temp = newName;
-//       } else {
-//         temp = clusters[j];
-//       }
-
-//       if (newClusters == "") {
-//         newClusters = temp;
-//       } else {
-//         newClusters += "," + temp;
-//       }
-//     }
-
-//     generalViewGraph.nodes[i].cl = newClusters;
-//   }
-
-//   for (var i = 0; i < generalViewGraph2.nodes.length; i++) {
-//     var newClusters = "";
-//     var clusters = generalViewGraph2.nodes[i].cl.split(",");
-
-//     for (var j = 0; j < clusters.length; j++) {
-//       var temp = "";
-//       if (clusters[j] == oldName) {
-//         temp = newName;
-//       } else {
-//         temp = clusters[j];
-//       }
-
-//       if (newClusters == "") {
-//         newClusters = temp;
-//       } else {
-//         newClusters += "," + temp;
-//       }
-//     }
-
-//     generalViewGraph2.nodes[i].cl = newClusters;
-//   }
-// }
-
-/**
  * rename the name of cluster in tooltip of nodes in general view
  * @param clusterListNames = the old list of cluster names
  * @param oldName = old name of cluster
@@ -2403,30 +2254,6 @@ function createCluster(clusterName) {
   }
 }
 
-/**
- * For cluster tooltip
- * @param clusterName = cluster ID
- */
-// function clusterToolTip(clusterName) {
-//   $("#" + clusterName).qtip({
-//     // Content
-//     content: {
-//       title: "Cluster Name: " + clusterName,
-//       text: "Number of Documents: " + numberOfDocumnets(clusterName),
-//     },
-
-//     // Positioning
-//     position: {
-//       at: "bottom center",
-//       my: "top center",
-//     },
-
-//     // Styles
-//     style: {
-//       classes: "qtip-rounded qtip-shadow",
-//     },
-//   });
-// }
 
 /**
  * Get the number of documents of the cluster
@@ -2628,52 +2455,6 @@ function getFiles(clusterName) {
   return files;
 }
 
-/**
- * Show the content of the selected file in the cluster tree view
- * @param fileName = the name of selected file
- */
-// function fileClicked(fileName) {
-//   console.log("fileClicked", fileName);
-//   <li 
-//     role="none" 
-//     data-jstree="{&quot;icon&quot;:&quot;img/pdf.gif&quot;}" 
-//     onclick="fileClicked(this)" 
-//     id="j2_3" class="jstree-node context-menu-three box menu-1 jstree-leaf">
-//       <i class="jstree-icon jstree-ocl" role="presentation"></i>
-//       <a class="jstree-anchor jstree-clicked" href="#" tabindex="-1" role="treeitem" aria-selected="true" aria-level="3" id="j2_3_anchor">
-//       <i class="jstree-icon jstree-themeicon jstree-themeicon-custom" role="presentation" style="background-image: url(&quot;img/pdf.gif&quot;); background-position: center center; background-size: auto;">
-//         </i>paper2.txt</a>
-//         </li>
-//   ////////////////////////////////////////////////////////////////////////////////////////  ///////////////////////////
-//   //// /////////// Add a dialog box maybe to show the selected document in the cluster ree //////////////////////////////
-//   ////////////////////////////////////////////////////////////////////////////////////////  ///////////////////////////
-//   // document.getElementById("doc_content").innerHTML = "";
-//   // loadDoc($(fileName).text());
-//   // // highlightDocGeneralView($(fileName).text());
-//   // createTermClusterChart();
-//   // //show the paralel cordinator view
-//   // var words = new Array(1);
-//   // var colors = {};
-//   // words[0] = $(fileName).text();
-//   // colors[words[0]] = $("#" + getSelectedClusterID() + " p").css(
-//   //   "background-color"
-//   // ); //"Blue";
-//   // paralelCordinator(
-//   //   documentClusterData,
-//   //   "#panel6",
-//   //   words,
-//   //   "#DocumentClusterView",
-//   //   colors
-//   // );
-//   // //change the selected list of documents
-//   // var docSelect = document.getElementById("doc_select");
-//   // for (var i = 0; i < docSelect.options.length; i++) {
-//   //   if (docSelect.options[i].innerHTML == $(fileName).text()) {
-//   //     docSelect.selectedIndex = i;
-//   //     break;
-//   //   }
-//   // }
-// }
 function fetchDocumentText(docId) {
   return getDocumentContent(docId);
 }
@@ -3118,66 +2899,6 @@ function termClick(event) {
   // highlightDocuments(words);
 }
 
-/**
- * Highlight documents that have selected terms
- * @param words = the selected words
- */
-var docsHighlight = new Array(); //Highlighted docs
-// function highlightDocuments(words) {
-//   saveLog("highlightDocuments");
-
-//   docsHighlight = new Array();
-
-//   for (var i = 0; i < words.length; i++) {
-//     for (var j = 0; j < termDocumentSimilarity.length; j++) {
-//       var docScore = 0.0;
-//       docScore = termDocumentSimilarity[j][allWords.indexOf(words[i])];
-//       if (docScore > 0) {
-//         docsHighlight[documentsName[j]] = true;
-//       }
-//     }
-//   }
-
-//   //change the stroke of corresponding nodes (docs) in general view graph
-//   // node.style("stroke", function(o) {
-//   //   if(o.na == $(doc_select).val())
-//   //   {
-//   //     return "red";
-//   //   }
-//   //   else if(docsHighlight[o.na]) {
-//   //     return "blue";
-//   //   }
-//   //   else {
-//   //     return "#ccc";
-//   //   }
-//   // })
-
-//   // node.style("stroke-width", function(o) {
-//   //   if(docsHighlight[o.na] || o.na == $(doc_select).val()) {
-//   //     return "2px";
-//   //   }
-//   //   else {
-//   //     return "0.5px";
-//   //   }
-//   // })
-
-//   //change the opacity of corresponding nodes (docs) and links in general view graph
-//   node.style("opacity", function (o) {
-//     return docsHighlight[o.na] ? 1 : highlight_trans;
-//   });
-
-//   link.style("opacity", function (o) {
-//     return docsHighlight[o.source.na] && docsHighlight[o.target.na] ? 1 : 0;
-//   });
-
-//   node2.style("opacity", function (o) {
-//     return docsHighlight[o.na] ? 1 : highlight_trans;
-//   });
-
-//   link2.style("opacity", function (o) {
-//     return docsHighlight[o.source.na] && docsHighlight[o.target.na] ? 1 : 0;
-//   });
-// }
 
 /**
  * Set the background color of term
@@ -3617,94 +3338,6 @@ function MindMapClicked() {
   if (userID != "") {
     window.open("./" + userID + "/docClusters.mm");
   }
-}
-
-/*
- * Send the desired terms of the users to the server in order to reclustering.
- */
-// function SendData2Server() { ///////////////
-//   //save session before
-//   sessionDescription =
-//     "This session was saved automatically before reclustering.";
-//   callSaveSession("AutoSave");
-
-//   clusterNumber = document.getElementsByClassName("cluster").length;
-
-//   if (clusterNumber < 2) {
-//     userU = -1;
-//     alert("Your desired number of clusters should be at least 2!");
-//   } else {
-//     userU = +1;
-//     serverData = new Array();
-
-//     var confirmed = confirm(
-//       "Your desired number of clusters is " + clusterNumber
-//     );
-//     if (confirmed) {
-//       var clusters = document.getElementsByClassName("cluster");
-
-//       for (var i = 0; i < clusters.length; i++) {
-//         var clusterName = $(clusters[i]).attr("id");
-//         var terms = $(
-//           document
-//             .getElementById(clusterName)
-//             .getElementsByClassName("sortable")
-//         ).children();
-
-//         serverClusetrName[i] = clusterName;
-//         serverData[i] = new Array();
-//         for (var j = 0; j < terms.length; j++) {
-//           serverData[i][j] = $(terms[j]).text();
-//         }
-//       }
-
-//       clearScreen();
-//       callServer();
-//     }
-//   }
-// }
-
-/*
- * clear the screen.
- */
-function clearScreen() {
-  //clear previous data
-  tsneResult = new Array();
-
-  $("#forceSilhouette_label").html("");
-
-  clusterWords = ""; //the name and the key terms of clusters
-  clusterKeyTerms = ""; //the key terms of clusters are here
-  clusterDocuments = ""; //the list of documents of cluster
-  clusterCloud = ""; //the cloud terms of cluster
-  termClusterData = ""; //the term cluster data
-  termClusterDataString = ""; //the string of the term cluster data (for changing it later)
-  documentClusterData = ""; //the document cluster data
-  documentClusterDataString = ""; //the string of the documnet cluster data (for changing it later)
-  allWords = ""; //all words
-
-  $("#panel4_1").html("");
-  $("#doc_content").html("");
-  $("#doc_select").html("");
-  $("#DocumentClusterView").html("");
-  $("#barcharts").html("");
-  $("#selectable").html("");
-  $("#TermClusterView").html("");
-  $("#panel8_2").html("");
-  $("#general_view1").html("");
-  $("#general_view2").html("");
-  $("#TsneSilhouette_label").html("");
-
-  $("#slider1").slider("disable");
-  $("#slider2").slider("disable");
-  $("#slider3").slider("disable");
-  $("#slider1_Textbox").attr("disabled", "disabled");
-  $("#slider2_Textbox").attr("disabled", "disabled");
-  $("#slider3_Textbox").attr("disabled", "disabled");
-
-  $.jstree.destroy(); //clear tree view
-
-  // $("#silhouette").html("");
 }
 
 /*
@@ -4497,69 +4130,7 @@ function saveLog(command) {
     },
   });
 }
-/**
- * Get Silhouette of force layout.
- */
-// function forceSilhouette() {
-//   saveLog("forceSilhouette");
 
-//   force2.stop();
-
-//   $("#forceSilhouette_label").html("");
-
-//   var nodes = $(".node2");
-
-//   var forceResult = new Array();
-//   var forceLables = new Array();
-
-//   for (var i = 0; i < nodes.length; i++) {
-//     forceResult[i] = new Array();
-//     forceResult[i][0] = parseFloat($(nodes[i]).attr("cx"));
-//     forceResult[i][1] = parseFloat($(nodes[i]).attr("cy"));
-
-//     forceLables[i] = $(nodes[i]).css("fill");
-//   }
-
-//   // getForceSilhouette(forceResult, forceLables);
-// }
-/*
- * Get  force Silhouette
- * @param forceResult =  x and y dimensions
- * @param forceLables = labels of documents
- */
-// function getForceSilhouette(forceResult, forceLables) {
-//   $.ajax({
-//     type: "POST",
-//     url: "./cgi-bin/tsneSilhouette.py",
-//     data: {
-//       tsneResult: JSON.stringify(forceResult),
-//       tsneLables: JSON.stringify(forceLables),
-//     },
-//     success: function (msg) {
-//       var status = msg["status"];
-
-//       if (status == "yes") {
-//         var forceSilhouette = eval(msg["TsneSilhouette"]);
-//         forceSilhouette = forceSilhouette.toFixed(4);
-
-//         //show the tsne Silhouette
-//         $("#forceSilhouette_label").html(
-//           "Force layout Silhouette: " + forceSilhouette
-//         );
-//       }
-//       if (status == "no") {
-//         alert("Error1 in getting Force Silhouette!");
-//       }
-//       if (status == "error") {
-//         alert("Error2 in getting Force Silhouette!");
-//       }
-//     },
-//     error: function (msg) {
-//       alert("Error3 in getting Force Silhouette!");
-//     },
-//   });
-// }
-//write a function to make ajax request to explanation.py
 function getExplanation() {
   $.ajax({
     type: "POST",
@@ -4677,7 +4248,6 @@ function getTopFeatures(doc_data, numberOfFeatures) {
 }
 function createTermClusterChart() {
   if(currentDocumentName=="paper6.txt"){
-  console.log("here")
   }
   var panel9 = document.getElementById("panel9");
   var computedStyle = window.getComputedStyle(panel9);
@@ -4695,8 +4265,6 @@ function createTermClusterChart() {
   doc = getDocumentContent(currentDocumentName).replace(/\n$/, "");
   // doc = document.getElementById("doc_content").innerHTML.replace(/\n$/, "");
   // remove extra spaces within the document
-  // console.log(doc);
-  // console.log(explanation_details);
   documentExplanation = explanation_details[doc.replace(/\s+/g, " ")];
   // var documentExplanation = {
   //   "Michael Fincke": [0.269, 0.268, 0.304, 0.290], feature: cluster 1, cluster 2, cluster 3, cluster 4
@@ -4742,7 +4310,6 @@ function createTermClusterChart() {
     .append("g") //<div id="chart"><svg width="1000" height="500"><g></g></svg></div>
     // This is useful for applying a single transformation to a group of elements, like translating (moving) all elements of the chart at once.
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); //<div id="chart"><svg width="1000" height="500"><g transform="translate(30,20)"></g></svg></div>
-  // console.log("doc_data", doc_data);
   var x = d3.scale
     .ordinal()
     .rangeRoundBands([0, width], 0.3)
@@ -4755,7 +4322,6 @@ function createTermClusterChart() {
     
 
   let topFeatures = getTopFeatures(doc_data, 5);
-  // console.log(topFeatures);
 
   // Update the domain of your color scale to use only the top features
 
@@ -5065,10 +4631,8 @@ function createTermClusterChart() {
 });
 document.getElementById("feedbackFormContent").style.display = "block";
 // #get content of paragraph with id question1
-console.log(document.getElementById("question1").innerHTML)
 //extract first 76 characters and append the highestAggregateCluster
 document.getElementById("question1").innerHTML = document.getElementById("question1").innerHTML.substring(0, 77) + highestAggregateCluster + "?";
-console.log(document.getElementById("question1").innerHTML)
 // #get currrent cluster number
 currentCluster = highestAggregateCluster.split(" ")[1]
 }
@@ -5119,22 +4683,40 @@ function getTermProbabilities(){
         termProbabilitiesString = asyncRequest.responseText;
 
         termProbabilites = d3.csv.parse(asyncRequest.responseText);
-        console.log("termProbabilites",termProbabilites);
         return termProbabilites;
 
 }
+
 function submitFeedback() {
-  var feedback = document.getElementById("feedbackText").value;
-  var support = document.querySelector('input[name="support"]:checked').value;
-  var satisfaction = document.querySelector('input[name="satisfaction"]:checked').value;
+  // Attempt to retrieve the checked radio button for the "support" question
+  var supportRadioChecked = document.querySelector('input[name="support"]:checked');
+  var support = supportRadioChecked ? supportRadioChecked.value : null;
+
+  // Attempt to retrieve the checked radio button for the "satisfaction" question
+  var satisfactionRadioChecked = document.querySelector('input[name="satisfaction"]:checked');
+  var satisfaction = satisfactionRadioChecked ? satisfactionRadioChecked.value : null;
+
+  // Get the value of the textual feedback if "No" is selected
+  var feedbackText = document.getElementById("feedbackText").value.trim();
+
+  // Validate the form inputs
+  if (!support) {
+    alert("Please select an option for question 1.");
+    return; // Stop the function execution here
+  } else if (support === "No" && !feedbackText) {
+    alert("Please provide your feedback in the text box.");
+    return; // Stop the function execution here
+  } else if (!satisfaction) {
+    alert("Please select an option for question 2.");
+    return; // Stop the function execution here
+  }
 
   // Use AJAX to send all feedback to the Python CGI script
   $.ajax({
-      type: "POST",
-      url: "/cgi-bin/userFeedback.py", 
-      // pass in the feedback, support, satisfaction, userID, documentname, datetime, etc.
+    type: "POST",
+    url: "/cgi-bin/userFeedback.py",
       data: { 
-          feedback: feedback,
+          feedback: feedbackText,
           support: support,
           satisfaction: satisfaction,
           userID: userID,
@@ -5144,7 +4726,6 @@ function submitFeedback() {
       },
       success: function(response) {
           // Handle success
-          // console.log("Feedback submitted successfully");
           // Close the modal and clear the form
           document.getElementById("feedbackText").value = "";
           var radios = document.querySelectorAll('input[type="radio"]');

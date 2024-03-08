@@ -62,7 +62,13 @@
     <link href="css/main.css" type="text/css" rel="stylesheet" />
     <script src="js/style.js" charset="utf-8"></script>
     <script src="js/main.js" charset="utf-8"></script>
-  </head>
+    <script src="
+https://cdn.jsdelivr.net/npm/intro.js@7.2.0/intro.min.js
+"></script>
+<link href="
+https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
+" rel="stylesheet">
+</head>
   <body onload="pageLoad()" onbeforeunload="return pageClose()">
     <!----------------------- panel1 -------------------------->
     
@@ -306,5 +312,69 @@
     
 </div>
 <div id="fullpage" style="display: none;"></div>
-  </body>
+  
+<script>
+  document.addEventListener('DOMContentLoaded', function(event) {
+      introJs().setOptions({
+          steps: [
+            {
+              intro:"<strong>Purpose of this study</strong>\n\n        Before we discuss what the tool on which this user study is based, let's take a moment to understand the purpose of this study. The goal is to evaluate the effectiveness of the `EXPLANATION` for  AI driven document clustering. The AI has clustered the documents based on the concepts it has identified in the documents. The explanation is designed to help you understand why the AI has clustered the documents in the way it has. Your feedback will help us improve the AI's performance and the explanation quality. Click 'Next' to continue.",
+              tooltipClass: 'wideTooltip'
+            },
+            {intro:" <strong>Who are you?</strong>\n\n  Imagine you are a lead editor of an online news portal.Your role is to organize numerous news articles into understandable categories, using an advanced AI algorithm for clustering. This AI identifies unique patterns, suggesting newsworthy groupings beyond standard categories. Your task involves two main challenges: identifying the essence of AI-suggested clusters by naming and defining them, and evaluating the AI's explanations for article placements to ensure they're logical and align with the themes. This effort aims to deepen story understanding and improve how news is categorized for readers.",
+            tooltipClass: 'wideTooltip'},
+              {
+                  intro: "<strong>Welcome to our software!</strong>\n\n This platform assists you in understanding AI-driven document clustering. It's designed to clarify how decisions are made to group documents. We'll start with a brief overview of the interface."
+              },
+              {
+                  element: document.querySelector('#panel5'),
+                  intro: "Meet the Cluster Tree View. Here, the clusters created by the AI are presented. You can expand each cluster to see its documents and hover over them to preview their contents."
+              }, 
+              {
+                  element: document.querySelector('#panel2'),
+                  intro: "This is the Document View, displaying one document at a time. Notice the highlighted text - these colors represent key concepts that influence the document's cluster classification."
+              },
+              {
+                  element: document.querySelector('#panel9'),
+                  intro: "Now, observe the Local Explanation View. It demonstrates a document's connection to a cluster on a vertical scale. Horizontal bars indicate clusters, filled with the contribution of each concept that's highlighted in the Document View. The black dots reflect the document's final clustering, considering all concept contributions."
+              },
+              {
+                  element: document.querySelector('#feedbackModal'),
+                  intro: "The Explanation Evaluation View invites your feedback on the explanation clarity.\nThe first query seeks your agreement on whether the document's clustering rationale appears logical, examining the contribution of highlighted concepts.\nThe second question gauges your satisfaction with the provided explanation detail, asking if you feel fully informed about the AI's clustering decision."
+              },
+              {
+              intro: "Please evaluate the explanation and provide feedback. Your input will help us improve the AI's performance and the explanation quality. Click 'Submit Feedback and Continue' to proceed."
+              }
+          ]
+      }).start();
+  });
+  
+  document.addEventListener('startSecondTutorial', function(event) {
+      introJs().setOptions({
+          steps: [
+              {
+                  intro: "Having looked at individual document details, let's zoom out to the broader themes the AI has identified for the clusters. We'll also look at how these themes correlate with their defining terms. Ready to explore more?"
+              },
+              {
+                  element: document.querySelector('#panel4'),
+                  intro: "Here's the Clusters View. It lists defining concepts for each cluster, which you can scroll through. Analyze these to better understand each cluster's essence. Customize by right-clicking to rename any cluster. Clicking on different clusters or terms will update other views correspondingly."
+              },
+              {
+                  element: document.querySelector('#panel8'),
+                  intro: "In the Term Cloud View, see a visual array of terms representing the currently selected cluster. Larger terms have greater significance within that cluster, highlighting the predominant themes and concepts."
+              },
+              {
+                  element: document.querySelector('#panel3'),
+                  intro: "The Cluster Keyterms View shows key terms and their significance within a cluster, depicted by the length of the horizontal bars."
+              },
+              {
+                  element: document.querySelector('#panel7'),
+                  intro: "Finally, the Term-Cluster View charts the distribution of key terms across all clusters, allowing you to compare their significance in each."
+              }
+          ]
+      }).start();
+  });
+  </script>
+  
+</body>
 </html>
