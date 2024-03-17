@@ -113,6 +113,7 @@ def main(args):
 
     # Read the data, with some sanity checking
     data = []
+    dims = None
     for sample_line_num, sample_line in enumerate((l.rstrip('\n').replace(',','\t')
             for l in argp.input), start=1):
         sample_data = sample_line.split('\t')

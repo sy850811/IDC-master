@@ -446,9 +446,9 @@
 }
 
 .clusterTitle {
-  cursor: move;
-  border: thin;
-  border: #ccc;
+  /* cursor: move; */
+  /* border: thin; */
+  /* border: #ccc; */
   border-bottom-style: dotted;
   border-width: thin;
   text-align: center;
@@ -458,6 +458,26 @@
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   height: 15%;
+  cursor: pointer;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  /* margin: 4px 2px; */
+  padding: 8px 16px;
+  overflow-wrap: break-word;
+}
+/* .clusterTitle {
+  background-color: 
+  
+} */
+.wide-tooltip {
+  max-width: 900px; /* or whatever width you prefer */
+  max-height: 90vh; /* max height to 90% of the viewport height */
+  overflow: auto; /* to add scroll to the tooltip if the content exceeds the max-height */
+}
+
+.clusterTitle:hover, .clusterTitle:focus {
+  transform: scale(1.05);
 }
 
 .button {
