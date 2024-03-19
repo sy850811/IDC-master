@@ -3,16 +3,23 @@
  * Copyright: 2015        *
  **************************/
 // {
-//   "subset0": ["lovish", "John"],
-//   "subset1": ["wajahat", "lakshita"],
-//   "subset2": ["baqia", "aalim"],
-//   "subset3": ["harshit", "Anmol"]
+//   "subset0": [
+//       "syedmbhzi",
+//       "lovishagrawal75",...
+      
+//   ],
+//   "subset1": [
+//       "ap.amritapritam",
+//       "ssshubh97",....
+//   ]
 // }
+const PROPOSED_BOTH = 0;
+// const BASELINE_BOTH = 1; no longer needed it
+// const BASELINE_LOCAL = 0;
+// const BASELINE_GLOBAL = 1;
+// const BASELINE_BOTH = 2;
+// const PROPOSED_BOTH = 3;
 
-const BASELINE_LOCAL = 0;
-const BASELINE_GLOBAL = 1;
-const BASELINE_BOTH = 2;
-const PROPOSED_BOTH = 3;
 var maxPositiveAcrossDocument;
 var clusterNames = [];
 var minNegativeAcrossDocument;
@@ -25,18 +32,18 @@ var termClusterDataString = ""; //the string of the term cluster data (for chang
 var termProbabilitiesString = ""; //the string of the term cluster data (for changing it later)
 var documentClusterData = ""; //the document cluster data
 var documentClusterDataString = ""; //the string of the document cluster data (for changing it later)
-var allWords = ""; //all words
+// var allWords = ""; //all words
 var sessions = []; //list of sessions name
 var sessionsDescription = []; //list of sessions description
 var documentsName = []; //list of documents name
 var documentsNameString = ""; //list of documents name string
-var documentDocumentSimilarity = new Array(); //document document similarity
-var documentDocumentSimilarityString = ""; //document document similarity string
-var termDocumentSimilarity = new Array(); // term document similarity
+// var documentDocumentSimilarity = new Array(); //document document similarity
+// var documentDocumentSimilarityString = ""; //document document similarity string
+// var termDocumentSimilarity = new Array(); // term document similarity
 var termDocumentSimilarityString = new Array(); // term document similarity string
 var generalViewGraph = ""; //general view graph
 var generalViewGraph2 = ""; //general view graph
-var removedDocuments = []; //show the list of documents that have been removed (becuase of removing the cluster)
+// var removedDocuments = []; //show the list of documents that have been removed (becuase of removing the cluster)
 var sessionDescription = "";
 // var silhouette = 0;
 // var TsneSilhouette = 0;
@@ -82,10 +89,10 @@ function showNewDocument() {
   document.getElementById("doc_content").innerHTML = getDocumentContent(currentDocumentName);
   // $("#selectable").css('visibility', 'hidden'); 
   // #panel3
-  $("#panel3").css('visibility', 'hidden');
-  $("#panel4").css('visibility', 'hidden');
-  $("#panel7").css('visibility', 'hidden');
-  $("#panel8").css('visibility', 'hidden');
+  // $("#panel3").css('visibility', 'hidden');
+  // $("#panel4").css('visibility', 'hidden');
+  // $("#panel7").css('visibility', 'hidden');
+  // $("#panel8").css('visibility', 'hidden');
 }
 else {
   if (currentDocumentName == "paper"+numberOfDocumentsWithOnlyLocalExplanation+".txt") {
@@ -146,12 +153,20 @@ function pageLoad() {
   // //get the user id
   // else
   {
-    // var input = prompt("Please enter your userId", "");
+    var input = prompt("Please enter your userId", "");
     // var input = "baqia";
-    var input = "harshit";
+    // var input = "syedmbhzi";
     var loadSessionConfirmed = false;
 
     if (input != null && input.trim() != "") {
+      // Convert the email to lowercase
+      var emailLower = input.toLowerCase();
+  
+      // Remove everything after '@'
+      var emailBeforeAt = emailLower.split('@')[0];
+  
+      // Remove special characters except '.'
+      input = emailBeforeAt.replace(/[^a-z0-9.]/g, '');
       userID = input;
       getExplanation();
 
@@ -375,17 +390,15 @@ function callServer() {
 
 
 
-        //for list of all terms of the collocation
+
+        // asyncRequest.open("POST", "./cgi-bin/fetchTerms.py", false);
+        // asyncRequest.setRequestHeader(
+        //   "Content-Type",
+        //   "application/x-www-form-urlencoded"
+        // );
+        // asyncRequest.send("userID=" + encodeURIComponent(userID));
+
         // allWords = asyncRequest.responseText.split("\n"); // .split("\r\n")
-
-        asyncRequest.open("POST", "./cgi-bin/fetchTerms.py", false);
-        asyncRequest.setRequestHeader(
-          "Content-Type",
-          "application/x-www-form-urlencoded"
-        );
-        asyncRequest.send("userID=" + encodeURIComponent(userID));
-
-        allWords = asyncRequest.responseText.split("\n"); // .split("\r\n")
 
         //load clusters
         for (var i = 0; i < clusterWords.length; i++) {
@@ -420,45 +433,45 @@ function callServer() {
         //get document-document similarity matrix
         // var temp = documentDocumentSimilarityString.split("\n"); // .split("\r\n")
 
-        asyncRequest.open("POST", "./cgi-bin/fetchDocumentDistance.py", false);
-        asyncRequest.setRequestHeader(
-          "Content-Type",
-          "application/x-www-form-urlencoded"
-        );
-        asyncRequest.send("userID=" + encodeURIComponent(userID));
+        // asyncRequest.open("POST", "./cgi-bin/fetchDocumentDistance.py", false);
+        // asyncRequest.setRequestHeader(
+        //   "Content-Type",
+        //   "application/x-www-form-urlencoded"
+        // );
+        // asyncRequest.send("userID=" + encodeURIComponent(userID));
 
-        documentDocumentSimilarityString = asyncRequest.responseText;
-        var temp = documentDocumentSimilarityString.split("\n"); // .split("\r\n")
+        // documentDocumentSimilarityString = asyncRequest.responseText;
+        // var temp = documentDocumentSimilarityString.split("\n"); // .split("\r\n")
 
-        for (var i = 0; i < temp.length; i++) {
-          if (temp[i].length > 0) {
-            documentDocumentSimilarity[i] = temp[i].split(",");
-          }
-        }
+        // for (var i = 0; i < temp.length; i++) {
+        //   if (temp[i].length > 0) {
+        //     documentDocumentSimilarity[i] = temp[i].split(",");
+        //   }
+        // }
 
         //get term-document matrix
         // var temp = termDocumentSimilarityString.split("\n"); // .split("\r\n")
 
-        asyncRequest.open("POST", "./cgi-bin/fetchMatrix.py", false);
-        asyncRequest.setRequestHeader(
-          "Content-Type",
-          "application/x-www-form-urlencoded"
-        );
-        asyncRequest.send("userID=" + encodeURIComponent(userID));
+        // asyncRequest.open("POST", "./cgi-bin/fetchMatrix.py", false);
+        // asyncRequest.setRequestHeader(
+        //   "Content-Type",
+        //   "application/x-www-form-urlencoded"
+        // );
+        // asyncRequest.send("userID=" + encodeURIComponent(userID));
 
-        termDocumentSimilarityString = asyncRequest.responseText;
-        var temp = termDocumentSimilarityString.split("\n"); // .split("\r\n")
+        // termDocumentSimilarityString = asyncRequest.responseText;
+        // var temp = termDocumentSimilarityString.split("\n"); // .split("\r\n")
 
-        for (var i = 0; i < temp.length; i++) {
-          if (temp[i].length > 0) {
-            termDocumentSimilarity[i] = temp[i].split(",");
-          }
-        }
+        // for (var i = 0; i < temp.length; i++) {
+        //   if (temp[i].length > 0) {
+        //     termDocumentSimilarity[i] = temp[i].split(",");
+        //   }
+        // }
 
-        //set the remove status of documents
-        for (var i = 0; i < documentDocumentSimilarity.length; i++) {
-          removedDocuments[i] = false;
-        }
+        // //set the remove status of documents
+        // for (var i = 0; i < documentDocumentSimilarity.length; i++) {
+        //   removedDocuments[i] = false;
+        // }
 
         var date2 = new Date();
         var n2 = date2.getTime();
@@ -2467,69 +2480,9 @@ function loadTermCloud(elementID) {
   }
 }
 
-/**
- * for auto complete of search bar
- */
-$(function () {
-  saveLog("search");
 
-  $("#textbox1").autocomplete({
-    source: function (request, response) {
-      response(
-        $.map(getWord(request.term), function (item) {
-          return { label: item, value: item };
-        })
-      );
-    },
-    select: function (event, ui) {
-      //check if the term exists or not
 
-      if (getSelectedClusterID() != "") {
-        //check if the cluster is checked
-        var term = ui.item.value;
 
-        var terms = document
-          .getElementById(getSelectedClusterID())
-          .getElementsByClassName("sortable");
-
-        var ok = confirm(
-          "Do you want to add '" +
-            term +
-            "' to cluster '" +
-            getSelectedClusterID() +
-            "'?"
-        );
-
-        // if (ok) {
-        //   if (!termExists($(terms).children(), term)) {
-        //     appendTerm(term);
-        //   } else {
-        //     alert('This cluster already have "' + term + '"');
-        //   }
-        // }
-      }
-    },
-  });
-});
-
-/**
- * Search the term in all words of document collocation
- * @param term = the term
- * @return the found words
- */
-function getWord(term) {
-  var foundWords = new Array();
-  var index = 0;
-
-  for (var i = 0; i < allWords.length; i++) {
-    if (allWords[i].indexOf(term) > -1) {
-      foundWords[index] = allWords[i];
-      index++;
-    }
-  }
-
-  return foundWords;
-}
 
 /**
  * Clear cloud
@@ -2832,20 +2785,6 @@ function pageClose() {
 }
 
 
-
-function json2arrayRemovedDocuments(data) {
-  data = data.replace("[", "").replace("]", "");
-  data = data.split(",");
-
-  for (var i = 0; i < data.length; i++) {
-    if (data[i] == "true") {
-      removedDocuments[i] = true;
-    } else if (data[i] == "false") {
-      removedDocuments[i] = false;
-    }
-  }
-}
-
 //varibales for contorling general view graph
 var svg, //for T-SNE
   link, // T-SNE
@@ -3053,72 +2992,8 @@ function createListOfDocumentClustersName(clustersNames, documentName) {
   return list;
 }
 
-/*
- * Create list of top terms of document
- * @parm documentName = the name of the document
- * @return list of top terms of document.
- */
-function getListOfTermsOfDocument(documentName) {
-  var terms = new Array();
-  terms = getDocumentTermsSorted(documentName);
 
-  var list = "";
 
-  //show top 5 terms
-  for (var i = 0; i < terms.length; i++) {
-    if (i == 5)
-      //show top 5 terms
-      break;
-
-    list += "<span>" + terms[i][0] + "</span><br>";
-  }
-
-  return list;
-}
-
-/*
- * get sorted list of document terms
- * @parm documentName = the name of the document
- * @return sorted list of document terms
- */
-function getDocumentTermsSorted(documentName) {
-  var temp = termDocumentSimilarity[documentsName.indexOf(documentName)];
-  var terms = new Array();
-  var termsScore = new Array();
-
-  var index = 0;
-  for (var i = 0; i < temp.length; i++) {
-    if (temp[i] > 0.0) {
-      terms[index] = allWords[i];
-      termsScore[index] = temp[i];
-      index++;
-    }
-  }
-
-  //sort the terms by score
-  for (var i = 0; i < termsScore.length; i++) {
-    for (var j = i; j < termsScore.length; j++) {
-      if (termsScore[j] > termsScore[i]) {
-        var temp = termsScore[i];
-        termsScore[i] = termsScore[j];
-        termsScore[j] = temp;
-
-        temp = terms[i];
-        terms[i] = terms[j];
-        terms[j] = temp;
-      }
-    }
-  }
-
-  var finalTerms = new Array(terms.length);
-  for (var i = 0; i < terms.length; i++) {
-    finalTerms[i] = new Array(2);
-    finalTerms[i][0] = terms[i];
-    finalTerms[i][1] = termsScore[i];
-  }
-
-  return finalTerms;
-}
 
 /*
  * Load document in the cluster
@@ -3195,117 +3070,7 @@ function getDocumentClustersName(documentName) {
   return clusterList;
 }
 
-/**
- * For right click in general view graph
- */
-$(function () {
-  $.contextMenu({
-    selector: ".context-menu-four",
-    callback: function (key, options) {
-      if (key == "ShowCloud") {
-        showSelectedDocumentsCloud();
-      }
-    },
-    items: {
-      ShowCloud: { name: "ShowCloud", icon: "edit" },
-    },
-  });
-});
-/**
- * Show the terms cloud of selected documents in general view graph
- */
-function showSelectedDocumentsCloud() {
-  //no user no job!
-  if (userID == "") {
-    return null;
-  }
 
-  //get the names of the selected documents
-  var selectedDocuments = new Array();
-
-  var index = 0;
-  node.filter(function (o, i) {
-    if ($($(".node")[i]).css("opacity") == 1) {
-      selectedDocuments[index] = o.na;
-      index++;
-    }
-  });
-
-  //get terms of each document and aggregate the terms
-  var aggregatedTerms = new Array(allWords.length); //allWords.length + 1);//hashmap of terms
-  // aggregatedTerms["allWords[i]"] = 0.003;
-
-  for (var i = 0; i < allWords.length; i++) {
-    //initialize the aggregatedTerms
-    aggregatedTerms[allWords[i]] = parseFloat(0.0);
-  }
-
-  for (var i = 0; i < selectedDocuments.length; i++) {
-    var temp =
-      termDocumentSimilarity[documentsName.indexOf(selectedDocuments[i])];
-
-    //add the value of each term to the aggregatedTerms
-    for (var j = 0; j < temp.length; j++) {
-      try {
-        aggregatedTerms[allWords[j]] =
-          aggregatedTerms[allWords[j]] + parseFloat(temp[j]);
-      } catch (err) {
-        console.log(err.message);
-      }
-    }
-  }
-
-  //divide the terms value by total number of selected documents (normalization of values)
-  for (var term in aggregatedTerms)
-    aggregatedTerms[term] = aggregatedTerms[term] / selectedDocuments.length;
-
-  //sort the aggregated terms
-  var aggregatedTermsSorted = [];
-  for (var term in aggregatedTerms)
-    aggregatedTermsSorted.push([term, aggregatedTerms[term]]);
-
-  aggregatedTermsSorted.sort(function (a, b) {
-    return b[1] - a[1];
-  });
-
-  //get top 30 terms
-  var wordsTemp = "";
-  for (var i = 0; i < aggregatedTermsSorted.length; i++) {
-    if (i == 0) {
-      wordsTemp +=
-        aggregatedTermsSorted[i][0] +
-        "|" +
-        Math.floor(aggregatedTermsSorted[i][1] * 30);
-    } else {
-      wordsTemp +=
-        "|" +
-        aggregatedTermsSorted[i][0] +
-        "|" +
-        Math.floor(aggregatedTermsSorted[i][1] * 30);
-    }
-
-    if (i >= 29) {
-      break;
-    }
-  }
-
-  //clear the cloud
-  $("#panel8_2").html("");
-
-  //show the terms in Term Cloud view
-  if (wordsTemp != "") {
-    var words = wordsTemp.split("|");
-    var x = document.getElementById("cloudColor");
-    var title = "Term Cloud (Selected Nodes)";
-    wordCloud(
-      wordText(words),
-      sizeOfText(words),
-      "panel8_2",
-      "panel8",
-      title
-    );
-  }
-}
 /**
  * show the cluster nodes in general view graph
  * @param clusterName = neme of cluster

@@ -77,9 +77,9 @@ def getMode(userID):
             # Select the last character of the key string
             currentSubset = int(key[-1])  # Convert last character to integer
 
-    if currentSubset == 3:
+    if currentSubset == 0:
         return "proposed_"
-    elif currentSubset == 2 or currentSubset == 1 or currentSubset == 0:
+    elif currentSubset == 1:
         return "baseline_"
     else:
         return "error_"
