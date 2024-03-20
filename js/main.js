@@ -89,10 +89,10 @@ function showNewDocument() {
   document.getElementById("doc_content").innerHTML = getDocumentContent(currentDocumentName);
   // $("#selectable").css('visibility', 'hidden'); 
   // #panel3
-  // $("#panel3").css('visibility', 'hidden');
-  // $("#panel4").css('visibility', 'hidden');
-  // $("#panel7").css('visibility', 'hidden');
-  // $("#panel8").css('visibility', 'hidden');
+  $("#panel3").css('visibility', 'hidden');
+  $("#panel4").css('visibility', 'hidden');
+  $("#panel7").css('visibility', 'hidden');
+  $("#panel8").css('visibility', 'hidden');
 }
 else {
   if (currentDocumentName == "paper"+numberOfDocumentsWithOnlyLocalExplanation+".txt") {
