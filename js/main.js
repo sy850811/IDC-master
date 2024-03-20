@@ -200,6 +200,7 @@ function pageLoad() {
                 }
               }
               if (found) {
+                document.dispatchEvent(new CustomEvent('FirstTutorial'));
               } else {
                 alert(
                   "You are not a member of any subset. Please contact the administrator."
