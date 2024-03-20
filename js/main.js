@@ -1388,7 +1388,7 @@ $(function () {
 function clusterRename(oldName) {
   saveLog("clusterRename");
 
-  var clusterName = prompt('Please input the new name of "' + oldName + '":');
+  var clusterName = prompt('Please input a meaningful name of "' + oldName + '":');
 
   if (clusterName != null) {
     if (nameIsValid(clusterName)) {
