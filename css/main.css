@@ -434,6 +434,7 @@
   cursor: move;
   border: thin;
   border: #ccc;
+  /* border: thin solid #ccc; Updated for clarity */
   border-bottom-style: dotted;
   border-width: thin;
   text-align: center;
@@ -443,7 +444,12 @@
   border-top-right-radius: 10px;
   position: relative;
   font-size: 80%;
+  font-weight: bold;
+  color: #fff;
+  background-color: #555;
 }
+
+
 
 .clusterTitle {
   /* cursor: move; */
@@ -1669,9 +1675,7 @@ form label {
   animation-duration: 0.5s; /* Duration of the animation */
 }
 
-.satisfactionScaleRadioButton{
-  margin-bottom: 5px;
-}
+
 #fullpage {
   position: fixed; /* Fixed position to cover the whole screen */
   top: 0;

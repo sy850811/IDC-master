@@ -4772,6 +4772,94 @@ var docsHighlight = new Array(); //Highlighted docs
 //       }
 //     }
 //   }
+
+        //get document-document similarity matrix
+        // var temp = documentDocumentSimilarityString.split("\n"); // .split("\r\n")
+
+        // asyncRequest.open("POST", "./cgi-bin/fetchDocumentDistance.py", false);
+        // asyncRequest.setRequestHeader(
+        //   "Content-Type",
+        //   "application/x-www-form-urlencoded"
+        // );
+        // asyncRequest.send("userID=" + encodeURIComponent(userID));
+
+        // documentDocumentSimilarityString = asyncRequest.responseText;
+        // var temp = documentDocumentSimilarityString.split("\n"); // .split("\r\n")
+
+        // for (var i = 0; i < temp.length; i++) {
+        //   if (temp[i].length > 0) {
+        //     documentDocumentSimilarity[i] = temp[i].split(",");
+        //   }
+        // }
+
+        //get term-document matrix
+        // var temp = termDocumentSimilarityString.split("\n"); // .split("\r\n")
+
+        // asyncRequest.open("POST", "./cgi-bin/fetchMatrix.py", false);
+        // asyncRequest.setRequestHeader(
+        //   "Content-Type",
+        //   "application/x-www-form-urlencoded"
+        // );
+        // asyncRequest.send("userID=" + encodeURIComponent(userID));
+
+        // termDocumentSimilarityString = asyncRequest.responseText;
+        // var temp = termDocumentSimilarityString.split("\n"); // .split("\r\n")
+
+        // for (var i = 0; i < temp.length; i++) {
+        //   if (temp[i].length > 0) {
+        //     termDocumentSimilarity[i] = temp[i].split(",");
+        //   }
+        // }
+
+        // //set the remove status of documents
+        // for (var i = 0; i < documentDocumentSimilarity.length; i++) {
+        //   removedDocuments[i] = false;
+        // }
+
+                    //check if the cluster is empty or not
+
+            // var doc = new Array(1);
+            // var color = {};
+            // doc[0] = document.getElementById("doc_select").value;
+            // color[doc[0]] = $("#" + clusterName + " p").css("background-color"); //"Blue";
+
+            // paralelCordinator(
+            //   documentClusterData,
+            //   "#panel6",
+            //   doc,
+            //   "#DocumentClusterView",
+            //   color
+            // );
+
+            /**
+ * rename the name of cluster in tooltip of nodes in general view
+ * @param clusterListNames = the old list of cluster names
+ * @param oldName = old name of cluster
+ * @param newName = new name of cluster
+ * @return newClusters = new list of document cluster names
+ */
+// function renameCLusterNameInToolTip(clusterListNames, oldName, newName) {
+//   var clusters = clusterListNames.split(",");
+
+//   var newClusters = "";
+
+//   for (var i = 0; i < clusters.length; i++) {
+//     var temp = "";
+//     if (clusters[i] == oldName) {
+//       temp = newName;
+//     } else {
+//       temp = clusters[i];
+//     }
+
+//     if (newClusters == "") {
+//       newClusters = temp;
+//     } else {
+//       newClusters += "," + temp;
+//     }
+//   }
+
+//   return newClusters;
+// }
   
 // #!/home/ubuntu/IDC/bin/python
 

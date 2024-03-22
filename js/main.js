@@ -153,7 +153,7 @@ function pageLoad() {
   // //get the user id
   // else
   {
-    var input = prompt("Please enter your userId", "");
+    var input = prompt("Please enter your email", "");
     // var input = "baqia";
     // var input = "syedmbhzi";
     var loadSessionConfirmed = false;
@@ -431,48 +431,7 @@ function callServer() {
         documentsNameString = asyncRequest.responseText;
         documentsName = documentsNameString.split("\n"); // .split("\r\n")
 
-        //get document-document similarity matrix
-        // var temp = documentDocumentSimilarityString.split("\n"); // .split("\r\n")
 
-        // asyncRequest.open("POST", "./cgi-bin/fetchDocumentDistance.py", false);
-        // asyncRequest.setRequestHeader(
-        //   "Content-Type",
-        //   "application/x-www-form-urlencoded"
-        // );
-        // asyncRequest.send("userID=" + encodeURIComponent(userID));
-
-        // documentDocumentSimilarityString = asyncRequest.responseText;
-        // var temp = documentDocumentSimilarityString.split("\n"); // .split("\r\n")
-
-        // for (var i = 0; i < temp.length; i++) {
-        //   if (temp[i].length > 0) {
-        //     documentDocumentSimilarity[i] = temp[i].split(",");
-        //   }
-        // }
-
-        //get term-document matrix
-        // var temp = termDocumentSimilarityString.split("\n"); // .split("\r\n")
-
-        // asyncRequest.open("POST", "./cgi-bin/fetchMatrix.py", false);
-        // asyncRequest.setRequestHeader(
-        //   "Content-Type",
-        //   "application/x-www-form-urlencoded"
-        // );
-        // asyncRequest.send("userID=" + encodeURIComponent(userID));
-
-        // termDocumentSimilarityString = asyncRequest.responseText;
-        // var temp = termDocumentSimilarityString.split("\n"); // .split("\r\n")
-
-        // for (var i = 0; i < temp.length; i++) {
-        //   if (temp[i].length > 0) {
-        //     termDocumentSimilarity[i] = temp[i].split(",");
-        //   }
-        // }
-
-        // //set the remove status of documents
-        // for (var i = 0; i < documentDocumentSimilarity.length; i++) {
-        //   removedDocuments[i] = false;
-        // }
 
         var date2 = new Date();
         var n2 = date2.getTime();
@@ -1192,7 +1151,7 @@ function listLoad(clusterID, color) {
         if (i == 0) {
           //load paralel cordinator view for the first word
           $("#selectable").append(
-            '<li draggable="true" ondragstart="dragTerm(event)" ' +
+            '<li draggable="true" ' +
               "class='ui-widget-content ui-selectee ui-selected' onclick=\"termClick(event)\"" +
               "style=\"background-color: rgb(135, 135, 135);\"><span class='termListSpan'>" +
               part3Data[i].word +
@@ -1223,7 +1182,7 @@ function listLoad(clusterID, color) {
           // highlightDocuments(words);
         } else {
           $("#selectable").append(
-            '<li draggable="true" ondragstart="dragTerm(event)" ' +
+            '<li draggable="true" " ' +
               "class='ui-widget-content' onclick=\"termClick(event)\"><span class='termListSpan'>" +
               part3Data[i].word +
               "</span></li>"
@@ -1420,7 +1379,7 @@ function clusterRename(oldName) {
             // Replace the old name with the new name
             clusterNames[index] = clusterName;
         }
-
+        updateClusterName(oldName, clusterName)
         //rename the cluster in csv data files
         renameClusterNameInCSV("data2", oldName, clusterName);
         renameClusterNameInCSV("data1", oldName, clusterName);
@@ -1435,20 +1394,6 @@ function clusterRename(oldName) {
           //check if the cluster is selected or not
 
           if (!isEmpty(clusterName)) {
-            //check if the cluster is empty or not
-
-            // var doc = new Array(1);
-            // var color = {};
-            // doc[0] = document.getElementById("doc_select").value;
-            // color[doc[0]] = $("#" + clusterName + " p").css("background-color"); //"Blue";
-
-            // paralelCordinator(
-            //   documentClusterData,
-            //   "#panel6",
-            //   doc,
-            //   "#DocumentClusterView",
-            //   color
-            // );
 
             var selectedTerms = document.getElementsByClassName(
               "ui-widget-content ui-selectee ui-selected"
@@ -1494,35 +1439,26 @@ function clusterRename(oldName) {
   }
 }
 
-/**
- * rename the name of cluster in tooltip of nodes in general view
- * @param clusterListNames = the old list of cluster names
- * @param oldName = old name of cluster
- * @param newName = new name of cluster
- * @return newClusters = new list of document cluster names
- */
-function renameCLusterNameInToolTip(clusterListNames, oldName, newName) {
-  var clusters = clusterListNames.split(",");
+function updateClusterName(oldName, newName) {
+  var input = {
+    oldName: oldName,
+    newName: newName
+  };
 
-  var newClusters = "";
-
-  for (var i = 0; i < clusters.length; i++) {
-    var temp = "";
-    if (clusters[i] == oldName) {
-      temp = newName;
-    } else {
-      temp = clusters[i];
+  $.ajax({
+    type: "POST",
+    url: "./cgi-bin/update_cluster.py", // Ensure this is the correct path to your CGI script
+    data: {
+      userID: userID,
+      cluster_name_update: JSON.stringify(input),
+    },
+    success: function (msg) {
+      console.log(msg);
     }
-
-    if (newClusters == "") {
-      newClusters = temp;
-    } else {
-      newClusters += "," + temp;
-    }
-  }
-
-  return newClusters;
+  });
 }
+
+
 
 /**
  * Check if the cluste is empty or not
@@ -2243,7 +2179,6 @@ function termClick(event) {
       colors
     );
   }
-
   $("#selectable").selectable({
     selected: function (event, ui) {
       // if(event.shiftKey){
@@ -3762,22 +3697,37 @@ function submitFeedback() {
   var supportRadioChecked = document.querySelector('input[name="support"]:checked');
   var support = supportRadioChecked ? supportRadioChecked.value : null;
 
+  // Get the value of the textual feedback for the "support" question
+  var reasonForSupport = document.getElementById("reasonForSupport").value.trim();
+
+  // Get the value of the textual feedback for the "satisfaction" question
+  var reasonForSatisfaction = document.getElementById("reasonForSatisfaction").value.trim();
+  
+
   // Attempt to retrieve the checked radio button for the "satisfaction" question
   var satisfactionRadioChecked = document.querySelector('input[name="satisfaction"]:checked');
   var satisfaction = satisfactionRadioChecked ? satisfactionRadioChecked.value : null;
 
   // Get the value of the textual feedback if "No" is selected
-  var feedbackText = document.getElementById("feedbackText").value.trim();
+  // var feedbackText = document.getElementById("feedbackText").value.trim();
 
-  // Validate the form inputs
+  // Validate that both scales are responded to
   if (!support) {
-    alert("Please select an option for question 1.");
-    return; // Stop the function execution here
-  } else if (support === "No" && !feedbackText) {
-    alert("Please provide your feedback in the text box.");
+    alert("Please respond to question 1");
     return; // Stop the function execution here
   } else if (!satisfaction) {
-    alert("Please select an option for question 2.");
+    alert("Please repond to question 2");
+    return; // Stop the function execution here
+  }
+
+  // Validate the textual response for neutral or lower ratings
+  if (support <= 3 && !reasonForSupport) { // Checks if the support rating is neutral or lower without a reason
+    alert("Please provide a reason for question 1 rating.");
+    return; // Stop the function execution here
+  }
+
+  if (satisfaction <= 3 && !reasonForSatisfaction) { // Checks if the satisfaction rating is neutral or lower without a reason
+    alert("Please provide a reason for question 1 rating.");
     return; // Stop the function execution here
   }
 
@@ -3786,7 +3736,9 @@ function submitFeedback() {
     type: "POST",
     url: "/cgi-bin/userFeedback.py",
       data: { 
-          feedback: feedbackText,
+          supportReason: reasonForSupport,
+          satisfactionReason: reasonForSatisfaction,
+          // feedback: feedbackText,
           support: support,
           satisfaction: satisfaction,
           userID: userID,
@@ -3797,7 +3749,7 @@ function submitFeedback() {
       success: function(response) {
           // Handle success
           // Close the modal and clear the form
-          document.getElementById("feedbackText").value = "";
+          // document.getElementById("feedbackText").value = "";
           var radios = document.querySelectorAll('input[type="radio"]');
           radios.forEach(radio => radio.checked = false); // Uncheck all radio buttons
       },
@@ -3818,7 +3770,9 @@ function submitFeedback() {
   });
 
   // Clear the textual response
-  document.getElementById("feedbackText").value = "";
+  // document.getElementById("feedbackText").value = "";
+  document.getElementById("reasonForSupport").value = "";
+  document.getElementById("reasonForSatisfaction").value = "";
   
   showNewDocument();
 }

@@ -1,6 +1,10 @@
 Tasks:
 
-1) Send invitation mail
+1) Send invitation mail 
+
+Note: USING BCC
+
+
 Subject: Invitation for the user study - Visual System Evaluation for Explaination of Document Clustering.
 Hello, 
 
@@ -56,7 +60,7 @@ Congratulations on successfully passing the screening questionnaire for our user
 
 As the next step, we would like to invite you to interact with our tool. The tool will guide you through a tutorial to familiarize you with its features and functionalities. Following the tutorial, you will be asked to evaluate the explanations provided for 20 examples.
 
-To access the tool, please use the following link: [Tool Link]
+To access the tool, please use the following link: http://13.51.19.177//
 
 <br>NOTE: Please use your email as your username.<br>
 

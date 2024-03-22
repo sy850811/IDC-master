@@ -15,12 +15,17 @@ satisfaction = form.getvalue('satisfaction')
 userID = form.getvalue('userID')
 documentname = form.getvalue('documentname')
 datetime_received = form.getvalue('datetime')
+# Retrieve additional data from the POST request
+reason_for_support = form.getvalue('supportReason')
+reason_for_satisfaction = form.getvalue('satisfactionReason')
 
-# Create a DataFrame
+# Add the new fields to your DataFrame
 df = pd.DataFrame({
     'Feedback': [feedback],
     'Support': [support],
     'Satisfaction': [satisfaction],
+    'ReasonForSupport': [reason_for_support],
+    'ReasonForSatisfaction': [reason_for_satisfaction],
     'UserID': [userID],
     'DocumentName': [documentname],
     'DateTime': [datetime_received]
@@ -44,3 +49,7 @@ df.to_csv(file_path, index=False)
 print("Content-type:application/json\r\n\r\n")
 response = {'status': 'success', 'message': 'Feedback submitted successfully'}
 print(json.dumps(response))
+
+
+
+

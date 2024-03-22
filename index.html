@@ -217,7 +217,7 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
       ondrag="panelDrag(this)"
       onclick="panelDrag(this)"
     >
-      <p id="panel9title" class="panelTitle">Local Explanation</p>
+      <p id="panel9title" class="panelTitle">Local Explanation View</p>
       <div
         id="chart"
         style="
@@ -237,75 +237,88 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
     
     <div id="feedbackModal" class="modal resizable" ondrag="panelDrag(this)" onclick="panelDrag(this)">
       <p id="panel10title" class="panelTitle">Explanation Evaluation</p>
-      <!-- set display style to none -->
       <div class="modal-content" style="display: none;" id="feedbackFormContent">
         <p id="question1">1) Does the local explanation logically support the document's assignment to </p>
-        <input type="radio" id="yes" name="support" value="Yes">
-        <label for="yes">Yes</label>
-        <input type="radio" id="no" name="support" value="No">
-        <label for="no">No</label><br>
-    
-        <div id="textualResponse" style="display:none;">
-          <br>
-          <textarea id="feedbackText" placeholder="Enter your feedback here..."></textarea><br>
+        <div id="supportScaleRadioButton">
+          <div>
+          <input type="radio" id="support1" name="support" value="5">
+          <label for="support1">Strongly Agree</label>
+          </div>
+          <div>
+          <input type="radio" id="support2" name="support" value="4">
+          <label for="support2">Agree</label>
         </div>
-    
+          <div>
+          <input type="radio" id="support3" name="support" value="3">
+          <label for="support3">Neutral</label>
+        </div>
+          <div>
+          <input type="radio" id="support4" name="support" value="2">
+          <label for="support4">Disagree</label>
+        </div>
+          <div>
+          <input type="radio" id="support5" name="support" value="1">
+          <label for="support5">Strongly Disagree</label>
+        </div>
+        </div>
+        <textarea id="reasonForSupport" placeholder="Reason for the rating above..."></textarea><br>
         <p>2) Are you satisfied with the depth and detail of the explanation?</p>
         <form>
-          <div id="satisfactionScaleRadioButton">
+          <div>
             <input type="radio" id="scale1" name="satisfaction" value="5">
             <label for="scale1">Strongly Agree</label>
           </div>
-          <div id="satisfactionScaleRadioButton">
+          <div>
             <input type="radio" id="scale2" name="satisfaction" value="4">
             <label for="scale2">Agree</label>
           </div>
-          <div id="satisfactionScaleRadioButton">
+          <div>
             <input type="radio" id="scale3" name="satisfaction" value="3">
             <label for="scale3">Neutral</label>
           </div>
-          <div id="satisfactionScaleRadioButton">
+          <div>
             <input type="radio" id="scale4" name="satisfaction" value="2">
             <label for="scale4">Disagree</label>
           </div>
-          <div id="satisfactionScaleRadioButton">
+          <div>
             <input type="radio" id="scale5" name="satisfaction" value="1">
             <label for="scale5">Strongly Disagree</label>
           </div>
         </form>
+        <textarea id="reasonForSatisfaction" placeholder="Reason for the rating above..."></textarea><br>
         <div class="submit-button-container">
           <button onclick="submitFeedback()">Submit Feedback and Continue</button>
         </div>
       </div>
     </div>
-    <script>
+    
+    <!-- <script>
       document.addEventListener('DOMContentLoaded', function() {
     // Select the radio buttons for the "support" question
-    var yesButton = document.getElementById('yes');
-    var noButton = document.getElementById('no');
+    // var yesButton = document.getElementById('yes');
+    // var noButton = document.getElementById('no');
 
-    // Function to toggle the visibility of the feedback textarea
-    function toggleFeedbackTextArea() {
-        var feedbackTextArea = document.getElementById('textualResponse');
-        if(noButton.checked) {
-            // If "No" is selected, show the textarea
-            feedbackTextArea.style.display = 'block';
-        } else {
-            // Otherwise, hide it
-            feedbackTextArea.style.display = 'none';
-        }
-    }
+    // // Function to toggle the visibility of the feedback textarea
+    // function toggleFeedbackTextArea() {
+    //     var feedbackTextArea = document.getElementById('textualResponse');
+    //     if(noButton.checked) {
+    //         // If "No" is selected, show the textarea
+    //         feedbackTextArea.style.display = 'block';
+    //     } else {
+    //         // Otherwise, hide it
+    //         feedbackTextArea.style.display = 'none';
+    //     }
+    // }
 
     // Add click event listeners to both radio buttons
-    yesButton.addEventListener('click', toggleFeedbackTextArea);
-    noButton.addEventListener('click', toggleFeedbackTextArea);
+    // yesButton.addEventListener('click', toggleFeedbackTextArea);
+    // noButton.addEventListener('click', toggleFeedbackTextArea);
 });
 
-    </script>
+    </script> -->
     
 </div>
 <div id="fullpage" style="display: none;"></div>
-  
 <script>
   document.addEventListener('FirstTutorial', function(event) {
       introJs().setOptions({
@@ -313,15 +326,15 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
         exitOnEsc: false, // Prevent closing the tutorial when pressing the Escape key
           steps: [
             {
-              intro:"<strong><center>Welcome</center></strong><br>Before discussing the tool used for this user study, let's clarify the purpose of our research. We aim to understand AI's reasoning for clustering documents. This tool demonstrates the AI's justifications (using concepts from the documents) to form clusters. Please examine these justifications/explanations and provide your feedback. Please click 'Next' to continue the tutorial."
+              intro:"<strong><center>Welcome</center></strong><br>Before discussing the tool used for this user study, let's clarify the purpose of our research. We aim to understand AI's reasoning for clustering documents. This tool demonstrates the AI's justifications (using concepts from the news documents) to form clusters. Please examine these justifications/explanations and provide your feedback. Please click 'Next' to continue the tutorial."
             },
-            {intro:" <strong><center>Who are you?</center></strong><br> Imagine stepping into the role of a lead editor at a premier online news portal. Your new task involves utilizing an innovative tool designed to organize news articles into distinct, coherent categories. This tool, powered by advanced AI, not only clusters articles but also provides explanations for its categorizations, highlighting unique patterns and suggesting novel groupings beyond the ordinary."},{intro:"Your critical mission is to assess these explanations. Are they clear? Do they convincingly justify the placement of articles within each cluster? This exercise isn't about evaluating the AI's ability to categorize per se but instead focusing on the rationale it provides. Your insights will play a pivotal role in refining how we understand and interact with AI, ensuring that it operates not just with precision, but with logic and transparency that align with human reasoning. Let's get started!"},
+            {intro:" <strong><center>Who are you?</center></strong><br> Imagine stepping into the role of a lead editor at a premier online news portal. Your new task involves utilizing an innovative tool designed to organize news articles into distinct, coherent categories. This tool, powered by advanced AI, not only clusters articles but also provides explanations for its categorizations, highlighting unique patterns and suggesting novel groupings beyond the ordinary."},{intro:"Your critical mission is to assess these explanations. Are they clear? Do they convincingly justify the placement of articles within each cluster? This exercise isn't about evaluating the AI's ability to categorize per se but <strong>instead focusing on the rationale it provides.</strong> Your insights will play a pivotal role in refining how we understand and interact with AI, ensuring that it operates not just with precision, but with logic and transparency that align with human reasoning. Let's get started!"},
               {
-                  intro: "<strong><center>Welcome to our AI's explanation tool<br>(for document clustering)!</center></strong><br> This platform assists you in understanding rationale of AI-driven document clustering. It's designed to clarify how decisions are made to group documents. We'll start with a brief overview of the interface."
+                  intro: "<strong><center>Welcome to our AI's explanation tool<br>(for document clustering)!</center></strong><br> This platform assists you in understanding rationale of AI-driven document clustering. It's designed to clarify how decisions are made to group news documents. We'll start with a brief overview of the interface."
               },
               {
                   element: document.querySelector('#panel5'),
-                  intro: "Meet the Cluster Tree View. Here, the clusters created by the AI are presented. <br>You can expand each cluster to see its documents and hover over them to preview their contents."
+                  intro: "Meet the Cluster Tree View. Here, the clusters created by the AI are presented. <br>Click on the clusters to open them up and see its new documents. Move your mouse over the documents to take a quick look at what they're about. Plus, this panel is resizable, so you can adjust the view to your liking. Give it a try!"
               }, 
               {
                   element: document.querySelector('#panel2'),
@@ -329,14 +342,14 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
               },
               {
                   element: document.querySelector('#panel9'),
-                  intro: "Now, observe the Local Explanation View. The Local Explanation View graphically shows how concepts influences a document's classification into clusters. Positive numbers on the chart mean the concept is strongly related to that cluster, while negative numbers mean it's less related. The bars represent different clusters, color-coded by concepts. The size of each colored segment in the bars shows the impact level of that concept on the clustering decision. The black dots mark the overall result after considering all the concepts. This visual helps understand the document's placement and the reasoning behind the algorithm's decision for that specific clustering."
+                  intro: "Let's focus on the Local Explanation View. This view uses colours to connect specific words or phrases in the document to broader concepts. When a word or phrase is highlighted in the document view, it corresponds to a particular concept, represented by the same colour in the graph. For instance, the word 'Iraq' might be highlighted in green in the text, and 'Iraq' as a concept would also be depicted in green on the graph. The graph then shows how these concepts influence the document's assignment into various clusters. The presence and strength of these concepts, indicated by the height of their respective coloured segments in the graph's bars, contribute to the document's association with a particular cluster. A positive value indicates a strong association, whereas a negative value suggests a weak association. Black dots summarize the collective impact of all concepts, reflecting the document's final assignment."
               },
               {
                   element: document.querySelector('#feedbackModal'),
                   intro: "The Explanation Evaluation View invites your feedback on the explanation clarity.\nThe first query seeks your agreement on whether the document's clustering rationale appears logical, examining the contribution of highlighted concepts.\nThe second question gauges your satisfaction with the provided explanation detail, asking if you feel fully informed about the AI's clustering decision."
               },
               {
-              intro: "Please evaluate the explanation and provide feedback.<br>Once you submit feedback for the current document, you will be requested to submit input for another 19 documents, Where you <br>\
+              intro: "Please evaluate the explanation and provide feedback.<br>Once you submit feedback for the current document, you will be requested to submit input for another 19 news documents, Where you <br>\
               <ul>\
                 <li>Read the Document</li>\
                 <li>Analyze the contribution of the colour-coded concepts of the document in the Local Explanation view</li>\
@@ -358,15 +371,15 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
               },
               {
                   element: document.querySelector('#panel4'),
-                  intro: "Here's the Clusters View. It lists defining concepts for each cluster, which you can <strong>scroll</strong> through. Analyze these to better understand each cluster's essence. Customize by double-clicking to rename any cluster. Clicking on different clusters or terms will update other views correspondingly."
+                  intro: "Explore the resizable Clusters View, where key concepts for each cluster are at your fingertips. Slide up or down to uncover more insights and grasp the essence of each group. Feel like a name doesn't quite fit? You can easily rename any cluster with a double-click. Plus, clicking on any cluster or concept updates the display across other sections. Dive in and scroll through - this view is designed to expand your understanding and is adjustable to your viewing preference!"
               },
               {
                   element: document.querySelector('#panel8'),
-                  intro: "The Term Cloud View displays a visual array of terms corresponding to the currently selected cluster, document, or nodes, as specified in the panel's title within parentheses. This representation uses variations in shade intensity and font size to illustrate the degree of relevance of each term to the selected element; terms that are more significantly related to the selected cluster appear in darker shades of gray and are presented in a larger font."
+                  intro: "The Term Cloud View gives you a cool visual of key words linked to whatever cluster you've picked. It's easy to see which words matter most because they're in darker shades and bigger sizes. Darker and bigger means more important. Just click to rearrange and get a clear picture of what's key!"
               },
               {
                   element: document.querySelector('#panel3'),
-                  intro: "The Cluster Keyterms View shows the key terms of selected cluster. The header color of this panel is similar to the color of selected cluster in Clusters panel. The selected cluster has a red border line and gray background. The bar chart in front of each term shows the relatedness of the term to the selected cluster. Scrollable Terms are sorted based on their relatedness in an increasing order (first terms are more similar to the cluster). The relatedness of selected term to each clusters will be shown in the Term-Cluster View panel. The list is <strong>clickable and scrollable</strong>."
+                  intro: "The Cluster Keyterms View is all about diving into the core terms of the cluster you're checking out, and you can even adjust its size to your liking! It matches the cluster's color for a seamless experience. Discover how well each term aligns with your cluster with the handy bar chart that ranks them by closeness - the top ones are your closest matches. Click on any term to see how it measures up across all clusters in the Term-Cluster View. Feel free to scroll, click, and resize the panel as you explore deeper!"
               },
               {
                   element: document.querySelector('#panel7'),
@@ -375,6 +388,10 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
               {
                   element: document.querySelector('#cluster0_title'),
                   intro: "Before submitting the feedback for the explanation for following documents, please explore the newly added infomation especially the Cluster View to <strong>assign an appropriate name to each cluster</strong>. You can do this by double clicking on the cluster name (cluster0, cluster1) in the Cluster View."
+              },
+              {
+                element: document.querySelector('#button1'),
+                intro: "Click here to access the help page to access the information of each view again."
               }
           ]
       }).start();
