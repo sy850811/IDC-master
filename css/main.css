@@ -366,8 +366,10 @@
   width: 40.5%;
   float: left;
   height: 91%;
-  margin: 3px;
+  margin: 0px;
   background-color: white;
+  /* padding-top: 20px; */
+  overflow: auto;
 }
 
 #general_view1 {
@@ -1650,10 +1652,11 @@ form label {
   left: 0;
 }
 
-.popup {
+.popuptext {
   display: none; /* Hidden by default */
   position: absolute; /* Positioned relative to the nearest positioned ancestor */
-  z-index: 100; /* Sit on top */
+  /* z-index: 100; Sit on top */
+  z-index: 1010; /* Now it will sit on top of the popupWindow */
   padding: 15px; /* Add some padding */
   border: 1px solid #ddd; /* Add a border */
   background-color: #fff; /* White background color */
@@ -1669,7 +1672,7 @@ form label {
   to { opacity: 1; }
 }
 
-.popup.show {
+.popuptext.show {
   display: block; /* Show the popup */
   animation-name: fadeIn; /* Fade in the popup */
   animation-duration: 0.5s; /* Duration of the animation */
@@ -1709,3 +1712,50 @@ form label {
   width: auto !important;
 }
 
+.popup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.4);
+  z-index: 1000;
+}
+
+.popup-container {
+  width: 60vw; /* Or the width you want for your content */
+  height: 80vh; /* Or the height you want for your content */
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  left : 50%
+  /* No need for a higher z-index than the popup since it's a child element */
+}
+
+.popup-content {
+  width: 60vw; /* This should match the popup-container if you want the same size */
+  height: 80vh; /* This should match the popup-container if you want the same size */
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow-y: auto; /* In case the content overflows */
+  /* Ensure no margin, position, or other properties are interfering with the flexbox centering */
+}
+
+
+.close {
+  position: absolute;
+  top: 15px; /* Adjust as necessary */
+  right: 20px; /* Adjust as necessary */
+  color: #000; /* A color that contrasts well with your popup background */
+  font-size: 36px; /* Make it larger for better visibility */
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover, .close:focus {
+  color: #f00; /* A different color on hover for better visibility */
+  text-decoration: none;
+}

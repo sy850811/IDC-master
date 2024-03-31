@@ -2,6 +2,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+  <script>
+    window.addEventListener('focus', function() {
+    location.reload();
+});
+  </script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>User Guide</title>
     <link rel="stylesheet" href="css/jquery-ui.css">  <!-- should be the first -->    
@@ -26,7 +31,6 @@
 				The goal is to evaluate the effectiveness of the `EXPLANATION` for  AI driven document clustering. The AI has clustered the documents based on the concepts it has identified in the documents. The explanation is designed to help you understand why the AI has clustered the documents in the way it has. Your feedback will help us improve the AI's performance and the explanation quality.
         <br>
         This platform assists you in understanding AI-driven document clustering. It's designed to clarify how decisions are made to group documents. Each section below corresponds to a part of the interface. The explanation for each part is provided in the following sections.
-        <!-- <strong>Help Video:</strong> You can have an access to an introduction video of the interface from <a target="_blank" href="video.html">here</a> -->
 			</p>
 		</div>
 		</div>
@@ -84,12 +88,20 @@
           <div id="collapse9" class=" collapse">
             <div class="accordion-inner">
               <img src="img/fig8.png" style="margin:20px;float:left;width:450px;height:500px;border-width:5px;border:1px solid gray;">
-              <br><p style="text-align:justify;margin:5px">Now, observe the Local Explanation View. The Local Explanation View graphically shows how each concept influences a document's classification into clusters. Positive numbers on the chart mean the concept is strongly related to that cluster, while negative numbers mean it's less related. The bars represent different clusters, color-coded by concepts. The size of each colored segment in the bars shows the impact level of that concept on the clustering decision. The black dots mark the overall result after considering all the concepts. This visual helps understand the document's placement and the reasoning behind the algorithm's decision for that specific clustering.</p><br><br><br><br><br><br><br><br><br><br>
+              <br><p style="text-align:justify;margin:5px"><h4>What It Is</h4><br><br>
+                The Local Explanation View is a tool that helps us see why a document gets put into a group. It uses colors to link words in the document to big ideas, making it easier to see how these ideas play a part in grouping documents.<br>
+                
+                <h4>How to Interpret</h4><br><br>
+                a) Matching Colors to Ideas<br>
+                When a word in the document is colored, it matches an idea shown with the same color on a graph. This helps us quickly see which words and ideas are connected. For example, if "Iraq" is colored green in the text, it will also appear green on the graph, showing it's an important idea.
+                
+                b) Understanding Impact on Grouping<br>
+                The graph has bars representing groups, with colors inside these bars showing different ideas. The size of the colored part tells us how much an idea affects the document's place in a group. A big, positive number means the idea strongly links the document to that group. A negative number means the idea doesn't fit well with that group. Black dots give a quick view of how all ideas together decide the document's group, making it easier to understand why the document is placed in a particular group.</p><br><br><br><br><br><br><br><br>
   			  </ul>
             </div>
           </div>
         </div>
-
+        <div id="global_explanation">
         <!----------------------- panel4 (Clusters) Help -------------------------->
         <div class="panel panel-default help_panel">
           <div class="panel-heading">
@@ -102,7 +114,18 @@
           <div id="collapse4" class=" collapse">
             <div class="accordion-inner">
             	<img src="img/fig5.png" style="margin:20px;float:left;width:480px;height:300px;border-width:5px;border:1px solid gray;">
-            	<br><p style="text-align:justify;margin:5px">This panel displays all clusters from the document collection, with each cluster's header color matching its designation in the Clusters panel. The currently selected cluster is distinguished by a red border line and gray background. Clicking on a cluster will apply this color scheme to indicate selection. Clicking on a term within a cluster highlights it in the Cluster Key Terms panel and displays its relevance to other clusters in the Term-Cluster View panel. Double-clicking on a term removes it from the cluster, while dragging allows for reordering. double-clicking on a cluster offers an option to rename it, updating its name across all panels for consistency.</p><br>
+            	<br><p style="text-align:justify;margin:5px"><h4>What is it?</h4><br><br>
+                The resizable Clusters View helps you see and understand the main ideas or topics in a cluster of documents. In this view, you can find key concepts of each cluster easily. It's like having a map that shows you how topics are grouped.
+                <br><br>
+                
+                <h4>Interactivity</h4><br>
+                <ul>
+                <li>Renaming Clusters: If a group's name doesn't describe what it's about, you can change it. Double-click on the cluster's name to type in a new one. This new name will then show up everywhere that group is talked about.</li>
+
+                <li>Selecting Clusters: You can select a cluster by clicking on its list. Once selected, it stands out with a red line and a gray background. With a cluster selected, three views - the Term Cloud, Cluster Key Terms View, and Term-Cluster View - will update to show information relevant to that cluster. This feature allows you to dive deep into the specifics of each cluster, making it easier to understand its key themes and how they relate to the overall collection.</li>
+
+                <li>Resizing the View: Should the current view feel too cramped or limited, you can resize it. Resizing ensures that you can always tailor the Clusters View to your viewing preferences, making it easier to explore and understand the displayed information.</li>
+                </ul></p>
             </div>
           </div>
         </div>
@@ -119,7 +142,7 @@
           <div id="collapse8" class=" collapse">
             <div class="accordion-inner">
               <img src="img/fig7.png" style="margin:10px;float:left;width:300px;height:180px;border-width:5px;border:1px solid gray;"><br>
-              <p style="text-align:justify;margin:5px">The Term Cloud View displays a visual array of terms corresponding to the currently selected cluster, document, or nodes, as specified in the panel's title within parentheses. This representation uses variations in color intensity and font size to illustrate the degree of relevance of each term to the selected element; terms that are more significantly related to the selected cluster appear in darker shades of gray and are presented in a larger font.</p><br><br><br>
+              <p style="text-align:justify;margin:5px">The Term Cloud View provides a cool visual of keywords linked to the selected cluster. It's easy to see which words matter most because they're in darker shades. Darker means more important. Just click to rearrange and get a clear picture of what's key!</p><br><br><br>
             </div>
           </div>
         </div>
@@ -136,7 +159,17 @@
           <div id="collapse3" class=" collapse">
             <div class="accordion-inner">
               <img src="img/fig4.png" style="margin:10px;float:left;width:250px;height:290px;border-width:5px;border:1px solid gray;">
-              <br><p style="text-align:justify;margin:5px">The Cluster Keyterms View shows the key terms of selected cluster. The header color of this panel is similar to the color of selected cluster in Clusters panel. The selected cluster has a red border line and gray background. The bar chart in front of each term shows the relatedness of the term to the selected cluster. Terms are sorted based on their relatedness in an increasing order (first terms are more similar to the cluster). The relatedness of selected term to each clusters will be shown in the Term-Cluster View panel.</p><br><br><br><br><br><br><br>
+              <br><p style="text-align:justify;margin:5px"><h4>What It Is</h4>
+                <p>The Cluster Keyterms View is a feature that allows users to explore the core terms associated with a specific cluster they are interested in. It visually integrates with the cluster's overall color scheme, making the experience more intuitive and seamless. The terms are displayed in a way that represents their relevance to the selected cluster, with a color-coded header that matches the cluster's appearance in the Clusters panel. The specific cluster you're looking at is highlighted with a red border line and a gray background for easy identification.</p>
+            
+                <h4>What Interactivity Can You Do</h4>
+                <p>In the Cluster Keyterms View, interactivity is key to discovering the significance of each term within the context of your cluster. Here’s what you can do:</p>
+                <ul>
+                    <li><h5>Resize the Panel:</h5> Adjust the size of the Keyterms View panel to fit your screen or preference.</li>
+                    <li><h5>Explore Term Closeness:</h5> Use the bar chart to see how closely each term is related to your cluster. The chart ranks terms by their closeness, with the top ones indicating the closest match.</li>
+                    <li><h5>Click on Terms:</h5> By clicking on any term, you can see how it measures up against all clusters in the Term-Cluster View. This shows the relatedness of the selected term to each cluster.</li>
+                    <li><h5>Scroll and Interact:</h5> Feel free to scroll through the list of terms, click on any that interest you, and dynamically interact with the panel to gain deeper insights.</li>
+                </ul></p><br><br><br><br><br><br><br>
             </div>
           </div>
         </div>
@@ -153,12 +186,12 @@
           <div id="collapse7" class=" collapse">
             <div class="accordion-inner">
               <img src="img/fig9.png" style="margin:20px;float:left;width:250px;height:250px;border-width:5px;border:1px solid gray;">
-              <br><p style="text-align:justify;margin:5px">The Term-Cluster View panel effectively charts the distribution of key terms across all clusters, enabling you to compare their significance within each one. Additionally, any actions such as renaming or deleting a cluster are reflected in this panel, ensuring that changes are consistently applied across the interface.</p>
+              <br><p style="text-align:justify;margin:5px">The Term-Cluster View panel effectively charts the distribution of key terms across all clusters, enabling you to compare their significance within each one. Additionally, renaming a cluster are reflected in this panel, ensuring that changes are consistently applied across the interface.</p>
               <br><br><br><br><br><br><br><br><br>
             </div>
           </div>
         </div>
-
+        </div>
         <!-- --------------------- panel6 (Feedback) Help ------------------------>
         <div class="panel panel-default help_panel">
           <div class="panel-heading">
@@ -175,6 +208,16 @@
             </div>
           </div>
         </div>
+        <script>
+          window.addEventListener('DOMContentLoaded', (event) => {
+    const isVisible = localStorage.getItem('visible'); // Use 'sessionStorage' if you prefer
+    if (isVisible === 'true') {
+        document.getElementById('global_explanation').style.display = 'block';
+    } else {
+        document.getElementById('global_explanation').style.display = 'none';
+    }
+});
+        </script
 	</div>
     </div>
 	</div>

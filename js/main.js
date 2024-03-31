@@ -19,7 +19,9 @@ const PROPOSED_BOTH = 0;
 // const BASELINE_GLOBAL = 1;
 // const BASELINE_BOTH = 2;
 // const PROPOSED_BOTH = 3;
-
+let originalParent;
+let originalWidth;
+let originalHeight;
 var maxPositiveAcrossDocument;
 var clusterNames = [];
 var minNegativeAcrossDocument;
@@ -68,7 +70,7 @@ var currentSubset = null;
 var currentDocumentName = "";
 var numberOfDocumnetsVariable = 20;
 var termProbabilities = [];
-var numberOfDocumentsWithOnlyLocalExplanation = 4;
+var numberOfDocumentsWithOnlyLocalExplanation = 1;
 /**
  * Load the system and clusters
  */
@@ -89,6 +91,8 @@ function showNewDocument() {
   document.getElementById("doc_content").innerHTML = getDocumentContent(currentDocumentName);
   // $("#selectable").css('visibility', 'hidden'); 
   // #panel3
+  localStorage.setItem('visible', 'false'); // Use 'sessionStorage' if you prefer
+
   $("#panel3").css('visibility', 'hidden');
   $("#panel4").css('visibility', 'hidden');
   $("#panel7").css('visibility', 'hidden');
@@ -96,6 +100,7 @@ function showNewDocument() {
 }
 else {
   if (currentDocumentName == "paper"+numberOfDocumentsWithOnlyLocalExplanation+".txt") {
+    localStorage.setItem('visible', 'true'); // Use 'sessionStorage' if you prefer
     $("#panel3").css('visibility', 'visible');
     $("#panel4").css('visibility', 'visible');
     $("#panel7").css('visibility', 'visible');
@@ -153,9 +158,9 @@ function pageLoad() {
   // //get the user id
   // else
   {
-    var input = prompt("Please enter your email", "");
+    // var input = prompt("Please enter your email", "");
     // var input = "baqia";
-    // var input = "syedmbhzi";
+    var input = "rakshitmakan";
     var loadSessionConfirmed = false;
 
     if (input != null && input.trim() != "") {
@@ -3347,6 +3352,15 @@ function createTermClusterChart() {
     return prev.aggregateValue > current.aggregateValue ? prev : current;
   }).cluster;
 
+
+// Append a text element to the SVG to display the assigned cluster
+svg.append("text")
+  .attr("x", width / 2) // Position at the center of the SVG
+  .attr("y", 20) // Increase y value to move the text lower
+  .attr("text-anchor", "middle") // Center the text
+  .style("font-size", "16px") // Set the font size
+  .text(`Document is assigned to ${highestAggregateCluster}.`);
+
   var y = d3.scale
     .linear()
     .rangeRound([height, 0])
@@ -3358,18 +3372,21 @@ function createTermClusterChart() {
     .append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
+    .call(xAxis)
+    .selectAll("text") // Select all text elements for the x-axis
+    .style("font-weight", "bold"); // Make the x-axis labels bold
   //Y axis
   var yAxis = d3.svg.axis().scale(y).orient("left");
-  svg
+    svg
     .append("g")
     .attr("class", "y axis")
     .call(yAxis)
     .append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
+    .attr("y", -margin.left) // Move the text to the left of the y-axis
+    .attr("x", 0 - (height / 2)) // Center the text vertically
+    .attr("dy", "1em") // Adjust distance from the y-axis
+    .style("text-anchor", "middle") // Center align the text
     .text("Document Belongingness to cluster");
 
   // #draw horizontal line at y=0
@@ -3775,4 +3792,50 @@ function submitFeedback() {
   document.getElementById("reasonForSatisfaction").value = "";
   
   showNewDocument();
+  // introJs().exit();
 }
+
+function showPopup() {
+    const panel = document.getElementById("panel5");
+    originalParent = panel.parentNode;
+
+    const computedStyle = window.getComputedStyle(panel);
+    originalWidth = computedStyle.width;
+    originalHeight = computedStyle.height;
+
+    // Set the panel size for the popup
+    panel.style.width = "50vw";
+    panel.style.height = "70vh";
+
+    const popupContent = document.getElementById("popupContent");
+    popupContent.appendChild(panel);
+
+    // Show the popup
+    document.getElementById("popupWindow").style.display = "flex"; // Use 'flex' to activate flexbox centering
+}
+
+function closePopup() {
+    const panel = document.getElementById("panel5");
+
+    // Restore the panel size
+    panel.style.width = originalWidth;
+    panel.style.height = originalHeight;
+    console.log("originalWidth : ",originalWidth)
+    console.log("originalHeight : ",originalHeight)
+    console.log(typeof originalWidth)
+
+    // Move back the panel to its original parent
+    originalParent.appendChild(panel);
+    // Move back the panel to its original parent
+    if (originalParent) {
+      if (originalParent.hasChildNodes()) {
+          originalParent.insertBefore(panel, originalParent.firstChild);
+      } else {
+          originalParent.appendChild(panel);
+      }
+  }
+
+    // Hide the popup
+    document.getElementById("popupWindow").style.display = "none";
+}
+

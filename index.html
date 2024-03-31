@@ -134,28 +134,32 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
       </div>
     </div>
 
-    <!----------------------- panel5 (Cluster Tree View) -------------------------->
-    <div
-      class="resizable"
-      id="panel5"
-      ondrag="panelDrag(this)"
-      onclick="panelDrag(this)"
-    >
-      <p id="panel5title" class="panelTitle">Cluster Tree View</p>
-      <div id="cluster_tree_view">
-        <ul>
-          <li
-            data-jstree='{ "opened" : true }'
-            class="context-menu-zero box menu-1"
-          >
-            Clusters
-          </li>
+<!----------------------- panel5 (Cluster Tree View) -------------------------->
+<div class="resizable" id="panel5" ondrag="panelDrag(this)">
+  <p id="panel5title" class="panelTitle" onclick="showPopup()">Cluster Tree View</p>
+  <div id="cluster_tree_view">
+      <ul>
+          <li data-jstree='{ "opened" : true }' class="context-menu-zero box menu-1">Clusters</li>
           <!-- cluster list goes here! -->
-        </ul>
-      </div>
-    </div>
-    <div id="docText" class="popup" style="display: none;"></div>
+      </ul>
+  </div>
+</div>
 
+<!----------------------- Popup Window -------------------------->
+<div id="popupWindow" class="popup" style="display: none;">
+  <!-- Intermediate container for centering the content -->
+  <div class="popup-container">
+      <!-- Popup content goes here -->
+      <div id="popupContent">
+          <!-- Content dynamically inserted here -->
+      </div>
+  </div>
+  <!-- Close button -->
+  <span class="close" onclick="closePopup()">&times;</span>
+</div>
+
+<!-- Tooltip text for clusters (hidden by default, shown on hover) -->
+<div id="docText" class="popuptext" style="display: none;"></div>
     <!----------------------- panel7 (Term-Cluster View) -------------------------->
     <div
       class="resizable"
@@ -328,38 +332,47 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
             {
               intro:"<strong><center>Welcome</center></strong><br>Before discussing the tool used for this user study, let's clarify the purpose of our research. We aim to understand AI's reasoning for clustering documents. This tool demonstrates the AI's justifications (using concepts from the news documents) to form clusters. Please examine these justifications/explanations and provide your feedback. Please click 'Next' to continue the tutorial."
             },
-            {intro:" <strong><center>Who are you?</center></strong><br> Imagine stepping into the role of a lead editor at a premier online news portal. Your new task involves utilizing an innovative tool designed to organize news articles into distinct, coherent categories. This tool, powered by advanced AI, not only clusters articles but also provides explanations for its categorizations, highlighting unique patterns and suggesting novel groupings beyond the ordinary."},{intro:"Your critical mission is to assess these explanations. Are they clear? Do they convincingly justify the placement of articles within each cluster? This exercise isn't about evaluating the AI's ability to categorize per se but <strong>instead focusing on the rationale it provides.</strong> Your insights will play a pivotal role in refining how we understand and interact with AI, ensuring that it operates not just with precision, but with logic and transparency that align with human reasoning. Let's get started!"},
-              {
-                  intro: "<strong><center>Welcome to our AI's explanation tool<br>(for document clustering)!</center></strong><br> This platform assists you in understanding rationale of AI-driven document clustering. It's designed to clarify how decisions are made to group news documents. We'll start with a brief overview of the interface."
-              },
-              {
-                  element: document.querySelector('#panel5'),
-                  intro: "Meet the Cluster Tree View. Here, the clusters created by the AI are presented. <br>Click on the clusters to open them up and see its new documents. Move your mouse over the documents to take a quick look at what they're about. Plus, this panel is resizable, so you can adjust the view to your liking. Give it a try!"
-              }, 
-              {
-                  element: document.querySelector('#panel2'),
-                  intro: "This is the Document View, displaying one document at a time. Notice the highlighted text - these colors represent key concepts that influence the document's cluster classification."
-              },
-              {
-                  element: document.querySelector('#panel9'),
-                  intro: "Let's focus on the Local Explanation View. This view uses colours to connect specific words or phrases in the document to broader concepts. When a word or phrase is highlighted in the document view, it corresponds to a particular concept, represented by the same colour in the graph. For instance, the word 'Iraq' might be highlighted in green in the text, and 'Iraq' as a concept would also be depicted in green on the graph. The graph then shows how these concepts influence the document's assignment into various clusters. The presence and strength of these concepts, indicated by the height of their respective coloured segments in the graph's bars, contribute to the document's association with a particular cluster. A positive value indicates a strong association, whereas a negative value suggests a weak association. Black dots summarize the collective impact of all concepts, reflecting the document's final assignment."
-              },
-              {
-                  element: document.querySelector('#feedbackModal'),
-                  intro: "The Explanation Evaluation View invites your feedback on the explanation clarity.\nThe first query seeks your agreement on whether the document's clustering rationale appears logical, examining the contribution of highlighted concepts.\nThe second question gauges your satisfaction with the provided explanation detail, asking if you feel fully informed about the AI's clustering decision."
-              },
-              {
-              intro: "Please evaluate the explanation and provide feedback.<br>Once you submit feedback for the current document, you will be requested to submit input for another 19 news documents, Where you <br>\
-              <ul>\
-                <li>Read the Document</li>\
-                <li>Analyze the contribution of the colour-coded concepts of the document in the Local Explanation view</li>\
-                <li>Submit feedback on the explanation for placing the current document in its cluster.Your input will help us improve the AI's performance and the quality of explanations. Click 'Submit Feedback and Continue' to proceed.</li>\
-              </ul>"
-              }
+            {
+              intro:" <strong><center>Who are you?</center></strong><br> Imagine stepping into the role of a lead editor at a premier online news portal. Your new task involves utilizing an innovative tool designed to organize news articles into distinct, coherent categories. This tool, powered by advanced AI, not only clusters articles but also provides explanations for its categorizations, highlighting unique patterns and suggesting novel groupings beyond the ordinary."},{intro:"Your critical mission is to assess these explanations. Are they clear? Do they convincingly justify the placement of articles within each cluster? This exercise isn't about evaluating the AI's ability to categorize per se but <strong>instead focusing on the rationale it provides.</strong> Your insights will play a pivotal role in refining how we understand and interact with AI, ensuring that it operates not just with precision, but with logic and transparency that align with human reasoning. Let's get started!"},
+            {
+                intro: "<strong><center>Welcome to our AI's explanation tool<br>(for document clustering)!</center></strong><br> This platform assists you in understanding rationale of AI-driven document clustering. It's designed to clarify how decisions are made to group news documents. We'll start with a brief overview of the interface."
+            },
+            {
+                element: document.querySelector('#panel5'),
+                intro: "Meet the Cluster Tree View. Here, the clusters created by the AI are presented.<br><strong>Read the documents to understand each cluster's theme.</strong> <br><br> <strong>Give it a try</strong><br><br><ul><li>Double-click clusters to view their documents.</li><li>Hover over documents for a quick preview.</li><li>Click on title 'Cluster Tree View' for a larger view.</li></ul> <br>"
+            }, 
+            {
+                element: document.querySelector('#panel2'),
+                intro: "This is the Document View, displaying one document at a time. Notice the highlighted text - these colors represent key concepts that influence the document's cluster classification."
+            },
+            { 
+                element: document.querySelector('#panel9'),
+                intro: "This graph explains why AI assigns a document to a cluster. This graph does so by showing the contribution of the document's concepts to each cluster. For example, the key concepts, like <span style='background-color: #8ED3C7;'>'Iraq'</span> highlighted in the document view contribute positively to cluster 3. Therefore, their contribution places the document in cluster 3."
+            },
+            {
+                element: document.querySelector('#feedbackModal'),
+                intro: "The Explanation Evaluation View invites your feedback on the explanation for assigning a document to a cluster."
+            },
+            {
+            intro: "Here is what you need to do in this user study"
+            },
+            {
+                intro: "Step 1: Read the document.",
+                element: document.querySelector('#panel2'),
+            },
+            {
+                intro: "Step 2: Understand why AI places the document in the bolded cluster. Evaluate the contribution of the document's concepts.",
+                element: document.querySelector('#panel9'),
+            },
+            {
+                intro: "Step 3: Fill Evaluation Feedback <br><br> <ul><li>Answer the first question: For example Choose 'neutral' and write reason for your rating in the text box.</li><li>Repeat for the second question</li><li>Click 'Submit Feedback and Continue'.</li></ul>",
+                element: document.querySelector('#feedbackModal'),
+            }
           ]
       }).start();
   });
   
+  // document.addEventListener('FirstTutorial', function(event) {
   document.addEventListener('startSecondTutorial', function(event) {
       introJs().setOptions({
         tooltipClass: 'wide-tooltip',
@@ -367,23 +380,23 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
         exitOnEsc: false, // Prevent closing the tutorial when pressing the Escape key
           steps: [
               {
-                  intro: "Having looked at individual document details, let's zoom out to the broader themes the AI has identified for the clusters. We'll also look at how these themes correlate with their defining terms. Ready to explore more?"
+                  intro: "We looked at why documents belonged to a particular cluster. But what is a cluster? What topics and themes does each cluster contain? Let's see an explanation for these questions."
               },
               {
                   element: document.querySelector('#panel4'),
-                  intro: "Explore the resizable Clusters View, where key concepts for each cluster are at your fingertips. Slide up or down to uncover more insights and grasp the essence of each group. Feel like a name doesn't quite fit? You can easily rename any cluster with a double-click. Plus, clicking on any cluster or concept updates the display across other sections. Dive in and scroll through - this view is designed to expand your understanding and is adjustable to your viewing preference!"
+                  intro: "The Cluster view helps you to understand the main themes and topics represented by each cluster.<br><br><strong>Give it a try</strong><ul><li> Slide up or down to uncover more insights and grasp the essence of each group.</li><li> <u>Select different cluster</u> by clicking on its list. See what it changes in other views.</li><li> Try recising the view for better clarity.</li></ul>"
               },
               {
                   element: document.querySelector('#panel8'),
-                  intro: "The Term Cloud View gives you a cool visual of key words linked to whatever cluster you've picked. It's easy to see which words matter most because they're in darker shades and bigger sizes. Darker and bigger means more important. Just click to rearrange and get a clear picture of what's key!"
+                  intro: "The Term Cloud View shows important words from the chosen group with a neat picture. The most important words are darker and bigger."
               },
               {
                   element: document.querySelector('#panel3'),
-                  intro: "The Cluster Keyterms View is all about diving into the core terms of the cluster you're checking out, and you can even adjust its size to your liking! It matches the cluster's color for a seamless experience. Discover how well each term aligns with your cluster with the handy bar chart that ranks them by closeness - the top ones are your closest matches. Click on any term to see how it measures up across all clusters in the Term-Cluster View. Feel free to scroll, click, and resize the panel as you explore deeper!"
+                  intro: "The Cluster Keyterms View lists the main words of the chosen group, showing how closely each word is related to the group with a simple bar chart. The closest matches are at the top.<br><br><strong>Try:</strong><ul><li>Slide up or down to learn more about how important a word is in the group.</li><li>Click on any word to see how concepts is across each cluster in the Term Cluster View.</li></ul>"
               },
               {
                   element: document.querySelector('#panel7'),
-                  intro: "Finally, the Term-Cluster View charts the distribution of key terms across all clusters, allowing you to compare their significance in each."
+                  intro: "Finally, the Term-Cluster View charts shows the importance of selected concepts across all clusters."
               },
               {
                   element: document.querySelector('#cluster0_title'),

@@ -2,68 +2,77 @@
  * Author: Ehsan Sherkat  *
  * Copyright: 2015        *
  **************************/
- 
+
+ body {
+  margin: 0;
+  font-family: Arial, sans-serif; /* Ensures font consistency */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh; /* Ensures the body takes up at least the full height of the viewport */
+  background-color: #f0f0f0; /* Background color for areas outside the main panel */
+}
+
 #userguide_panel {
-  position: absolute;
-  top: 0.5%;
-  width:70%;
-  left:15%;
-  border:thin;
-  border:#CCC;
-  border-style:solid;
+  margin-top: 1vh;
+  width: 70vw; /* Adjusted to viewport width for better scalability */
+  border: solid #CCC thin;
   border-radius: 10px;
-  border-width:thin;
-  height: 95%;
-  margin: 3px;
+  min-height: 95vh; /* Adjusted to viewport height to ensure it scales with the screen size */
   background-color: white;
+  overflow: auto; /* Allows scrolling within the panel if content exceeds its size */
+  padding: 20px; /* Added padding for better content spacing */
+  box-sizing: border-box; /* Ensures padding and border are included in the width and height calculations */
 }
 
-#introduction_margin {
-  position: absolute;
-  top: 0.5%;
-  width:100%;  
-  height: 30%;
-  overflow: auto;
+#introduction_margin, #panels {
+  width: 100%;
+  overflow: auto; /* Allows scrolling within these sections if content exceeds their size */
 }
 
-#introduction{
-  position: absolute;
-  top: 0.5%;
-  width:90%;
-  left: 4.5%;
-  height: 26%;
-  margin: 3px;
+#introduction {
+  margin: 0 auto; /* Centers the introduction section */
+  width: 90%; /* Adjusts width relative to its parent */
+  min-height: 26%; /* Adjusted for scalability */
+  overflow: hidden; /* Ensures no spillover of content */
 }
 
 #line1 {
-  position: absolute;
-  top: 31%;
-  width:100%;
+  width: 100%;
   height: 1px;
   background-color: #CCC;
-  color:#CCC;
-}
-
-#panels {
-  position: absolute;
-  width:100%;
-  top: 35%;
-  height: 65%;
-  overflow: auto;
+  margin: 20px 0; /* Adds vertical spacing around the horizontal line */
 }
 
 #accordion {
-  position: absolute;
-  width:80%;
-  left: 10%;
+  margin: 0 auto; /* Centers the accordion within its parent */
+  width: 80%; /* Adjusts width relative to its parent */
+}
+
+#copy_right_margin {
+  width: 100%;
+  text-align: center; /* Centers the copyright text */
+  margin-top: 20px; /* Adds space above the copyright section */
 }
 
 #copy_right {
   color: #888888;
 }
 
-#copy_right_margin{
-  position: absolute;
-  width:100%;
-  top:96%;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #userguide_panel {
+    width: 95vw; /* Increases width on smaller screens for better readability */
+  }
+
+  #introduction, #accordion {
+    width: 95%; /* Allows more space for content on smaller screens */
+  }
+}
+
+/* Further responsive adjustments for very small screens */
+@media (max-width: 480px) {
+  body {
+    font-size: 14px; /* Slightly reduces font size for better readability on small screens */
+  }
 }
