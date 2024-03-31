@@ -158,9 +158,9 @@ function pageLoad() {
   // //get the user id
   // else
   {
-    // var input = prompt("Please enter your email", "");
+    var input = prompt("Please enter your email", "");
     // var input = "baqia";
-    var input = "rakshitmakan";
+    // var input = "rakshitmakan";
     var loadSessionConfirmed = false;
 
     if (input != null && input.trim() != "") {
