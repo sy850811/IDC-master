@@ -155,11 +155,11 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
       </div>
   </div>
   <!-- Close button -->
-  <span class="close" onclick="closePopup()">&times;</span>
+  <span class="close" onclick="closePopup()" style="z-index: 1000000000" id="closebutton">&times;</span>
 </div>
 
 <!-- Tooltip text for clusters (hidden by default, shown on hover) -->
-<div id="docText" class="popuptext" style="display: none;"></div>
+<div id="docText" class="popuptext" style="display: none;" style="z-index: 1000000001"></div>
     <!----------------------- panel7 (Term-Cluster View) -------------------------->
     <div
       class="resizable"
@@ -291,7 +291,7 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
         </form>
         <textarea id="reasonForSatisfaction" placeholder="Reason for the rating above..."></textarea><br>
         <div class="submit-button-container">
-          <button onclick="submitFeedback()">Submit Feedback and Continue</button>
+          <button onclick="submitFeedback()" id="submitButton">Submit Feedback and Continue</button>
         </div>
       </div>
     </div>
@@ -324,88 +324,229 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
 </div>
 <div id="fullpage" style="display: none;"></div>
 <script>
+
   document.addEventListener('FirstTutorial', function(event) {
-      introJs().setOptions({
+  var intro1 = introJs()
+  // Define event listener functions
+function onDblClick() {
+  console.log(intro1);
+  intro1.nextStep();
+  // Remove the event listener after it has been triggered
+  document.querySelector('#j2_2_anchor').removeEventListener('dblclick', onDblClick);
+}
+function onMouseLeave() {
+  console.log(intro1);
+  intro1.nextStep();
+  // Remove the event listener after it has been triggered
+  document.querySelector('#j2_2').removeEventListener('mouseleave', onMouseLeave);
+}
+function onClickPanelTitle() {
+  console.log("Panel 5 clicked");
+  intro1.nextStep();
+  // Remove the event listener after it has been triggered
+  document.querySelector('#panel5title').removeEventListener('click', onClickPanelTitle);
+}
+function onWaitAndNext(event) {
+  setTimeout(function() {
+    intro1.nextStep();
+  }, 2000);
+  // Remove the event listener after it has been triggered
+  document.removeEventListener('waitandnext', onWaitAndNext);
+}
+function onClickCloseButton() {
+  intro1.nextStep();
+  // Remove the event listener after it has been triggered
+  document.querySelector('#closebutton').removeEventListener('click', onClickCloseButton);
+}
+function onSubmitFeedback(){
+  intro1.nextStep();
+  // Remove the event listener after it has been triggered
+  document.querySelector('#submitButton').removeEventListener('click', onSubmitFeedback);
+}
+
+// Add event listeners
+document.querySelector('#j2_2_anchor').addEventListener('dblclick', onDblClick);
+document.querySelector('#panel5title').addEventListener('click', onClickPanelTitle);
+document.addEventListener('waitandnext', onWaitAndNext);
+document.querySelector('#closebutton').addEventListener('click', onClickCloseButton);
+document.querySelector('#submitButton').addEventListener('click', onSubmitFeedback);
+
+      intro1.setOptions({
         exitOnOverlayClick: false, // Prevent closing the tutorial when clicking outside
         exitOnEsc: false, // Prevent closing the tutorial when pressing the Escape key
           steps: [
-            {
-              intro:"<strong><center>Welcome</center></strong><br>Before discussing the tool used for this user study, let's clarify the purpose of our research. We aim to understand AI's reasoning for clustering documents. This tool demonstrates the AI's justifications (using concepts from the news documents) to form clusters. Please examine these justifications/explanations and provide your feedback. Please click 'Next' to continue the tutorial."
+            { //0
+              intro:"<strong><center>Welcome</center></strong><br>Before discussing the tool used for this user study, let's clarify the purpose of our research. We aim to understand AI's reasoning for clustering documents. This tool demonstrates the AI's justifications (using concepts from the news documents) to form clusters. Please examine these justifications/explanations and provide your feedback. Please click 'Next' to continue the tutorial.",
             },
-            {
-              intro:" <strong><center>Who are you?</center></strong><br> Imagine stepping into the role of a lead editor at a premier online news portal. Your new task involves utilizing an innovative tool designed to organize news articles into distinct, coherent categories. This tool, powered by advanced AI, not only clusters articles but also provides explanations for its categorizations, highlighting unique patterns and suggesting novel groupings beyond the ordinary."},{intro:"Your critical mission is to assess these explanations. Are they clear? Do they convincingly justify the placement of articles within each cluster? This exercise isn't about evaluating the AI's ability to categorize per se but <strong>instead focusing on the rationale it provides.</strong> Your insights will play a pivotal role in refining how we understand and interact with AI, ensuring that it operates not just with precision, but with logic and transparency that align with human reasoning. Let's get started!"},
-            {
+            { //1
+              intro:" <strong><center>Who are you?</center></strong><br> Imagine stepping into the role of a lead editor at a premier online news portal. Your new task involves utilizing an innovative tool designed to organize news articles into distinct, coherent categories. This tool, powered by advanced AI, not only clusters articles but also provides explanations for its categorizations, highlighting unique patterns and suggesting novel groupings beyond the ordinary."},
+            { //2
+                intro:"Your critical mission is to assess these explanations. Are they clear? Do they convincingly justify the placement of articles within each cluster? This exercise isn't about evaluating the AI's ability to categorize per se but <strong>instead focusing on the rationale it provides.</strong> Your insights will play a pivotal role in refining how we understand and interact with AI, ensuring that it operates not just with precision, but with logic and transparency that align with human reasoning. Let's get started!"
+            },
+            { //3
                 intro: "<strong><center>Welcome to our AI's explanation tool<br>(for document clustering)!</center></strong><br> This platform assists you in understanding rationale of AI-driven document clustering. It's designed to clarify how decisions are made to group news documents. We'll start with a brief overview of the interface."
             },
-            {
+            { //4
                 element: document.querySelector('#panel5'),
-                intro: "Meet the Cluster Tree View. Here, the clusters created by the AI are presented.<br><strong>Read the documents to understand each cluster's theme.</strong> <br><br> <strong>Give it a try</strong><br><br><ul><li>Double-click clusters to view their documents.</li><li>Hover over documents for a quick preview.</li><li>Click on title 'Cluster Tree View' for a larger view.</li></ul> <br>"
-            }, 
-            {
+                intro: "Meet the Cluster Tree View. Here, the clusters created by the AI are presented. Read the documents to understand each cluster's theme.",
+                position: 'right',
+
+            },
+            { //5
+                element: document.querySelector('#j2_2_anchor'),
+                intro: "Give it a try: Double-click on any cluster to view its documents. This action will take you deeper into the themes identified by the AI.",
+                position: 'right',
+            },
+            { //6
+                element: document.querySelector('.jstree-children'),
+                intro: "Hover over any document within a cluster for a quick preview. This helps you get a glimpse of the document content without opening it.",
+                position: 'bottom',
+            },
+            { //7
+                // Specify the element that needs to be clicked for a larger view. Adjust the selector as necessary.
+                element: document.querySelector('#panel5title'),
+                intro: "Double click on the title 'Cluster Tree View' to expand it for a larger, more detailed view. This allows you to see the clusters and documents in greater detail.",
+                position: 'bottom',
+            },
+            { //8
+                // Specify the element that needs to be clicked for a larger view. Adjust the selector as necessary.
+                element: document.querySelector('#popupWindow'),
+                intro: "This is the expanded view of the Cluster Tree View. You can close this view by clicking the 'X' button at the top right corner.",
+            },
+
+            { //9
                 element: document.querySelector('#panel2'),
                 intro: "This is the Document View, displaying one document at a time. Notice the highlighted text - these colors represent key concepts that influence the document's cluster classification."
             },
-            { 
+            { //10
                 element: document.querySelector('#panel9'),
                 intro: "This graph explains why AI assigns a document to a cluster. This graph does so by showing the contribution of the document's concepts to each cluster. For example, the key concepts, like <span style='background-color: #8ED3C7;'>'Iraq'</span> highlighted in the document view contribute positively to cluster 3. Therefore, their contribution places the document in cluster 3."
             },
-            {
+            { //11
                 element: document.querySelector('#feedbackModal'),
                 intro: "The Explanation Evaluation View invites your feedback on the explanation for assigning a document to a cluster."
             },
-            {
+            { //12
             intro: "Here is what you need to do in this user study"
             },
-            {
+            { //13
                 intro: "Step 1: Read the document.",
                 element: document.querySelector('#panel2'),
             },
-            {
+            { //14
                 intro: "Step 2: Understand why AI places the document in the bolded cluster. Evaluate the contribution of the document's concepts.",
                 element: document.querySelector('#panel9'),
             },
-            {
-                intro: "Step 3: Fill Evaluation Feedback <br><br> <ul><li>Answer the first question: For example Choose 'neutral' and write reason for your rating in the text box.</li><li>Repeat for the second question</li><li>Click 'Submit Feedback and Continue'.</li></ul>",
+            { //15
+                intro: "Step 3: Fill Evaluation Feedback <br><br> <ul><li>Answer the first and second question: For example Choose 'neutral' and write reason for your rating 'Practice response' in the text box.</li><li>Repeat for the second question</li><li>Click 'Submit Feedback and Continue'.</li></ul>",
                 element: document.querySelector('#feedbackModal'),
+            },
+            {
+              intro: "A new document is now presented in the Document View. Please apply the same three steps to this document and any that follow."
             }
-          ]
-      }).start();
-  });
+          
+          ],
+      })
+
+      intro1.onafterchange(function(targetElement) {
+          console.log(intro1._currentStep);
+          // Steps where you want to hide the "Next" button
+          if (intro1._currentStep === 5 || intro1._currentStep === 6 || intro1._currentStep === 7 || intro1._currentStep === 8 || intro1._currentStep === 15) {
+              var nextButton = document.querySelector('.introjs-nextbutton');
+              if (nextButton) {
+                  nextButton.style.display = 'none'; // Hide the "Next" button
+              }
+          }
+          else {
+              // For all other steps, make sure the "Next" button is visible
+              var nextButton = document.querySelector('.introjs-nextbutton');
+              if (nextButton) {
+                  nextButton.style.display = ''; // Show the "Next" button by resetting the display property
+              }
+          }
+});
+intro1.start();
+  });  
+  //end the first tutorial
+
+
+
+
+  
+  
+  var intro = introJs()
+
+  // document.querySelector('#j2_2_anchor').addEventListener('dblclick', onDblClick);
   
   // document.addEventListener('FirstTutorial', function(event) {
   document.addEventListener('startSecondTutorial', function(event) {
       introJs().setOptions({
-        tooltipClass: 'wide-tooltip',
         exitOnOverlayClick: false, // Prevent closing the tutorial when clicking outside
         exitOnEsc: false, // Prevent closing the tutorial when pressing the Escape key
           steps: [
-              {
+              { //0
                   intro: "We looked at why documents belonged to a particular cluster. But what is a cluster? What topics and themes does each cluster contain? Let's see an explanation for these questions."
               },
               {
                   element: document.querySelector('#panel4'),
-                  intro: "The Cluster view helps you to understand the main themes and topics represented by each cluster.<br><br><strong>Give it a try</strong><ul><li> Slide up or down to uncover more insights and grasp the essence of each group.</li><li> <u>Select different cluster</u> by clicking on its list. See what it changes in other views.</li><li> Try recising the view for better clarity.</li></ul>"
+                  intro: "The Cluster view helps you to understand the main themes and topics represented by each cluster.",
+                  position: 'left',
               },
+              {
+                  element: document.querySelector('#panel4'),
+                  intro: "Slide up or down to uncover more insights and grasp the essence of each group.",
+                  position: 'left',
+              },
+              {
+                  element: document.querySelector('#panel4'),
+                  intro: " Currently cluster0 is selected try select a different cluster by clicking on its list. See what it changes in other views.",
+                  position: 'left',
+              },
+
+
+
+
+
+
               {
                   element: document.querySelector('#panel8'),
-                  intro: "The Term Cloud View shows important words from the chosen group with a neat picture. The most important words are darker and bigger."
+                  intro: "The Term Cloud View shows important words from the chosen group with a neat picture. The most important words are darker and bigger.",
+                  position: 'left',
               },
-              {
+              {//selectable
                   element: document.querySelector('#panel3'),
-                  intro: "The Cluster Keyterms View lists the main words of the chosen group, showing how closely each word is related to the group with a simple bar chart. The closest matches are at the top.<br><br><strong>Try:</strong><ul><li>Slide up or down to learn more about how important a word is in the group.</li><li>Click on any word to see how concepts is across each cluster in the Term Cluster View.</li></ul>"
+                  intro: "The Cluster Keyterms View lists the main words of the chosen group, showing how closely each word is related to the group with a simple bar chart. The closest matches are at the top.",
+                  position: 'left',
+              },
+              {//selectable
+                element: document.querySelector('#panel3'),
+                  intro: "Slide up or down to learn more about how important a word is in the group. Then, Click on any word to see how concepts is across each cluster in the Term Cluster View.",
+                  position: 'left',
               },
               {
                   element: document.querySelector('#panel7'),
-                  intro: "Finally, the Term-Cluster View charts shows the importance of selected concepts across all clusters."
+                  intro: "Finally, the Term-Cluster View charts shows the importance of selected concepts across all clusters.",
+                  position: 'left',
               },
               {
                   element: document.querySelector('#cluster0_title'),
-                  intro: "Before submitting the feedback for the explanation for following documents, please explore the newly added infomation especially the Cluster View to <strong>assign an appropriate name to each cluster</strong>. You can do this by double clicking on the cluster name (cluster0, cluster1) in the Cluster View."
+                  intro: "Before submitting the feedback for the explanation for following documents, please explore the newly added infomation especially the Cluster View to <strong>assign an appropriate name to each cluster</strong>. You can do this by double clicking on the cluster name (cluster0, cluster1) in the Cluster View.",
+                  position: 'left',
               },
               {
                 element: document.querySelector('#button1'),
-                intro: "Click here to access the help page to access the information of each view again."
-              }
+                intro: "Click here to access the help page to access the information of each view again.",
+                  position: 'left',
+              },
+              
+            {
+              intro: "What next? Keep applying the same three steps to this document and any that follow. \
+              <ul>\
+                <li>Step 1: Read the document.</li>\
+                <li>Step 2: Understand local explanation graph (in light of new information shown in the right views.)</li>\
+                <li>Step 3: Fill Evaluation Feedback.</li>\
+              </ul>"
+            }
           ]
       }).start();
   });

@@ -19,6 +19,7 @@ const PROPOSED_BOTH = 0;
 // const BASELINE_GLOBAL = 1;
 // const BASELINE_BOTH = 2;
 // const PROPOSED_BOTH = 3;
+let tutorialGiven = false
 let originalParent;
 let originalWidth;
 let originalHeight;
@@ -158,9 +159,9 @@ function pageLoad() {
   // //get the user id
   // else
   {
-    var input = prompt("Please enter your email", "");
+    // var input = prompt("Please enter your email", "");
     // var input = "baqia";
-    // var input = "rakshitmakan";
+    var input = "rakshitmakan";
     var loadSessionConfirmed = false;
 
     if (input != null && input.trim() != "") {
@@ -205,7 +206,7 @@ function pageLoad() {
                 }
               }
               if (found) {
-                document.dispatchEvent(new CustomEvent('FirstTutorial'));
+                
               } else {
                 alert(
                   "You are not a member of any subset. Please contact the administrator."
@@ -258,6 +259,7 @@ function pageLoad() {
               ) {
                 clusterNumber = Number(input);
                 callServer();
+                
               } else if (
                 input != null &&
                 (input.trim() == "" || IsNumeric(input) == false)
@@ -1787,7 +1789,7 @@ function refreshTreeView() {
   var clusters = document.getElementsByClassName("cluster");
   var treeHtml =
     "<ul>" +
-    '<li data-jstree=\'{ "opened" : true }\' class="context-menu-zero box menu-1">Clusters' +
+    '<li data-jstree=\'{ "opened" : true }\' class="context-menu-zero box menu-1"> ' +
     '<ul id="new_cluster_tree_view">';
 
   for (var i = 0; i < clusters.length; i++) {
@@ -1856,6 +1858,9 @@ function fetchDocumentText(docId) {
 }
 
 function showDocText(element, docId) {
+  // issue event hoverdone
+  document.dispatchEvent(new CustomEvent('waitandnext'));
+  console.log(element)
   var docText = fetchDocumentText(docId);
   var popup = document.getElementById('docText');
   popup.textContent = docText; // Set the text for the popup
@@ -3368,13 +3373,15 @@ svg.append("text")
 
   //X axis
   var xAxis = d3.svg.axis().scale(x).orient("bottom");
-  svg
-    .append("g")
+  svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis)
     .selectAll("text") // Select all text elements for the x-axis
-    .style("font-weight", "bold"); // Make the x-axis labels bold
+    .style("font-weight", function(d) { 
+      return d == highestAggregateCluster ? "bold" : "normal"; 
+    }); // Make only the specific label bold
+
   //Y axis
   var yAxis = d3.svg.axis().scale(y).orient("left");
     svg
@@ -3629,6 +3636,14 @@ document.getElementById("feedbackFormContent").style.display = "block";
 document.getElementById("question1").innerHTML = document.getElementById("question1").innerHTML.substring(0, 77) + highestAggregateCluster + "?";
 // #get currrent cluster number
 currentCluster = highestAggregateCluster.split(" ")[1]
+console.log("tutorial given bahar", tutorialGiven)
+if (tutorialGiven == false){
+  console.log("tutorial given", tutorialGiven)
+  tutorialGiven = true;
+  console.log("tutorial given", tutorialGiven)
+  document.dispatchEvent(new CustomEvent('FirstTutorial'));
+}
+
 }
 function buildText(queryResults) {
   const textElt = $("#doc_content");
@@ -3794,48 +3809,48 @@ function submitFeedback() {
   showNewDocument();
   // introJs().exit();
 }
-
+popupdisplayed = false
 function showPopup() {
+  // document.dispatchEvent(new CustomEvent('waitandnext'));
+    if(popupdisplayed == false){
+      popupdisplayed = true
     const panel = document.getElementById("panel5");
-    originalParent = panel.parentNode;
+    originalParent = panel.parentNode; // Store the original parent for later restoration
 
     const computedStyle = window.getComputedStyle(panel);
-    originalWidth = computedStyle.width;
-    originalHeight = computedStyle.height;
+    originalWidth = computedStyle.width; // Store original width
+    originalHeight = computedStyle.height; // Store original height
 
     // Set the panel size for the popup
     panel.style.width = "50vw";
     panel.style.height = "70vh";
 
-    const popupContent = document.getElementById("popupContent");
-    popupContent.appendChild(panel);
+    // Move the panel to the popup
+    document.getElementById("popupContent").appendChild(panel);
+    document.getElementById("popupWindow").style.zIndex = 1000000;
 
     // Show the popup
-    document.getElementById("popupWindow").style.display = "flex"; // Use 'flex' to activate flexbox centering
+    document.getElementById("popupWindow").style.display = "flex"; // Use 'flex' to center the content
+    }
 }
 
 function closePopup() {
+    popupdisplayed = false
     const panel = document.getElementById("panel5");
 
     // Restore the panel size
     panel.style.width = originalWidth;
     panel.style.height = originalHeight;
-    console.log("originalWidth : ",originalWidth)
-    console.log("originalHeight : ",originalHeight)
-    console.log(typeof originalWidth)
 
     // Move back the panel to its original parent
-    originalParent.appendChild(panel);
-    // Move back the panel to its original parent
-    if (originalParent) {
-      if (originalParent.hasChildNodes()) {
-          originalParent.insertBefore(panel, originalParent.firstChild);
-      } else {
-          originalParent.appendChild(panel);
-      }
-  }
+    if (originalParent.hasChildNodes()) {
+        originalParent.insertBefore(panel, originalParent.firstChild);
+    } else {
+        originalParent.appendChild(panel);
+    }
 
     // Hide the popup
     document.getElementById("popupWindow").style.display = "none";
 }
+
 

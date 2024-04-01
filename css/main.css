@@ -1656,7 +1656,7 @@ form label {
   display: none; /* Hidden by default */
   position: absolute; /* Positioned relative to the nearest positioned ancestor */
   /* z-index: 100; Sit on top */
-  z-index: 1010; /* Now it will sit on top of the popupWindow */
+  z-index: 1000001; /* Now it will sit on top of the popupWindow */
   padding: 15px; /* Add some padding */
   border: 1px solid #ddd; /* Add a border */
   background-color: #fff; /* White background color */
@@ -1688,29 +1688,7 @@ form label {
   z-index: 1000; /* Make sure it's on top */
   background: white; /* Optional: background color */
 }
-.introjs-skipbutton {
-  display: none !important;
-}
-.introjs-tooltip-header {
-  display: none !important;
-}
-.introjs-tooltip {
-  max-width: 600px; /* Set to desired maximum width */
-  width: auto; /* This will allow the tooltip to resize based on content, up to the max-width */
-}
-.wideTooltip {
-  max-width: 600px !important;
-  width: auto !important;
-}
-.introjs-tooltip.wideTooltip {
-  max-width: 600px !important; /* Adjust this value as needed */
-  white-space: normal !important; /* Ensure text wraps and does not overflow */
-}
 
-/* Additionally, if the tooltip header's width is not adjusting, target it specifically */
-.introjs-tooltip.wideTooltip .introjs-tooltip-header {
-  width: auto !important;
-}
 
 .popup {
   display: flex;
@@ -1758,4 +1736,31 @@ form label {
 .close:hover, .close:focus {
   color: #f00; /* A different color on hover for better visibility */
   text-decoration: none;
+}
+
+.introjs-showElement {
+  pointer-events: auto !important;
+}
+.introjs-skipbutton {
+  display: none !important;
+}
+.introjs-tooltip-header {
+  display: none !important;
+}
+.introjs-tooltip {
+  max-width: 600px; /* Set to desired maximum width */
+  width: auto; /* This will allow the tooltip to resize based on content, up to the max-width */
+}
+.wideTooltip {
+  max-width: 600px !important;
+  width: auto !important;
+}
+.introjs-tooltip.wideTooltip {
+  max-width: 600px !important; /* Adjust this value as needed */
+  white-space: normal !important; /* Ensure text wraps and does not overflow */
+}
+
+/* Additionally, if the tooltip header's width is not adjusting, target it specifically */
+.introjs-tooltip.wideTooltip .introjs-tooltip-header {
+  width: auto !important;
 }
