@@ -159,9 +159,9 @@ function pageLoad() {
   // //get the user id
   // else
   {
-    // var input = prompt("Please enter your email", "");
+    var input = prompt("Please enter your email", "");
     // var input = "baqia";
-    var input = "rakshitmakan";
+    // var input = "rakshitmakan";
     var loadSessionConfirmed = false;
 
     if (input != null && input.trim() != "") {
@@ -716,6 +716,8 @@ function clusterZIndex(clusterName) {
  * @param elementID = the name (ID) of cluster which was clicked
  */
 function clusterClicked(elementID) {
+  //dispatch an event anotherClusterClicked event
+  document.dispatchEvent(new CustomEvent("anotherClusterClicked"));
   saveLog("clusterClicked");
 
   //brign it to front of other div (clusters)
@@ -954,6 +956,18 @@ function paralelCordinator(allData, panelName, ID, divName, color) {
       .text(function (d) {
         return d;
       });
+      
+  }
+  if (panelName == "#panel7") {
+    // First, select the element you want to attach the event to.
+    var scrollableElement = document.getElementsByClassName("clusterwordlist")[0];
+
+    // Attach the scroll event listener to the element.
+    scrollableElement.addEventListener('scroll', function() {
+      // Dispatch the custom event whenever the scroll event is triggered.
+      // scrollableElement.dispatchEvent(new CustomEvent('customScrollEvent'));
+      scrollableElement.dispatchEvent(new CustomEvent('customScrollEvent', { bubbles: true }));
+    });
   }
 }
 
@@ -3358,13 +3372,6 @@ function createTermClusterChart() {
   }).cluster;
 
 
-// Append a text element to the SVG to display the assigned cluster
-svg.append("text")
-  .attr("x", width / 2) // Position at the center of the SVG
-  .attr("y", 20) // Increase y value to move the text lower
-  .attr("text-anchor", "middle") // Center the text
-  .style("font-size", "16px") // Set the font size
-  .text(`Document is assigned to ${highestAggregateCluster}.`);
 
   var y = d3.scale
     .linear()
@@ -3377,7 +3384,8 @@ svg.append("text")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis)
-    .selectAll("text") // Select all text elements for the x-axis
+    .selectAll("text") // Select all text elements for the x-axis // set text size to be 13px
+    .style("font-size", "13px")
     .style("font-weight", function(d) { 
       return d == highestAggregateCluster ? "bold" : "normal"; 
     }); // Make only the specific label bold
@@ -3392,8 +3400,11 @@ svg.append("text")
     .attr("transform", "rotate(-90)")
     .attr("y", -margin.left) // Move the text to the left of the y-axis
     .attr("x", 0 - (height / 2)) // Center the text vertically
-    .attr("dy", "1em") // Adjust distance from the y-axis
-    .style("text-anchor", "middle") // Center align the text
+    .attr("dy", "1.4em") // Adjust distance from the y-axis
+    .style("text-anchor", "middle") // Center align the text // make it bold
+    // .style("font-weight", "bold") //make size  of text be bigger
+    .style("font-size", "13px")
+
     .text("Document Belongingness to cluster");
 
   // #draw horizontal line at y=0
@@ -3479,7 +3490,7 @@ svg.append("text")
           .attr("y", barY)
           .attr("dy", ".35em")
           .attr("text-anchor", "middle")
-          .text(d3.format(".2f")(Math.abs(d.y1 - d.y0)))
+          .text(d3.format(".2f")(d.y1 - d.y0))
           .style("fill", "black") // Consider changing the text color to white for better contrast
           .style("font-size", "10px"); // Adjust font size based on the bar height
       }
@@ -3636,11 +3647,21 @@ document.getElementById("feedbackFormContent").style.display = "block";
 document.getElementById("question1").innerHTML = document.getElementById("question1").innerHTML.substring(0, 77) + highestAggregateCluster + "?";
 // #get currrent cluster number
 currentCluster = highestAggregateCluster.split(" ")[1]
-console.log("tutorial given bahar", tutorialGiven)
+
+// Append a text element to the SVG to display the assigned cluster
+svg.append("text")
+  .attr("x", width / 2) // Position at the center of the SVG
+  .attr("y", height -10) // Increase y value to move the text lower
+  .attr("text-anchor", "middle") // Center the text
+  .style("font-size", "16px") // Set the font size // color grey
+  .style("fill", "grey")
+  .text(`Document is assigned to ${highestAggregateCluster}.`);
+
+// console.log("tutorial given bahar", tutorialGiven)
 if (tutorialGiven == false){
-  console.log("tutorial given", tutorialGiven)
+  // console.log("tutorial given", tutorialGiven)
   tutorialGiven = true;
-  console.log("tutorial given", tutorialGiven)
+  // console.log("tutorial given", tutorialGiven)
   document.dispatchEvent(new CustomEvent('FirstTutorial'));
 }
 

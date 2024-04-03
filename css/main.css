@@ -1764,3 +1764,34 @@ form label {
 .introjs-tooltip.wideTooltip .introjs-tooltip-header {
   width: auto !important;
 }
+.close {
+  position: absolute;
+  top: 10px; /* Adjust the top position to move it down a bit */
+  right: 10px; /* Adjust the right position to move it from the corner */
+  background-color: #f44336; /* A red background to make it stand out */
+  color: white;
+  font-size: 30px; /* Larger font size */
+  font-weight: bold;
+  border-radius: 50%; /* Circular shape */
+  width: 30px; /* Width of the close button */
+  height: 30px; /* Height of the close button */
+  text-align: center;
+  line-height: 30px; /* Center the 'x' vertically */
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Optional: Adds a shadow for depth */
+  user-select: none; /* Prevent text selection */
+  transition: all 0.3s; /* Smooth transition for hover effects */
+}
+
+.close:hover {
+  background-color: #d32f2f; /* Darken background on hover */
+  transform: scale(1.1); /* Scale up the button a bit */
+}
+
+.close:active {
+  transform: scale(0.9); /* Scale down the button when clicked */
+}
+/* Hide the back button in all steps */
+.introjs-prevbutton {
+  display: none !important;
+}
