@@ -56,6 +56,7 @@
   width: 97%;
   left: 2%;
   font-size: 82%;
+  line-height: normal;
 }
 
 #panel3 {
@@ -1795,3 +1796,25 @@ form label {
 .introjs-prevbutton {
   display: none !important;
 }
+.introjs-bullets {
+  display: none !important;
+}
+
+
+.word.highlighted {
+  display: inline-block; /* Makes the element respect box-model properties fully */
+  vertical-align: top; /* Aligns elements to ensure borders are visible */
+}
+
+
+.word.highlighted {
+  display: inline-block;
+  vertical-align: top;
+  /* Add padding and margin to ensure the borders are visible without affecting line height */
+  padding: 3px; /* Adjust the padding as needed */
+  margin: -3px 0; /* Negative margin to counteract the padding's effect on line height */
+  border: 1px solid #ffff00; /* Example border property; adjust color and width as needed */
+  box-sizing: border-box; /* Ensures that padding and border are included in the element's dimensions */
+}
+
+

@@ -159,9 +159,9 @@ function pageLoad() {
   // //get the user id
   // else
   {
-    var input = prompt("Please enter your email", "");
+    // var input = prompt("Please enter your email", "");
     // var input = "baqia";
-    // var input = "rakshitmakan";
+    var input = "rakshitmakan";
     var loadSessionConfirmed = false;
 
     if (input != null && input.trim() != "") {
@@ -1198,6 +1198,12 @@ function listLoad(clusterID, color) {
             "#TermClusterView",
             colors
           );
+          document.querySelectorAll('.termListSpan').forEach(span => {
+            span.addEventListener('click', function(event) {
+              // This checks for the function in the parent <li> and calls it
+              this.parentNode.onclick(event);
+            });
+          });
 
           //higlight the docuemnts that have the first word in general view graph
           // highlightDocuments(words);
@@ -1268,7 +1274,8 @@ function listLoad(clusterID, color) {
         .append("rect")
         .attr("height", bar_height - 6)
         .attr("width", function (d, i) {
-          return linearScale((d.v1 - part3Data[part3Data.length - 1].v1) * 3);
+          temp = (currentSubset == PROPOSED_BOTH) ? 1 : 3;
+          return linearScale((d.v1 - part3Data[part3Data.length - 1].v1) * temp);
         })
         .attr("y", function (d, i) {
           return i * bar_height + 5;
@@ -3688,20 +3695,100 @@ function buildText(queryResults) {
   textElt.append(elementsToAdd);
 }
 // Function to apply highlighting based on annotations
+// Function to apply highlighting and border based on annotations
+// Function to apply highlighting, border, and pattern-like effect based on annotations
+// Function to apply highlighting, alternating border widths, and opacity adjustment based on annotations
+// Utility function to darken a color
+function darkenColor(color, amount) {
+  let r, g, b;
+
+  // Check if the color is in HEX format
+  if (color.startsWith('#')) {
+    // Convert HEX to RGB
+    const hex = color.slice(1);
+    r = parseInt(hex.substring(0, 2), 16);
+    g = parseInt(hex.substring(2, 4), 16);
+    b = parseInt(hex.substring(4, 6), 16);
+  } else {
+    // Extract RGB components
+    const result = color.match(/\d+/g);
+    if (!result) {
+      console.error('Invalid color format:', color);
+      return color; // Return the original color if the format is invalid
+    }
+    [r, g, b] = result.map(Number);
+  }
+
+  // Darken the color
+  r = Math.max(0, r - amount);
+  g = Math.max(0, g - amount);
+  b = Math.max(0, b - amount);
+
+  return `rgb(${r}, ${g}, ${b})`; // Return the darkened color
+}
+
+
+// Function to apply highlighting, alternating border widths, and opacity adjustment based on annotations
 function applyHighlighting(queryResults, topFeatures, color) {
   const annotations = queryResults.annotations;
-  annotations.forEach(ann => {
+  annotations.sort((a, b) => a.support[0].wFrom - b.support[0].wFrom);
+
+  annotations.forEach((ann, annIndex) => {
     if (topFeatures.includes(ann.title)) {
-      const featureColor = color(ann.title); // Get color for the feature
+      const featureColor = color(ann.title);
+      const borderWidth = '3px';
+
       ann.support.forEach(support => {
         for (let index = support.wFrom; index <= support.wTo; index++) {
-          $(`#w${index}`).css('background-color', featureColor).addClass("highlighted");
-          if (index < support.wTo) $(`#s${index + 1}`).css('background-color', featureColor).addClass("highlighted");
+          const wordSelector = `#w${index}`;
+          const $wordElement = $(wordSelector);
+
+          if (!$wordElement.hasClass("highlighted")) {
+            // Apply initial styles and store the border color in a data attribute
+            const borderColor = featureColor; // Use original color for borders
+            $wordElement.css({
+              'background-color': featureColor,
+              'border-top': `${borderWidth} solid ${borderColor}`,
+              'border-bottom': `${borderWidth} solid ${borderColor}`,
+              'box-sizing': 'border-box',
+              'position': 'relative',
+              'z-index': 100 - annIndex,
+            }).addClass("highlighted").data('original-border-color', borderColor);
+          } else {
+            // Retrieve the original border color from the data attribute
+            const originalBorderColor = $wordElement.data('original-border-color');
+            // Reapply styles without changing the border
+            $wordElement.css({
+              'background-color': featureColor,
+              'border-top': `${borderWidth} solid ${originalBorderColor}`,
+              'border-bottom': `${borderWidth} solid ${originalBorderColor}`,
+              'z-index': 100 - annIndex,
+            });
+          }
         }
       });
     }
   });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function getTermProbabilities(){
   var asyncRequest = new XMLHttpRequest();
   asyncRequest.open("POST", "./cgi-bin/FetchTermMembsProbabilities_baseline.py", false);
@@ -3780,7 +3867,7 @@ function submitFeedback() {
   }
 
   if (satisfaction <= 3 && !reasonForSatisfaction) { // Checks if the satisfaction rating is neutral or lower without a reason
-    alert("Please provide a reason for question 1 rating.");
+    alert("Please provide a reason for question 2 rating.");
     return; // Stop the function execution here
   }
 

@@ -1,7 +1,6 @@
 #!/home/ubuntu/IDC/bin/python
 
 # Author: Ehsan Sherkat
-import sys
 import cgi, cgitb 
 import json
 import os
