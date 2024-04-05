@@ -3736,8 +3736,8 @@ function applyHighlighting(queryResults, topFeatures, color) {
   annotations.forEach((ann, annIndex) => {
     if (topFeatures.includes(ann.title)) {
       const featureColor = color(ann.title);
-      const borderWidth = '3px';
-
+      const borderWidth = '1.5px';
+ 
       ann.support.forEach(support => {
         for (let index = support.wFrom; index <= support.wTo; index++) {
           const wordSelector = `#w${index}`;
