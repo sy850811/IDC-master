@@ -1116,7 +1116,7 @@
   margin: 2px;
   padding: 0.6em;
   font-size: 70%;
-  height: 5px;
+  /* height: 5px; */
 }
 
 #selectable li:hover {
@@ -1657,7 +1657,7 @@ form label {
   display: none; /* Hidden by default */
   position: absolute; /* Positioned relative to the nearest positioned ancestor */
   /* z-index: 100; Sit on top */
-  z-index: 1000001; /* Now it will sit on top of the popupWindow */
+  z-index: 1111111111111111111; /* Now it will sit on top of the popupWindow */
   padding: 15px; /* Add some padding */
   border: 1px solid #ddd; /* Add a border */
   background-color: #fff; /* White background color */

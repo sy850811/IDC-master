@@ -90,7 +90,6 @@ function showNewDocument() {
   if (document.getElementById("doc_content").innerHTML == "") {
   currentDocumentName = "paper0.txt";
   document.getElementById("doc_content").innerHTML = getDocumentContent(currentDocumentName);
-  // $("#selectable").css('visibility', 'hidden'); 
   // #panel3
   localStorage.setItem('visible', 'false'); // Use 'sessionStorage' if you prefer
 
@@ -123,10 +122,12 @@ else {
       "paper" + (parseInt(currentDocumentNumber) + 1).toString() + ".txt";
     // Extract number from text after paper and before .
     if (parseInt(currentDocumentNumber) + 1 >= numberOfDocumnetsVariable) { // remove 18 from here
-      //call questionnaires
+      link = (currentSubset == PROPOSED_BOTH) ? "https://surveys.dal.ca/opinio/s?s=76083" 
+                                              : "https://surveys.dal.ca/opinio/s?s=76510";
+
       $("#fullpage").html(`
     <iframe scrolling="yes" frameborder="0"
-    src="https://surveys.dal.ca/opinio/s?s=76083"
+    src="${link}"
     style="width: 100%; height: 100%; border: none;">
     </iframe>`);
     // set fullpage display to block
@@ -159,9 +160,9 @@ function pageLoad() {
   // //get the user id
   // else
   {
-    // var input = prompt("Please enter your email", "");
+    var input = prompt("Please enter your email", "");
     // var input = "baqia";
-    var input = "rakshitmakan";
+    // var input = "zehra2989";
     var loadSessionConfirmed = false;
 
     if (input != null && input.trim() != "") {
@@ -959,15 +960,18 @@ function paralelCordinator(allData, panelName, ID, divName, color) {
       
   }
   if (panelName == "#panel7") {
-    // First, select the element you want to attach the event to.
-    var scrollableElement = document.getElementsByClassName("clusterwordlist")[0];
+    // First, select all elements you want to attach the event to.
+var scrollableElements = document.getElementsByClassName("clusterwordlist");
 
-    // Attach the scroll event listener to the element.
-    scrollableElement.addEventListener('scroll', function() {
+// Loop through all elements and attach the scroll event listener to each one.
+for (var i = 0; i < scrollableElements.length; i++) {
+    scrollableElements[i].addEventListener('scroll', function() {
       // Dispatch the custom event whenever the scroll event is triggered.
-      // scrollableElement.dispatchEvent(new CustomEvent('customScrollEvent'));
-      scrollableElement.dispatchEvent(new CustomEvent('customScrollEvent', { bubbles: true }));
+      // Use 'this' to refer to the current element in the loop that the event is attached to.
+      this.dispatchEvent(new CustomEvent('customScrollEvent', { bubbles: true }));
     });
+}
+
   }
 }
 
@@ -2169,19 +2173,39 @@ function getDocumentContent(docName) {
 
   return content;
 }
+function reassignSelectedClass(term) {
+  // Remove the ui-selected class from all elements
+  $("#selectable .ui-widget-content").removeClass("ui-selected");
 
+  // Find the element containing the specified term and add the ui-selected class to it
+  $("#selectable .ui-widget-content").each(function() {
+    if ($(this).text() === term) {
+      $(this).addClass("ui-selected");
+      return false; // Exit the loop once the term is found
+    }
+  });
+}
 /**
  * On each term click in term list
  */
 function termClick(event) {
   saveLog("termClick");
+  document.dispatchEvent(new CustomEvent('termInKeytermClicked'));
+   // Determine if the target of the click is the span inside the li
+   var targetElement = event.target;
+
+   // Check if the target is the span and find the parent li if so
+   if (targetElement.className.includes('termListSpan')) {
+      reassignSelectedClass(targetElement.textContent);
+      targetElement = targetElement.closest('li');
+   }
 
   //highlight the term in the document view, if exists
   var selectedTerms = document.getElementsByClassName(
     "ui-widget-content ui-selectee ui-selected"
   );
 
-  var color = setTermColor(event.target);
+  var color = setTermColor(targetElement);
 
   $("#doc_content").removeHighlight(); //remove previous highlights
 
@@ -3651,7 +3675,7 @@ function createTermClusterChart() {
 document.getElementById("feedbackFormContent").style.display = "block";
 // #get content of paragraph with id question1
 //extract first 76 characters and append the highestAggregateCluster
-document.getElementById("question1").innerHTML = document.getElementById("question1").innerHTML.substring(0, 77) + highestAggregateCluster + "?";
+document.getElementById("question1").innerHTML = document.getElementById("question1").innerHTML.substring(0, 81) + highestAggregateCluster + "?";
 // #get currrent cluster number
 currentCluster = highestAggregateCluster.split(" ")[1]
 
@@ -3870,7 +3894,7 @@ function submitFeedback() {
     alert("Please provide a reason for question 2 rating.");
     return; // Stop the function execution here
   }
-
+  document.dispatchEvent(new CustomEvent('submitButtonevent'));
   // Use AJAX to send all feedback to the Python CGI script
   $.ajax({
     type: "POST",

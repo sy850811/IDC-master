@@ -283,9 +283,7 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
     >
       <p id="panel10title" class="panelTitle">Explanation Evaluation</p>
       <div class="modal-content" style="display: none" id="feedbackFormContent">
-        <p id="question1">
-          1) Does the local explanation logically support the document's
-          assignment to
+        <p id="question1">1) Does the local explanation logically support the document's assignment to
         </p>
         <div id="supportScaleRadioButton">
           <div>
@@ -416,7 +414,7 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
           // document.querySelector('#closebutton').removeEventListener('click', onClickCloseButton);
         }
         function onSubmitFeedback() {
-          if (intro1._currentStep === 15) intro1.nextStep();
+          if (intro1._currentStep === 16) intro1.nextStep();
           // Remove the event listener after it has been triggered
           // document.querySelector('#submitButton').removeEventListener('click', onSubmitFeedback);
         }
@@ -432,9 +430,10 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
         document
           .querySelector("#closebutton")
           .addEventListener("click", onClickCloseButton);
-        document
-          .querySelector("#submitButton")
-          .addEventListener("click", onSubmitFeedback);
+        document.addEventListener("submitButtonevent", onSubmitFeedback);
+        // document
+        //   .querySelector("#submitButton")
+        //   .addEventListener("click", onSubmitFeedback);
 
           document.addEventListener(
   "keydown",
@@ -484,7 +483,7 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
             {
               //1
               intro:
-                " <strong><center>Who are you?</center></strong><br> Imagine stepping into the role of a lead editor at a premier online news portal. Your new task involves utilizing an innovative tool designed to organize news articles into distinct, coherent categories. This tool, powered by advanced AI, not only clusters articles but also provides explanations for its categorizations, highlighting unique patterns and suggesting novel groupings beyond the ordinary.",
+                " <strong><center>Who are you?</center></strong><br> Imagine stepping into the role of a lead editor at an online news portal. Your new task involves utilizing an innovative tool designed to organize news articles into distinct, coherent categories. This tool, powered by advanced AI, not only clusters articles but also provides explanations for their categorizations, highlighting the unique patterns of each cluster.",
             },
             {
               //2
@@ -536,13 +535,13 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
               //9
               element: document.querySelector("#panel2"),
               intro:
-                "This is the Document View, displaying one document at a time. Notice the highlighted text - these colors represent key concepts that influence the document's cluster classification. Click 'Next' to proceed.",
+                "This is the Document View, displaying one document at a time.  Key concepts are extracted from the coloured part of the document—for example, the concept 'United Arab Emirates' is extracted from the yellow-coloured part of the text. Click 'Next' to proceed.",
             },
             {
               //10
               element: document.querySelector("#panel9"),
               intro:
-                "This graph explains why AI assigns a document to a cluster. This graph does so by showing the contribution of the document's concepts to the clusters. For example, the document's concepts, like 'Iraq', highlighted in the document view, positively contribute to the document's placement in cluster 3. Due to these contributions, the document is assigned to cluster 3.",
+                "This graph illustrates the AI's process for clustering documents, highlighting the influence of specific topics, such as 'Iraq,' on the assignment. The current document is mapped to cluster 3 because its concepts align more closely with this cluster than with clusters 0, 1, or 2, leading to its placement by the AI.",
             },
             {
               //11
@@ -550,30 +549,36 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
               intro:
                 "The Explanation Evaluation View invites your feedback on the explanation for assigning a document to a cluster. Click 'Next' to learn more about the feedback process.",
             },
+            { //12
+                element: document.querySelector("#button1"),
+                intro:
+                  "Click here to access the help page to access the information of each view again.",
+                position: "left",
+              },
             {
-              //12
+              //13
               intro: "Here is what you need to do in this user study",
             },
             {
-              //13
+              //14
               intro: "Step 1: Read the document.",
               element: document.querySelector("#panel2"),
             },
             {
-              //14
+              //15
               intro:
                 "Step 2: Understand why AI places the document in the bolded cluster. Evaluate the contribution of the document's concepts.",
               element: document.querySelector("#panel9"),
             },
             {
-              //15
+              //16
               intro:
-                "Step 3: Fill Evaluation Feedback <br><br> <ul><li>For this practive question, answer the first and second question: For example Choose 'Strongly Disagree' and write reason for your rating 'Practice response' in the text box.</li><li>Repeat for the second question</li><li>Click 'Submit Feedback and Continue'.</li></ul><br> Note: This is a mock question or practice question.",
+                "Step 3: Fill Evaluation Feedback <br><br> <ul><li>Answer the first and second questions for this practice exercise. For example, select 'Strongly Disagree' and provide a reason such as 'practice question' in the text box.</li><li>Click 'Submit Feedback and Continue'.</li></ul><br> Note: This is a mock question or practice question.",
               element: document.querySelector("#feedbackModal"),
-            },
-            {
+            }, 
+            { //17
               intro:
-                "A new document is now presented in the Document View. Please apply the same three steps to this document and any that follow. Click 'Next' to begin the user study.",
+                "A new document is now presented in the Document View. Please apply the same three steps to this document and any that follow. Click 'Done' to begin the user study.",
             },
           ],
         });
@@ -586,13 +591,23 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
             intro1._currentStep === 6 ||
             intro1._currentStep === 7 ||
             intro1._currentStep === 8 ||
-            intro1._currentStep === 15
+            intro1._currentStep === 16
           ) {
             var nextButton = document.querySelector(".introjs-nextbutton");
             if (nextButton) {
               nextButton.style.display = "none"; // Hide the "Next" button
             }
-          } else {
+          }
+          // add else if for step 11.
+          else if (intro1._currentStep === 11) {
+            // make the submit button disabled
+            document.getElementById("submitButton").disabled = true;
+          }
+          else if (intro1._currentStep === 12) {
+            // make the submit button disabled
+            document.getElementById("submitButton").disabled = false;
+          }
+           else {
             // For all other steps, make sure the "Next" button is visible
             var nextButton = document.querySelector(".introjs-nextbutton");
             if (nextButton) {
@@ -617,9 +632,21 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
           }, 5000);
         }
       }
+      termClicked = false;
+      function termInKeytermClickedF() {
+        if (intro._currentStep === 6 && !termClicked) {
+          termClicked = true;
+          // wait for 5 seconds then execute the next step
+          setTimeout(() => {
+            intro.nextStep();
+          }, 5000);
+        }
+      }
 
+      
       // Add the event listener for the custom scroll event
       document.addEventListener("customScrollEvent", onScrolling);
+      document.addEventListener("termInKeytermClicked", termInKeytermClickedF);
       // Add the event listener for clicking another cluster anotherClusterClicked
       document.addEventListener(
         "anotherClusterClicked",
@@ -650,13 +677,13 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
                 element: document.querySelector("#panel4"),
                 intro:
                   "Slide up or down to uncover more insights and grasp the essence of each group.",
-                position: "left",
+                position: "bottom",
               },
               {
                 //3
                 element: document.querySelector("#panel4"),
                 intro:
-                  " Currently cluster0 is selected try select a different cluster by clicking on its list.<strong> See what it changes in other views. </strong>",
+                  "Try selecting different clusters by clicking on their list.<strong> See what it changes in other views. </strong>",
                 position: "left",
               },
 
@@ -683,7 +710,7 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
               { //7
                 element: document.querySelector("#panel7"),
                 intro:
-                  "Finally, the Term-Cluster View charts shows the importance of selected concepts across all clusters.",
+                  "Finally, the Term-Cluster View chart displays the importance of the concept selected in the Cluster Keyterm View across all clusters.",
                 position: "left",
               },
               { //8
@@ -692,12 +719,7 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
                   "Before submitting the feedback for the explanation for following documents, please explore the newly added infomation especially the Cluster View to <strong>assign an appropriate name to each cluster</strong>. You can do this by double clicking on the cluster name (cluster0, cluster1) in the Cluster View.",
                 position: "left",
               },
-              {
-                element: document.querySelector("#button1"),
-                intro:
-                  "Click here to access the help page to access the information of each view again.",
-                position: "left",
-              },
+              
 
               {
                 intro:
@@ -715,7 +737,8 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
           // Steps where you want to hide the "Next" button
           if (
             intro._currentStep === 2 ||
-            intro._currentStep === 3
+            intro._currentStep === 3 ||
+            intro._currentStep === 6
           ) {
             var nextButton = document.querySelector(".introjs-nextbutton");
             if (nextButton) {
