@@ -435,18 +435,13 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
         //   .querySelector("#submitButton")
         //   .addEventListener("click", onSubmitFeedback);
 
-          document.addEventListener(
-  "keydown",
-  (event) => {
-    console.log("Key pressed:", event.key); // Should log for any key press
-    if (event.key === "Enter") {
-      console.log("Enter key action prevented.");
-      intro1.previousStep();
-      return false;
-    }
-  },
-  true
-);
+          document.addEventListener("keydown",(event) => {
+            if (event.key === "Enter") {
+              console.log("Enter key action prevented.");
+              intro1.previousStep();
+              return false;
+            }
+          },true);
 
 
         function removeEventListeners() {
@@ -620,6 +615,14 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
       //end the first tutorial
 
       var intro = introJs();
+
+      document.addEventListener("keydown",(event) => {
+            if (event.key === "Enter") {
+              console.log("Enter key action prevented.");
+              intro.previousStep();
+              return false;
+            }
+          },true);
       //customScrollEvent
       const onScrolling = () => intro._currentStep === 2 && intro.nextStep();
       clicked = false;

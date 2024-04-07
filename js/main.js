@@ -2502,6 +2502,10 @@ function loadCloudAgain() {
  */
 function nameIsValid(name) {
   var valid = true;
+  //if name is empty it is invalid
+  if (name == "") {
+    valid = false;
+  }
 
   for (var i = 0; i < name.length; i++) {
     if (i == 0) {
