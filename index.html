@@ -414,7 +414,7 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
           // document.querySelector('#closebutton').removeEventListener('click', onClickCloseButton);
         }
         function onSubmitFeedback() {
-          if (intro1._currentStep === 16) intro1.nextStep();
+          if (intro1._currentStep === 17) intro1.nextStep();
           // Remove the event listener after it has been triggered
           // document.querySelector('#submitButton').removeEventListener('click', onSubmitFeedback);
         }
@@ -494,7 +494,7 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
               //4
               element: document.querySelector("#panel5"),
               intro:
-                "Meet the Cluster Tree View. Here, the clusters created by the AI are presented. Read the documents to understand each cluster's theme. Click 'Next' to learn more!",
+                "Meet the Cluster Tree View. Here, the clusters created by the AI are presented. <strong>Read the documents to understand each cluster's theme.</strong> Click 'Next' to learn more!",
               position: "right",
             },
             {
@@ -554,26 +554,30 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
               //13
               intro: "Here is what you need to do in this user study",
             },
+            { //14
+              intro: "Step 0: Understand each clusters theme by reading documents in the Cluster Tree View.",
+              element: document.querySelector("#panel5"),
+            },
             {
-              //14
+              //15
               intro: "Step 1: Read the document.",
               element: document.querySelector("#panel2"),
             },
             {
-              //15
+              //16
               intro:
                 "Step 2: Understand why AI places the document in the bolded cluster. Evaluate the contribution of the document's concepts.",
               element: document.querySelector("#panel9"),
             },
             {
-              //16
+              //17
               intro:
                 "Step 3: Fill Evaluation Feedback <br><br> <ul><li>Answer the first and second questions for this practice exercise. For example, select 'Strongly Disagree' and provide a reason such as 'practice question' in the text box.</li><li>Click 'Submit Feedback and Continue'.</li></ul><br> Note: This is a mock question or practice question.",
               element: document.querySelector("#feedbackModal"),
             }, 
-            { //17
+            { //18
               intro:
-                "A new document is now presented in the Document View. Please apply the same three steps to this document and any that follow. Click 'Done' to begin the user study.",
+                "A new document is now presented in the Document View. Please apply the same steps to this document as well and any that follow. Click 'Done' to begin the user study.",
             },
           ],
         });
@@ -586,7 +590,7 @@ https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css
             intro1._currentStep === 6 ||
             intro1._currentStep === 7 ||
             intro1._currentStep === 8 ||
-            intro1._currentStep === 16
+            intro1._currentStep === 17
           ) {
             var nextButton = document.querySelector(".introjs-nextbutton");
             if (nextButton) {

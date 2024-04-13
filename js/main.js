@@ -3709,12 +3709,13 @@ function buildText(queryResults) {
   const words = queryResults.words;
 
   spaces.forEach((spaceText, index) => {
-    const spaceSpan = $("<span/>", { "class": "space", "id": `s${index}` }).text(spaceText);
+    // add border top and botttom only of 4 px color white
+    const spaceSpan = $("<span/>", { "class": "space", "id": `s${index}`, "style": "background-color: white; border-top: 3px solid white; border-bottom: 3px solid white; box-sizing: border-box; position: relative; z-index: 100;" }).text(spaceText);
     // spaceSpan.click(() => onSpanClick(index, true));
     elementsToAdd.push(spaceSpan);
 
     if (index < words.length) {
-      const wordSpan = $("<span/>", { "class": "word", "id": `w${index}` }).text(words[index]);
+      const wordSpan = $("<span/>", { "class": "word", "id": `w${index}`, "style": "background-color: white; border-top: 3px solid white; border-bottom: 3px solid white; box-sizing: border-box; position: relative; z-index: 100;" }).text(words[index]);
       // wordSpan.click(() => onSpanClick(index, false));
       elementsToAdd.push(wordSpan, $("<wbr/>"));
     }
@@ -3764,7 +3765,7 @@ function applyHighlighting(queryResults, topFeatures, color) {
   annotations.forEach((ann, annIndex) => {
     if (topFeatures.includes(ann.title)) {
       const featureColor = color(ann.title);
-      const borderWidth = '1.5px';
+      const borderWidth = '3px';
  
       ann.support.forEach(support => {
         for (let index = support.wFrom; index <= support.wTo; index++) {

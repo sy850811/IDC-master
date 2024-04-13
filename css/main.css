@@ -56,7 +56,7 @@
   width: 97%;
   left: 2%;
   font-size: 82%;
-  line-height: normal;
+  /* line-height: 20px; */
 }
 
 #panel3 {
@@ -1801,7 +1801,7 @@ form label {
 }
 
 
-.word.highlighted {
+.word {
   display: inline-block; /* Makes the element respect box-model properties fully */
   vertical-align: top; /* Aligns elements to ensure borders are visible */
 }
