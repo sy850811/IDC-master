@@ -6,7 +6,7 @@ cgitb.enable()
 form = cgi.FieldStorage()
 
 try:
-    userID = eval(form.getvalue('userDirectory'))
+    userID = eval(form.getvalue('userID'))
     command = eval(form.getvalue('command'))
     script_dir = os.path.dirname(os.path.realpath(__file__))
     project_root = os.path.join(script_dir, "..") 
@@ -22,6 +22,8 @@ try:
 
     print("Content-type:application/json\r\n\r\n")
     print("yes")
-except:
+except Exception as e:
     print("Content-type:application/json\r\n\r\n")
     print("no")
+    # print("form.getvalue('userDirectory')",form.getvalue('userDirectory'))
+    # print("form.getvalue('command')",form.getvalue('command'))
